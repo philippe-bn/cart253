@@ -1,24 +1,24 @@
 /**
- * Title of Project
- * Author Name
+ * Sailboat
+ * Philippe Beauchemin
  * 
- * HOW EMBARRASSING! I HAVE NO DESCRIPTION OF MY PROJECT!
- * PLEASE REMOVE A GRADE FROM MY WORK IF IT'S GRADED!
+ * A view from above of a boat out at sea on the Atlantic.
  */
 
 "use strict";
 
 /**
- * OH LOOK I DIDN'T DESCRIBE SETUP!!
+ * Create a canvas to draw on.
 */
 function setup() {
-
+    createCanvas(900, 500);
 }
 
 
 /**
- * OOPS I DIDN'T DESCRIBE WHAT MY DRAW DOES!
+ * Draw the sea and boat.
 */
 function draw() {
-
+    background(50, 50, 255);
+    rect(100, 100, 30, 70);
 }
