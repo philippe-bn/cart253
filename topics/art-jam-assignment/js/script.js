@@ -66,7 +66,7 @@ function drawFace() {
     drawSmile();
     drawEyes();
     drawNose();
-    //drawEyebrows();
+    drawEyebrows();
 
 function drawSmile() {
     push();
@@ -77,17 +77,23 @@ function drawSmile() {
 }
 
 function drawEyes() {
+    //Whites
     push();
     fill(255);
-    //Whites
-    ellipse(370, 340, 30);
-    ellipse(425, 340, 30);
+    ellipse(370, 340, 27);
+    ellipse(425, 340, 27);
+    pop();
+    //Irises
+    push();
+    fill(0, 0, 255);
+    ellipse(370, 340, 14);
+    ellipse(425, 340, 14);
     pop();
     //Pupils
     push();
     fill(0);
-    ellipse(370, 340, 12);
-    ellipse(425, 340, 12);
+    ellipse(370, 340, 6);
+    ellipse(425, 340, 6);
     pop();
 }
 
@@ -100,12 +106,15 @@ function drawNose() {
     pop();
 }
 
-// function drawEyebrows() {
-//     push();
-//     fill(0);
-//     //arc?
-//     pop();
-// }
+function drawEyebrows() {
+    push();
+    noFill();
+    strokeWeight(5);
+    stroke('#704030ff');
+    bezier(350, 320, 360, 315, 360, 310, 380, 315)
+    bezier(445, 320, 435, 315, 435, 310, 415, 315)
+    pop();
+}
 }
 
 function drawHair() {
@@ -113,11 +122,11 @@ function drawHair() {
     fill('#B3654C');
     noStroke();
     //Big curls
-    ellipse(400, 235, 75);
-    ellipse(375, 240, 75);
-    ellipse(370, 260, 75);
-    ellipse(425, 245, 75);
-    ellipse(445, 255, 55);
+    ellipse(400, 240, 75);
+    ellipse(375, 245, 75);
+    ellipse(370, 265, 75);
+    ellipse(425, 250, 75);
+    ellipse(445, 260, 55);
     //Small curls
     ellipse(305, 290, 40);
     ellipse(335, 250, 45);
