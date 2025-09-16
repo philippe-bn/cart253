@@ -13,8 +13,8 @@
 */
 // Our cheese colour broken into RGB
 let cheeseRed = 255;
-let cheeseGreen = 255;
-let cheeseBlue = 255;
+let cheeseGreen = 222;
+let cheeseBlue = 33;
 
 // Our cheese hole
 let holeShade = 0; // Greyscale value for the hole
