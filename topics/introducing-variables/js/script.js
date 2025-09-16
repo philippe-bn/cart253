@@ -1,9 +1,8 @@
 /**
- * Title of Project
- * Author Name
+ * Introducing Variables
+ * Philippe Beauchemin
  * 
- * HOW EMBARRASSING! I HAVE NO DESCRIPTION OF MY PROJECT!
- * PLEASE REMOVE A GRADE FROM MY WORK IF IT'S GRADED!
+ * Simple experimentation to try out variables.
  */
 
 "use strict";
@@ -12,13 +11,18 @@
  * OH LOOK I DIDN'T DESCRIBE SETUP!!
 */
 function setup() {
-
+    // Create the canvas
+    createCanvas(480, 480);
 }
 
-
-/**
- * OOPS I DIDN'T DESCRIBE WHAT MY DRAW DOES!
-*/
 function draw() {
-
+    background(0);
+    
+    // Draw a circle in the centre of the canvas
+    push();
+    noStroke();
+    // the circle changes colour when we move the mouse
+    fill(mouseX, mouseY, 0);
+    ellipse(width/2, height/2, 100, 100);
+    pop();
 }
