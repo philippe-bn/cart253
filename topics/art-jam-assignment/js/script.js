@@ -11,6 +11,15 @@
 
 "use strict";
 
+// Create an elbow object
+let elbow= {
+    x: 130,
+    y: 560
+}
+
+// Angle for the forearm
+let angle = 0;
+
 /**
  * Creates the canvas
  */
@@ -145,6 +154,38 @@ function drawArm() {
     push();
     fill(40);
     rect(230, 500, 120, 70)
+    pop();
+    // Arm
+    push();
+    fill('#FFD6C5');
+    noStroke();
+    rect(elbow.x, elbow.y, 100, -60);
+    pop();
+    // Forearm
+    push();
+    fill('#FFD6C5');
+    noStroke();
+        // Trying out a new function (I've used this last year but I did not remember how to use it) - this makes the center become the elbow
+        translate(elbow.x, elbow.y);
+        // Same goes for rotate - this allows me to rotate around the elbow
+        rotate(angle);
+        rect(0, -160, 60, 160);
+    pop();
+    // Hand
+    push();
+    fill('#FFD6C5');
+    noStroke();
+    ellipse(160, 370, 80);
+    pop();
+    // Fingers
+    push();
+    fill('#FFD6C5');
+    noStroke();
+    ellipse(130, 350, 20, 100);
+    ellipse(150, 340, 20, 100);
+    ellipse(170, 335, 20, 100);
+    ellipse(190, 340, 20, 100);
+    ellipse(200, 370, 50, 20);
     pop();
 }
 }
