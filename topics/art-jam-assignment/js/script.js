@@ -55,7 +55,7 @@ function drawChest() {
     push();
     fill(40);
     noStroke();
-    ellipse(400, 685, 290, 400);
+    rect(290, 490, 220, 300, 35);
 }
 
 function drawNeck() {
@@ -168,7 +168,7 @@ function drawArm() {
     noStroke();
     quad(elbow.x, elbow.y, elbow.x+100, elbow.y, elbow.x+100, elbow.y-60, elbow.x+20, elbow.y-60);
     pop();
-    // Forearm
+    // Forearm, hand and fingers
     push();
     fill('#FFD6C5');
     noStroke();
@@ -180,6 +180,7 @@ function drawArm() {
         angle = map(mouseX, 0, 640, -19.5, -18.6);
         angle = constrain(angle, -19.5, -18.6);
         // 0 is elbow.x, I draw the forearm from the side of the wrist above it (forearm.x = 0, so forearm.x is actually 130 at first, forearm.y = -160, so forearm.y is actually 400 at first)
+        // Forearm
         quad(forearm.x, forearm.y, forearm.x+60, forearm.y, forearm.x+60, forearm.y+140, forearm.x, forearm.y+160);
         // Hand
         ellipse(forearm.x + 30, forearm.y - 30, 80);
