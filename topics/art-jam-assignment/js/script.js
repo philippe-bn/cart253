@@ -17,6 +17,12 @@ let elbow= {
     y: 560
 }
 
+// Create a forearm object
+let forearm= {
+    x: 0,
+    y: -160
+} 
+
 // Angle for the forearm
 let angle = 0;
 
@@ -26,6 +32,7 @@ let angle = 0;
 function setup() {
     // A rectangular canvas to work with
     createCanvas(640, 700);
+    angle = mouseX * -1;
 }
 
 /**
@@ -159,7 +166,7 @@ function drawArm() {
     push();
     fill('#FFD6C5');
     noStroke();
-    rect(elbow.x, elbow.y, 100, -60);
+    quad(elbow.x, elbow.y, elbow.x+100, elbow.y, elbow.x+100, elbow.y-60, elbow.x+20, elbow.y-60);
     pop();
     // Forearm
     push();
@@ -169,23 +176,19 @@ function drawArm() {
         translate(elbow.x, elbow.y);
         // Same goes for rotate - this allows me to rotate around the elbow
         rotate(angle);
-        rect(0, -160, 60, 160);
-    pop();
-    // Hand
-    push();
-    fill('#FFD6C5');
-    noStroke();
-    ellipse(160, 370, 80);
-    pop();
-    // Fingers
-    push();
-    fill('#FFD6C5');
-    noStroke();
-    ellipse(130, 350, 20, 100);
-    ellipse(150, 340, 20, 100);
-    ellipse(170, 335, 20, 100);
-    ellipse(190, 340, 20, 100);
-    ellipse(200, 370, 50, 20);
+        // Trying to debug by mapping the mouseX position to fit the values I want for the angle - I have never used this function before but I have used this similar map/scale in Max MSP
+        angle = map(mouseX, 0, 640, -19.5, -18.6);
+        angle = constrain(angle, -19.5, -18.6);
+        // 0 is elbow.x, I draw the forearm from the side of the wrist above it (forearm.x = 0, so forearm.x is actually 130 at first, forearm.y = -160, so forearm.y is actually 400 at first)
+        quad(forearm.x, forearm.y, forearm.x+60, forearm.y, forearm.x+60, forearm.y+140, forearm.x, forearm.y+160);
+        // Hand
+        ellipse(forearm.x + 30, forearm.y - 30, 80);
+        // Fingers
+        ellipse(forearm.x, forearm.y - 50, 20, 100);
+        ellipse(forearm.x + 20, forearm.y - 60, 20, 100);
+        ellipse(forearm.x + 40, forearm.y - 65, 20, 100);
+        ellipse(forearm.x + 60, forearm.y - 60, 20, 100);
+        ellipse(forearm.x + 70, forearm.y - 30, 50, 20);
     pop();
 }
 }
