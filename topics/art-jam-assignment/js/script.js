@@ -11,6 +11,10 @@
 
 "use strict";
 
+// Create a rainbow object
+let rainbow= {
+    y: 0
+}
 // Create an elbow object
 let elbow= {
     x: 130,
@@ -50,8 +54,18 @@ function draw() {
     // A background
     background('#ebff55ff');
 
+    drawBackgroundElements();
     drawBody();
 
+function drawBackgroundElements() {
+    // Draw a rainbow emoji
+    push();
+    textSize(450);
+    // I mention later in my code that it is my first time using this function, I added this after
+    rainbow.y = map(mouseY, 0, 700, 500, 700);
+    text('🌈', 150, rainbow.y);
+    pop();
+}
 function drawBody() {
     drawChest();
     drawNeck();
