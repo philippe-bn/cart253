@@ -227,6 +227,7 @@ function drawBody() {
         }
     }
 }
+}
 
 function mousePressed() {
     // Make the smile go up
@@ -242,5 +243,4 @@ function mouseReleased() {
     mouth.bezier1 = mouth.bezier1 + 5;
     mouth.bezier2 = mouth.bezier2 + 5;
     mouth.y2 = mouth.y2 + 5;
-}
 }
