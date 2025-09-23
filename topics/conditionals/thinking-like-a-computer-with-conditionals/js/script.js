@@ -14,11 +14,13 @@ function setup() {
     createCanvas(600, 400);
 }
 
-
+function draw() {
+    checkInput();
+}
 /**
  * Draw shapes based on conditions
  */
-function draw() {
+function checkInput() {
     background("#000000");
 
     // Draw a square if the mouse is in the left third
