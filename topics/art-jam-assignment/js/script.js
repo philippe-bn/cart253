@@ -7,6 +7,7 @@
  * Uses:
  * p5.js
  * https://p5js.org/
+ * Conditionals module
  */
 
 "use strict";
@@ -187,7 +188,7 @@ function drawBody() {
                 // Lenses
                 ellipse(leftEye.x, leftEye.y - 1, leftEye.size + 15, leftEye.size + 10);
                 ellipse(rightEye.x, rightEye.y - 1, rightEye.size + 15, rightEye.size + 10);
-                // Bridge
+                // Bridge - I had never used this function before
                 arc((leftEye.x + rightEye.x)/2, rightEye.y, 50, 15, PI + QUARTER_PI, TWO_PI - QUARTER_PI);
                 // Branches
                 line(leftEye.x - 16, leftEye.y - 10, leftEye.x - 58, leftEye.y - 15);
