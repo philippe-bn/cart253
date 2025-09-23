@@ -23,11 +23,6 @@
         y: 0
     }
 
-    // Create an invader object
-    let invader= {
-        y: 0
-    }
-
 // Create body parts objects
     // Create an elbow object
     let elbow= {
@@ -104,8 +99,7 @@ function drawBackgroundElements() {
     push();
     textSize(150);
     // Invader
-    invader.y = map(mouseY, 0, 700, 300, 700);
-    text('👾', 200, invader.y + 150);
+    text('👾', 200, rainbow.y + 400);
     pop();
 
 }
