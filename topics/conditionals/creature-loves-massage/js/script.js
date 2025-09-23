@@ -48,23 +48,24 @@ function draw() {
  * Responds to user input
  */
 function checkInput() {
-    // Check if the mouse is pressed...
-    if (mouseIsPressed) {
-        // The mouse is pressed!
-        // Change the colour of the creature to show it's happy
-        // It likes the mouse! Squeak squeak!
-        creature.fill = creature.fills.happy;
-    }
-    // Mouse if not pressed, check if a key is pressed...
-    else if (keyIsPressed) {
-        // A key is pressed!
-        // Change the colour of the creature to show it's angry
-        // It hates those keys! Ugh!
-        creature.fill = creature.fills.angry;
+    // Calculate the distance between the cursor and the creature
+    // and put it into a "distance" variable (using const again since
+    // we won't change this again later!)
+    const distance = dist(mouseX, mouseY, creature.x, creature.y);
+    // Calculate whether the mouse overlaps the creature by checking whether
+    // the distance is less than its radius! (Half its diameter)
+    const mouseIsOverlapping = (distance < creature.size/2);
+    // Check if EITHER movedX OR movedY are NOT equal to zero
+    // and store the result in our mouseIsMoving variable (another
+    // const because we don't want to change it later)
+    const mouseIsMoving = (movedX !== 0 || movedY !== 0);
+    if (mouseIsOverlapping && mouseIsMoving) {
+    // The cursor is overlapping the creature AND it's moving
+    // So the creature is happy!
+    creature.fill = creature.fills.happy;
     }
     else {
-        // The mouse isn't pressed and no key is pressed!
-        // Change the colour of the creature to show it's bored
+        // Otherwise the creature is bored
         creature.fill = creature.fills.bored;
     }
 }
