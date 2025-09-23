@@ -81,12 +81,20 @@ function draw() {
     drawBody();
     checkInput();
 
+/**
+ * Draws the background elements
+ */
 function drawBackgroundElements() {
-    // Draw emojis
+    // My name
     push();
-    textSize(150);
+    textSize(40);
+    text("Hi! I'm Phil.", 90, 150);
+    pop();
+    // Draw emojis
     // I mention later in my code that it is my first time using this function, I added this after
     // Rainbow
+    push();
+    textSize(150);
     rainbow.y = map(mouseY, 0, 700, 40, 700);
     text('🌈', 200, rainbow.y + 150);
     pop();
@@ -103,6 +111,10 @@ function drawBackgroundElements() {
     pop();
 
 }
+
+/**
+ * Draws my body
+ */
 function drawBody() {
     drawChest();
     drawNeck();
@@ -177,7 +189,7 @@ function drawBody() {
             function drawGlasses() {
                 push()
                 noFill();
-                stroke(0);
+                stroke('#301b14ff');
                 strokeWeight(2);
                 // Lenses
                 ellipse(leftEye.x, leftEye.y - 1, leftEye.size + 15, leftEye.size + 10);
@@ -285,6 +297,36 @@ function drawBody() {
 }
 }
 
+function checkInput() { // Credit to Conditionals pt. 2 module
+    // Calculate the distance between the cursor and each eye
+    // and put it into two "distance" variables (using const again since
+    // we won't change this again later!)
+    const distanceLeftEye = dist(mouseX, mouseY, leftEye.x, leftEye.y);
+    const distanceRightEye = dist(mouseX, mouseY, rightEye.x, rightEye.y);
+    // Calculate whether the mouse overlaps the eyes by checking whether
+    // the distance is less than their radius! (Half their diameter)
+    const mouseIsOverLeftEye = (distanceLeftEye < leftEye.size/2);
+    const mouseIsOverRightEye = (distanceRightEye < rightEye.size/2);
+    if (mouseIsOverLeftEye) {
+        // The cursor is overlapping the left eye
+        // The eyelid is closed
+        push();
+        fill('#FFD6C5');
+        noStroke();
+        ellipse(leftEye.x, leftEye.y, leftEye.size);
+        pop();
+    }
+    if (mouseIsOverRightEye) {
+        // The cursor is overlapping the right eye
+        // The eyelid is closed
+        push();
+        fill('#FFD6C5');
+        noStroke();
+        ellipse(rightEye.x, rightEye.y, rightEye.size);
+        pop();
+    }
+}
+
 function mousePressed() {
     // Make the smile go up
     mouth.y1 = mouth.y1 - 5;
@@ -302,32 +344,3 @@ function mouseReleased() {
 }
 
 
-function checkInput() { // Credit to Conditionals pt. 2 module
-    // Calculate the distance between the cursor and each eye
-    // and put it into two "distance" variables (using const again since
-    // we won't change this again later!)
-    const distanceLeftEye = dist(mouseX, mouseY, leftEye.x, leftEye.y);
-    const distanceRightEye = dist(mouseX, mouseY, rightEye.x, rightEye.y);
-    // Calculate whether the mouse overlaps the eyes by checking whether
-    // the distance is less than their radius! (Half their diameter)
-    const mouseIsOverlappingLeftEye = (distanceLeftEye < leftEye.size/2);
-    const mouseIsOverlappingRightEye = (distanceRightEye < rightEye.size/2);
-    if (mouseIsOverlappingLeftEye) {
-        // The cursor is overlapping the left eye
-        // The eyelid is closed
-        push();
-        fill('#FFD6C5');
-        noStroke();
-        ellipse(leftEye.x, leftEye.y, leftEye.size);
-        pop();
-    }
-    if (mouseIsOverlappingRightEye) {
-        // The cursor is overlapping the right eye
-        // The eyelid is closed
-        push();
-        fill('#FFD6C5');
-        noStroke();
-        ellipse(rightEye.x, rightEye.y, rightEye.size);
-        pop();
-    }
-}
