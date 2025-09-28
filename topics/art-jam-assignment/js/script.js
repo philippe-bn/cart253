@@ -298,13 +298,10 @@ function drawBody() {
 }
 
 function checkInput() { // Credit to Conditionals pt. 2 module
-    // Calculate the distance between the cursor and each eye
-    // and put it into two "distance" variables (using const again since
-    // we won't change this again later!)
+    // Calculate the distance between the cursor and each eye and put it into two "distance" variables (using const again since we won't change this again later!)
     const distanceLeftEye = dist(mouseX, mouseY, leftEye.x, leftEye.y);
     const distanceRightEye = dist(mouseX, mouseY, rightEye.x, rightEye.y);
-    // Calculate whether the mouse overlaps the eyes by checking whether
-    // the distance is less than their radius! (Half their diameter)
+    // Calculate whether the mouse overlaps the eyes by checking whether the distance is less than their radius! (Half their diameter)
     const mouseIsOverLeftEye = (distanceLeftEye < leftEye.size/2);
     const mouseIsOverRightEye = (distanceRightEye < rightEye.size/2);
     if (mouseIsOverLeftEye) {
@@ -342,5 +339,3 @@ function mouseReleased() {
     mouth.bezier2 = mouth.bezier2 + 5;
     mouth.y2 = mouth.y2 + 5;
 }
-
-
