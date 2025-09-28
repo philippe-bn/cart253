@@ -1,13 +1,14 @@
 /**
- * Self Portrait
+ * Meet Me
  * Philippe Beauchemin
  * 
- * A creative self portrait.
+ * Greet me in this interactive self-portrait.
  * 
  * Uses:
  * p5.js
  * https://p5js.org/
- * Conditionals module
+ * Code inspired by the *Conditionals in practice: Part 2: Massage* code written by Pippin Barr
+ * https://pippinbarr.com/cart253/topics/conditionals/conditionals-in-practice-part-2.html
  */
 
 "use strict";
@@ -297,7 +298,7 @@ function drawBody() {
 }
 }
 
-function checkInput() { // Credit to Conditionals pt. 2 module
+function checkInput() { // Credit to Conditionals pt. 2 module for syntax and idea
     // Calculate the distance between the cursor and each eye and put it into two "distance" variables (using const again since we won't change this again later!)
     const distanceLeftEye = dist(mouseX, mouseY, leftEye.x, leftEye.y);
     const distanceRightEye = dist(mouseX, mouseY, rightEye.x, rightEye.y);
