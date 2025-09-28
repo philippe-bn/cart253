@@ -13,7 +13,7 @@ Philippe Beauchemin
 
 ## Screenshot(s)
 
-> ![Image of the avatar waving](./assets/images/autoportrait.png)
+> ![Image of the avatar waving](./assets/images/autoportrait.PNG)
 
 ## Attribution
 
