@@ -1,5 +1,4 @@
-# TITLE OF PROJECT
-Meet Me
+# Meet Me
 Philippe Beauchemin
 
 [View this project online](https://philippe-bn.github.io/cart253/topics/art-jam-assignment/)
