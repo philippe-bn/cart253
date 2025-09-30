@@ -1,6 +1,6 @@
 # DO NOTHING
 
-Philippe Beauchemin and Jeany Valcourt
+Philippe Beauchemin, Jeany Valcourt and Kerven-Laurent Casimir
 
 [View this project online](https://philippe-bn.github.io/cart253/topics/events/events-challenge/)
 
