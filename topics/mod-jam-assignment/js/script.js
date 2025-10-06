@@ -1,8 +1,8 @@
 /**
- * Frogfrogfrog
- * Pippin Barr
+ * Frogfrogfrog (MODDED)
+ * Pippin Barr, modded by Philippe Beauchemin
  * 
- * A game of catching flies with your frog-tongue
+ * A modded game of catching flies with your frog-tongue
  * 
  * Instructions:
  * - Move the frog with your mouse
@@ -55,12 +55,20 @@ function setup() {
 
 function draw() {
     background("#87ceeb");
-    moveFly();
-    drawFly();
-    moveFrog();
-    moveTongue();
-    drawFrog();
-    checkTongueFlyOverlap();
+
+    // drawMenu();
+    launchGame();
+}
+
+/**
+ * Draws the fly as a black circle
+ */
+function drawFly() {
+    push();
+    noStroke();
+    fill("#000000");
+    ellipse(fly.x, fly.y, fly.size);
+    pop();
 }
 
 /**
@@ -77,22 +85,37 @@ function moveFly() {
 }
 
 /**
- * Draws the fly as a black circle
- */
-function drawFly() {
-    push();
-    noStroke();
-    fill("#000000");
-    ellipse(fly.x, fly.y, fly.size);
-    pop();
-}
-
-/**
  * Resets the fly to the left with a random y
  */
 function resetFly() {
     fly.x = 0;
     fly.y = random(0, 300);
+}
+
+/**
+ * Displays the tongue (tip and line connection) and the frog (body)
+ */
+function drawFrog() {
+    // Draw the tongue tip
+    push();
+    fill("#ff0000");
+    noStroke();
+    ellipse(frog.tongue.x, frog.tongue.y, frog.tongue.size);
+    pop();
+
+    // Draw the rest of the tongue
+    push();
+    stroke("#ff0000");
+    strokeWeight(frog.tongue.size);
+    line(frog.tongue.x, frog.tongue.y, frog.body.x, frog.body.y);
+    pop();
+
+    // Draw the frog's body
+    push();
+    fill("#00ff00");
+    noStroke();
+    ellipse(frog.body.x, frog.body.y, frog.body.size);
+    pop();
 }
 
 /**
@@ -131,45 +154,43 @@ function moveTongue() {
 }
 
 /**
- * Displays the tongue (tip and line connection) and the frog (body)
- */
-function drawFrog() {
-    // Draw the tongue tip
-    push();
-    fill("#ff0000");
-    noStroke();
-    ellipse(frog.tongue.x, frog.tongue.y, frog.tongue.size);
-    pop();
-
-    // Draw the rest of the tongue
-    push();
-    stroke("#ff0000");
-    strokeWeight(frog.tongue.size);
-    line(frog.tongue.x, frog.tongue.y, frog.body.x, frog.body.y);
-    pop();
-
-    // Draw the frog's body
-    push();
-    fill("#00ff00");
-    noStroke();
-    ellipse(frog.body.x, frog.body.y, frog.body.size);
-    pop();
-}
-
-/**
  * Handles the tongue overlapping the fly
  */
 function checkTongueFlyOverlap() {
     // Get distance from tongue to fly
     const d = dist(frog.tongue.x, frog.tongue.y, fly.x, fly.y);
     // Check if it's an overlap
-    const eaten = (d < frog.tongue.size/2 + fly.size/2);
+    const eaten = (d < frog.tongue.size / 2 + fly.size / 2);
     if (eaten) {
         // Reset the fly
         resetFly();
         // Bring back the tongue
         frog.tongue.state = "inbound";
     }
+}
+
+// /**
+//  * Draws a game menu
+//  */
+// function drawMenu() {
+//     push();
+//     fill("#000000");
+//     rect(0, 0, width, height);
+//     pop();
+//     if (mouseIsPressed === true) {
+//         launchGame();
+//     }
+// }
+
+function launchGame() {
+    drawFly();
+    moveFly();
+
+    drawFrog();
+    moveFrog();
+    moveTongue();
+
+    checkTongueFlyOverlap();
 }
 
 /**
