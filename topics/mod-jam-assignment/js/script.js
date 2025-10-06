@@ -31,6 +31,17 @@ const frog = {
         speed: 20,
         // Determines how the tongue moves each frame
         state: "idle" // State can be: idle, outbound, inbound
+    },
+    // The frog's eyes have globes and pupils of a colour and size and each their own position
+    eyes: {
+        globes: {
+            fill: "#FFFFFF",
+            size: undefined
+        },
+        pupils: {
+            fill: "#000000",
+            size: undefined
+        }
     }
 };
 
@@ -42,6 +53,9 @@ const fly = {
     size: 10,
     speed: 3
 };
+
+// Checks if the game is started
+let gameStarted = "false";
 
 /**
  * Creates the canvas and initializes the fly
@@ -56,8 +70,32 @@ function setup() {
 function draw() {
     background("#87ceeb");
 
-    // drawMenu();
+    drawMenu();
     launchGame();
+}
+
+/**
+ * Draws a game menu
+ */
+function drawMenu() {
+    if (gameStarted === "false") {
+        // Start menu
+        // Big frog body covering the screen
+        drawFrog();
+    }
+}
+
+function launchGame() {
+    if (gameStarted === "true") {
+        drawFly();
+        moveFly();
+
+        drawFrog();
+        moveFrog();
+        moveTongue();
+
+        checkTongueFlyOverlap();
+    }
 }
 
 /**
@@ -96,26 +134,55 @@ function resetFly() {
  * Displays the tongue (tip and line connection) and the frog (body)
  */
 function drawFrog() {
-    // Draw the tongue tip
-    push();
-    fill("#ff0000");
-    noStroke();
-    ellipse(frog.tongue.x, frog.tongue.y, frog.tongue.size);
-    pop();
+    // Draw the tongue
+    if (gameStarted === "true") {
+        // Draw the tongue tip
+        push();
+        fill("#ff0000");
+        noStroke();
+        ellipse(frog.tongue.x, frog.tongue.y, frog.tongue.size);
+        pop();
 
-    // Draw the rest of the tongue
-    push();
-    stroke("#ff0000");
-    strokeWeight(frog.tongue.size);
-    line(frog.tongue.x, frog.tongue.y, frog.body.x, frog.body.y);
-    pop();
+        // Draw the rest of the tongue
+        push();
+        stroke("#ff0000");
+        strokeWeight(frog.tongue.size);
+        line(frog.tongue.x, frog.tongue.y, frog.body.x, frog.body.y);
+        pop();
+    }
 
     // Draw the frog's body
-    push();
-    fill("#00ff00");
-    noStroke();
-    ellipse(frog.body.x, frog.body.y, frog.body.size);
-    pop();
+    // In the start menu, the frog's body takes up the whole screen
+    if (gameStarted === "false") {
+        background("#00ff00");
+    }
+    // In the game, the frog's body is smaller
+    else if (gameStarted === "true") {
+        push();
+        fill("#00ff00");
+        noStroke();
+        ellipse(frog.body.x, frog.body.y, frog.body.size);
+        pop();
+    }
+
+    // Draw the frog's eyes
+    if (gameStarted === "false") {
+        // Eye whites
+        push();
+        noStroke();
+        fill(frog.eyes.globes.fill);
+        ellipse(width / 4, height - height / 2.5, 80);
+        ellipse(width - width / 4, height - height / 2.5, 80);
+        pop();
+        // Pupils
+        push();
+        fill(frog.eyes.pupils.fill);
+        ellipse(width / 4, height - height / 2.5, 65);
+        ellipse(width - width / 4, height - height / 2.5, 65);
+        pop();
+    }
+
+
 }
 
 /**
@@ -169,34 +236,13 @@ function checkTongueFlyOverlap() {
     }
 }
 
-// /**
-//  * Draws a game menu
-//  */
-// function drawMenu() {
-//     push();
-//     fill("#000000");
-//     rect(0, 0, width, height);
-//     pop();
-//     if (mouseIsPressed === true) {
-//         launchGame();
-//     }
-// }
-
-function launchGame() {
-    drawFly();
-    moveFly();
-
-    drawFrog();
-    moveFrog();
-    moveTongue();
-
-    checkTongueFlyOverlap();
-}
-
 /**
- * Launch the tongue on click (if it's not launched yet)
- */
+* Start the game (if it isn't started yet) and launch the tongue on click (if it's not launched yet)
+*/
 function mousePressed() {
+    if (gameStarted === "false") {
+        gameStarted = "true";
+    }
     if (frog.tongue.state === "idle") {
         frog.tongue.state = "outbound";
     }
