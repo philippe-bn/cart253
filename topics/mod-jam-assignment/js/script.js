@@ -34,13 +34,19 @@ const frog = {
     },
     // The frog's eyes have globes and pupils of a colour and size and each their own position
     eyes: {
+        y: undefined,
+        size: 80,
         globes: {
             fill: "#FFFFFF",
-            size: undefined
         },
         pupils: {
             fill: "#000000",
-            size: undefined
+        },
+        left: {
+            x: undefined,
+        },
+        right: {
+            x: undefined,
         }
     }
 };
@@ -85,6 +91,9 @@ function drawMenu() {
     }
 }
 
+/**
+ * Launches the game if the mouse is pressed
+ */
 function launchGame() {
     if (gameStarted === "true") {
         drawFly();
@@ -166,23 +175,43 @@ function drawFrog() {
     }
 
     // Draw the frog's eyes
+    // In the start menu, the frog's eyes are bigger to be proportional to the body
     if (gameStarted === "false") {
         // Eye whites
         push();
         noStroke();
         fill(frog.eyes.globes.fill);
-        ellipse(width / 4, height - height / 2.5, 80);
-        ellipse(width - width / 4, height - height / 2.5, 80);
+        frog.eyes.y = height - height / 2.5;
+        frog.eyes.left.x = width / 4;
+        frog.eyes.right.x = width - width / 4;
+        ellipse(frog.eyes.left.x, frog.eyes.y, frog.eyes.size);
+        ellipse(frog.eyes.right.x, frog.eyes.y, frog.eyes.size);
         pop();
         // Pupils
         push();
         fill(frog.eyes.pupils.fill);
-        ellipse(width / 4, height - height / 2.5, 65);
-        ellipse(width - width / 4, height - height / 2.5, 65);
+        ellipse(frog.eyes.left.x, frog.eyes.y, frog.eyes.size - 15);
+        ellipse(frog.eyes.right.x, frog.eyes.y, frog.eyes.size - 15);
         pop();
     }
-
-
+    if (gameStarted === "true") {
+        // Eye whites
+        push();
+        noStroke();
+        fill(frog.eyes.globes.fill);
+        frog.eyes.y = frog.body.y - 60;
+        frog.eyes.left.x = frog.body.x - 35;
+        frog.eyes.right.x = frog.body.x + 35;
+        ellipse(frog.eyes.left.x, frog.eyes.y, frog.eyes.size - 50);
+        ellipse(frog.eyes.right.x, frog.eyes.y, frog.eyes.size - 50);
+        pop();
+        // Pupils
+        push();
+        fill(frog.eyes.pupils.fill);
+        ellipse(frog.eyes.left.x, frog.eyes.y, frog.eyes.size - 60);
+        ellipse(frog.eyes.right.x, frog.eyes.y, frog.eyes.size - 60);
+        pop();
+    }
 }
 
 /**
