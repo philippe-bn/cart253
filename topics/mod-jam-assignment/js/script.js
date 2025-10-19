@@ -52,12 +52,13 @@ const frog = {
 };
 
 // Our fly
-// Has a position, size, and speed of horizontal movement
+// Has a position, size, and speed of horizontal movement, as well as an internal population tracker
 const fly = {
     x: 0,
     y: 200, // Will be random
     size: 10,
-    speed: 3
+    speed: 3,
+    number: 1
 };
 
 // Checks if the game is started
@@ -128,6 +129,8 @@ function moveFly() {
     // Handle the fly going off the canvas
     if (fly.x > width) {
         resetFly();
+        fly.number = fly.number + 1;
+        console.log(fly.number);
     }
 }
 
