@@ -119,8 +119,8 @@ function launchGame() {
 
         // End the game when there are no flies left
         if (fly.population < 1) {
-            // wait 5 seconds and end the game
-            // make a 5 seconds countdown here-
+            // wait 3 seconds and end the game
+            // make a 3 seconds countdown here-
             gameStarted = "false";
         }
     }
