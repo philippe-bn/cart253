@@ -8,25 +8,40 @@
 "use strict";
 
 // Our flies that will buzz around
-let buzzyTheFly = {
-    x: 200,
-    y: 200,
-    size: 20,
-    buzziness: 3
-};
+let buzzyTheFly = undefined;
+let jazzyTheFly = undefined;
+let jacuzziTheFly = undefined;
 
-let jazzyTheFly = {
-    x: 200,
-    y: 200,
-    size: 20,
-    buzziness: 3
-};
 
 /**
- * Create a canvas
+ * Create a canvas and setup our flies
  */
 function setup() {
     createCanvas(400, 400);
+
+    // A pretty calm fly
+    buzzyTheFly = createFly(2);
+    // A not calm fly
+    jazzyTheFly = createFly(10);
+    // A bubbly fly
+    jacuzziTheFly = createFly(30);
+}
+
+/**
+ * Creates a fly object with randomized position, default size, 
+ * and provided buzziness
+ */
+function createFly(buzziness) {
+    const fly = {
+        // Position (random)
+        x: random(0, width),
+        y: random(0, height),
+        // Size (default)
+        size: 30,
+        // How much to move per frame (parameter)
+        buzziness: buzziness
+    };
+    return fly;
 }
 
 /**
@@ -37,9 +52,11 @@ function draw() {
 
     moveFly(buzzyTheFly);
     moveFly(jazzyTheFly);
+    moveFly(jacuzziTheFly);
 
     drawFly(buzzyTheFly);
     drawFly(jazzyTheFly);
+    drawFly(jacuzziTheFly);
 }
 
 /**
