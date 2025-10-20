@@ -15,6 +15,15 @@
 
 "use strict";
 
+// The background's fill
+let bg = {
+    fill: {
+        r: 135,
+        g: 206,
+        b: 235
+    }
+}
+
 // Our frog
 const frog = {
     // The frog's body has a position and size
@@ -76,17 +85,16 @@ function setup() {
 }
 
 function draw() {
-    background("#87ceeb");
-
     drawMenu();
     launchGame();
+    endGame();
 }
 
 /**
  * Draws a game menu
  */
 function drawMenu() {
-    if (gameStarted === "false") {
+    if (gameStarted === "false" && fly.population > 0) {
         // Start menu
         // Big frog body covering the screen
         drawFrog();
@@ -98,6 +106,8 @@ function drawMenu() {
  */
 function launchGame() {
     if (gameStarted === "true") {
+        background(bg.fill.r, bg.fill.g, bg.fill.b);
+
         drawFly();
         moveFly();
 
@@ -106,6 +116,13 @@ function launchGame() {
         moveTongue();
 
         checkTongueFlyOverlap();
+
+        // End the game when there are no flies left
+        if (fly.population < 1) {
+            // wait 5 seconds and end the game
+            // make a 5 seconds countdown here-
+            gameStarted = "false";
+        }
     }
 }
 
@@ -144,8 +161,9 @@ function drawFly() {
  * Resets the fly if it gets all the way to the right
  */
 function moveFly() {
-    // Move the fly
+    // Move the fly in a sinusoidal pattern across the screen
     fly.x += fly.speed;
+    fly.y = 45 * sin(frameCount * 0.05) + 200;
     // Handle the fly going off the canvas
     if (fly.x > width) {
         resetFly();
@@ -166,6 +184,12 @@ function resetFly() {
  * Displays the tongue (tip and line connection) and the frog (body)
  */
 function drawFrog() {
+    drawFrogTongue();
+    drawFrogBody();
+    drawFrogEyes();
+}
+
+function drawFrogTongue() {
     // Draw the tongue
     if (gameStarted === "true") {
         // Draw the tongue tip
@@ -182,10 +206,12 @@ function drawFrog() {
         line(frog.tongue.x, frog.tongue.y, frog.body.x, frog.body.y);
         pop();
     }
+}
 
+function drawFrogBody() {
     // Draw the frog's body
     // In the start menu, the frog's body takes up the whole screen
-    if (gameStarted === "false") {
+    if (gameStarted === "false" && fly.population > 0) {
         background("#00ff00");
     }
     // In the game, the frog's body is smaller
@@ -196,7 +222,17 @@ function drawFrog() {
         ellipse(frog.body.x, frog.body.y, frog.body.size);
         pop();
     }
+    // At the end of the game, the frog remains in its position as it starves
+    else if (gameStarted === "false" && fly.population === 0) {
+        push();
+        fill("#00ff00");
+        noStroke();
+        ellipse(frog.body.x, frog.body.y, frog.body.size);
+        pop();
+    }
+}
 
+function drawFrogEyes() {
     // Draw the frog's eyes
     // In the start menu, the frog's eyes are bigger to be proportional to the body
     if (gameStarted === "false") {
@@ -235,6 +271,7 @@ function drawFrog() {
         ellipse(frog.eyes.right.x, frog.eyes.y, frog.eyes.size - 60);
         pop();
     }
+
 }
 
 /**
@@ -294,10 +331,24 @@ function checkTongueFlyOverlap() {
 * Start the game (if it isn't started yet) and launch the tongue on click (if it's not launched yet)
 */
 function mousePressed() {
-    if (gameStarted === "false") {
+    if (gameStarted === "false" && fly.population > 0) {
         gameStarted = "true";
     }
     if (frog.tongue.state === "idle") {
         frog.tongue.state = "outbound";
     }
 }
+
+/**
+ * Sets out the sequence to play at the end of the game
+ */
+function endGame() {
+    if (gameStarted === "false" && fly.population < 1) {
+        background(bg.fill.r, bg.fill.g, bg.fill.b);
+        bg.fill.r = constrain(bg.fill.r, 0, 255);
+        bg.fill.r -= 1;
+        console.log(bg.fill.r);
+        drawFrogBody();
+    }
+}
+
