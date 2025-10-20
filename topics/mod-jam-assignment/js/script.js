@@ -52,13 +52,14 @@ const frog = {
 };
 
 // Our fly
-// Has a position, size, and speed of horizontal movement, as well as an internal population tracker
+// Has a position, size, and speed of horizontal movement, as well as an internal population tracker and a distance from the parent fly when new flies are created
 const fly = {
     x: 0,
     y: 200, // Will be random
     size: 10,
     speed: 3,
-    number: 1
+    population: 1,
+    spawn: 0
 };
 
 // Checks if the game is started
@@ -117,6 +118,14 @@ function drawFly() {
     fill("#000000");
     ellipse(fly.x, fly.y, fly.size);
     pop();
+    // If the population is more than 1, draw a second fly
+    if (fly.population > 1) {
+        push();
+        noStroke();
+        fill("#000000");
+        ellipse(fly.x + fly.spawn, fly.y + fly.spawn, fly.size);
+        pop();
+    }
 }
 
 /**
@@ -129,8 +138,7 @@ function moveFly() {
     // Handle the fly going off the canvas
     if (fly.x > width) {
         resetFly();
-        fly.number = fly.number + 1;
-        console.log(fly.number);
+        fly.population = fly.population + 1;
     }
 }
 
@@ -140,6 +148,7 @@ function moveFly() {
 function resetFly() {
     fly.x = 0;
     fly.y = random(0, 300);
+    fly.spawn = random(-100, 100);
 }
 
 /**
