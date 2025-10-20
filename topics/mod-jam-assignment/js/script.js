@@ -113,17 +113,28 @@ function launchGame() {
  * Draws the fly as a black circle
  */
 function drawFly() {
-    push();
-    noStroke();
-    fill("#000000");
-    ellipse(fly.x, fly.y, fly.size);
-    pop();
-    // If the population is more than 1, draw a second fly
+    // If the population is larger than 0, draw a fly - if the population is 0, there are no flies
+    if (fly.population > 0) {
+        push();
+        noStroke();
+        fill("#000000");
+        ellipse(fly.x, fly.y, fly.size);
+        pop();
+    }
+    // If the population is larger than 1, draw a second fly
     if (fly.population > 1) {
         push();
         noStroke();
         fill("#000000");
         ellipse(fly.x + fly.spawn, fly.y + fly.spawn, fly.size);
+        pop();
+    }
+    // If the population is larger than 2, draw a third fly
+    if (fly.population > 2) {
+        push();
+        noStroke();
+        fill("#000000");
+        ellipse(fly.x - fly.spawn, fly.y - fly.spawn, fly.size);
         pop();
     }
 }
@@ -270,8 +281,10 @@ function checkTongueFlyOverlap() {
     // Check if it's an overlap
     const eaten = (d < frog.tongue.size / 2 + fly.size / 2);
     if (eaten) {
-        // Reset the fly
+        // Reset the fly and take one off population
         resetFly();
+        fly.population = fly.population - 1;
+        constrain(fly.population, 0, 10);
         // Bring back the tongue
         frog.tongue.state = "inbound";
     }
