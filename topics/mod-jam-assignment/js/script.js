@@ -24,6 +24,9 @@ let bg = {
     }
 }
 
+// The fly population tracker
+let population = 1;
+
 // Our frog
 const frog = {
     // The frog's body has a position and size
@@ -60,16 +63,11 @@ const frog = {
     }
 };
 
-// Our fly
-// Has a position, size, and speed of horizontal movement, as well as an internal population tracker and a distance from the parent fly when new flies are created
-const fly = {
-    x: 0,
-    y: 200, // Will be random
-    size: 10,
-    speed: 3,
-    population: 1,
-    spawn: 0
-};
+// The first fly
+let eveTheFly = undefined;
+// The other flies
+let babyFly = undefined;
+let evolvedFly = undefined;
 
 // Checks if the game is started
 let gameStarted = "false";
@@ -80,8 +78,14 @@ let gameStarted = "false";
 function setup() {
     createCanvas(640, 480);
 
-    // Give the fly its first random position
-    resetFly();
+    eveTheFly = createFly(2);
+    babyFly = createFly(3);
+    evolvedFly = createFly(4);
+
+    // Give the flies their first random position
+    resetFly(eveTheFly);
+    resetFly(babyFly);
+    resetFly(evolvedFly);
 }
 
 function draw() {
@@ -94,7 +98,7 @@ function draw() {
  * Draws a game menu
  */
 function drawMenu() {
-    if (gameStarted === "false" && fly.population > 0) {
+    if (gameStarted === "false" && population > 0) {
         // Start menu
         // Big frog body covering the screen
         drawFrog();
@@ -108,17 +112,29 @@ function launchGame() {
     if (gameStarted === "true") {
         background(bg.fill.r, bg.fill.g, bg.fill.b);
 
-        drawFly();
-        moveFly();
+        drawFly(eveTheFly);
+        moveFly(eveTheFly);
+
+        if (population > 1) {
+            drawFly(babyFly);
+            moveFly(babyFly);
+        }
+
+        if (population > 2) {
+            drawFly(evolvedFly);
+            moveFly(evolvedFly);
+        }
 
         drawFrog();
         moveFrog();
         moveTongue();
 
-        checkTongueFlyOverlap();
+        checkTongueFlyOverlap(eveTheFly);
+        checkTongueFlyOverlap(babyFly);
+        checkTongueFlyOverlap(evolvedFly);
 
         // End the game when there are no flies left
-        if (fly.population < 1) {
+        if (population < 1) {
             // wait 3 seconds and end the game
             // make a 3 seconds countdown here-
             gameStarted = "false";
@@ -126,55 +142,48 @@ function launchGame() {
     }
 }
 
+function createFly(speed) {
+    // Our flies
+    // Have a position, size, speed of horizontal movement, and a distance from the parent fly when new flies are created
+    const fly = {
+        x: 0,
+        y: random(0, 300),
+        size: random(5, 10),
+        speed: speed, // Will vary every iteration to be quicker and quicker
+        spawn: 0
+    };
+    return fly;
+}
 /**
  * Draws the fly as a black circle
  */
-function drawFly() {
-    // If the population is larger than 0, draw a fly - if the population is 0, there are no flies
-    if (fly.population > 0) {
-        push();
-        noStroke();
-        fill("#000000");
-        ellipse(fly.x, fly.y, fly.size);
-        pop();
-    }
-    // If the population is larger than 1, draw a second fly
-    if (fly.population > 1) {
-        push();
-        noStroke();
-        fill("#000000");
-        ellipse(fly.x + fly.spawn, fly.y + fly.spawn, fly.size);
-        pop();
-    }
-    // If the population is larger than 2, draw a third fly
-    if (fly.population > 2) {
-        push();
-        noStroke();
-        fill("#000000");
-        ellipse(fly.x - fly.spawn, fly.y - fly.spawn, fly.size);
-        pop();
-    }
+function drawFly(fly) {
+    push();
+    noStroke();
+    fill("#000000");
+    ellipse(fly.x, fly.y, fly.size);
+    pop();
 }
 
 /**
  * Moves the fly according to its speed
  * Resets the fly if it gets all the way to the right
  */
-function moveFly() {
+function moveFly(fly) {
     // Move the fly in a sinusoidal pattern across the screen
     fly.x += fly.speed;
-    fly.y = 45 * sin(frameCount * 0.05) + 200;
+    fly.y += 5 * sin(frameCount * 0.05);
     // Handle the fly going off the canvas
     if (fly.x > width) {
-        resetFly();
-        fly.population = fly.population + 1;
+        resetFly(fly);
+        population = population + 1;
     }
 }
 
 /**
  * Resets the fly to the left with a random y
  */
-function resetFly() {
+function resetFly(fly) {
     fly.x = 0;
     fly.y = random(0, 300);
     fly.spawn = random(-100, 100);
@@ -211,7 +220,7 @@ function drawFrogTongue() {
 function drawFrogBody() {
     // Draw the frog's body
     // In the start menu, the frog's body takes up the whole screen
-    if (gameStarted === "false" && fly.population > 0) {
+    if (gameStarted === "false" && population > 0) {
         background("#00ff00");
     }
     // In the game, the frog's body is smaller
@@ -223,7 +232,7 @@ function drawFrogBody() {
         pop();
     }
     // At the end of the game, the frog remains in its position as it starves
-    else if (gameStarted === "false" && fly.population === 0) {
+    else if (gameStarted === "false" && population === 0) {
         push();
         fill("#00ff00");
         noStroke();
@@ -310,18 +319,18 @@ function moveTongue() {
 }
 
 /**
- * Handles the tongue overlapping the fly
+ * Handles the tongue overlapping any fly
  */
-function checkTongueFlyOverlap() {
+function checkTongueFlyOverlap(fly) {
     // Get distance from tongue to fly
     const d = dist(frog.tongue.x, frog.tongue.y, fly.x, fly.y);
     // Check if it's an overlap
     const eaten = (d < frog.tongue.size / 2 + fly.size / 2);
     if (eaten) {
         // Reset the fly and take one off population
-        resetFly();
-        fly.population = fly.population - 1;
-        constrain(fly.population, 0, 10);
+        resetFly(fly);
+        population = population - 1;
+        constrain(population, 0, 10);
         // Bring back the tongue
         frog.tongue.state = "inbound";
     }
@@ -331,7 +340,7 @@ function checkTongueFlyOverlap() {
 * Start the game (if it isn't started yet) and launch the tongue on click (if it's not launched yet)
 */
 function mousePressed() {
-    if (gameStarted === "false" && fly.population > 0) {
+    if (gameStarted === "false" && population > 0) {
         gameStarted = "true";
     }
     if (frog.tongue.state === "idle") {
@@ -343,7 +352,7 @@ function mousePressed() {
  * Sets out the sequence to play at the end of the game
  */
 function endGame() {
-    if (gameStarted === "false" && fly.population < 1) {
+    if (gameStarted === "false" && population < 1) {
         background(bg.fill.r, bg.fill.g, bg.fill.b);
         bg.fill.r = constrain(bg.fill.r, 0, 255);
         bg.fill.r -= 1;
