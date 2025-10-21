@@ -20,7 +20,11 @@ let bg = {
     fill: {
         r: 135,
         g: 206,
-        b: 235
+        b: 235,
+
+        h: 197,
+        s: 71,
+        l: 73,
     }
 }
 
@@ -52,7 +56,14 @@ const frog = {
             fill: "#FFFFFF",
         },
         pupils: {
+            y: undefined,
             fill: "#000000",
+            left: {
+                x: undefined,
+            },
+            right: {
+                x: undefined,
+            }
         },
         left: {
             x: undefined,
@@ -68,9 +79,10 @@ let eveTheFly = undefined;
 // The other flies
 let babyFly = undefined;
 let evolvedFly = undefined;
+let travellerFly = undefined;
 
-// Checks if the game is started
-let gameStarted = "false";
+// Starts the game on the start menu
+let gameState = "menu";
 
 /**
  * Creates the canvas and initializes the fly
@@ -81,64 +93,72 @@ function setup() {
     eveTheFly = createFly(2);
     babyFly = createFly(3);
     evolvedFly = createFly(4);
+    travellerFly = createFly(3.5);
 
     // Give the flies their first random position
     resetFly(eveTheFly);
     resetFly(babyFly);
     resetFly(evolvedFly);
+    resetFly(travellerFly);
 }
 
 function draw() {
-    drawMenu();
-    launchGame();
-    endGame();
+    if (gameState === "menu") {
+        drawMenu();
+    }
+    else if (gameState === "game") {
+        runGame();
+    }
 }
 
 /**
  * Draws a game menu
  */
 function drawMenu() {
-    if (gameStarted === "false" && population > 0) {
-        // Start menu
-        // Big frog body covering the screen
-        drawFrog();
-    }
+    // Start menu is a big frog body covering the screen
+    drawFrog();
 }
 
 /**
  * Launches the game if the mouse is pressed
  */
-function launchGame() {
-    if (gameStarted === "true") {
-        background(bg.fill.r, bg.fill.g, bg.fill.b);
+function runGame() {
+    colorMode(RGB);
+    background(bg.fill.r, bg.fill.g, bg.fill.b);
 
+    if (population > 0) {
         drawFly(eveTheFly);
         moveFly(eveTheFly);
+    }
 
-        if (population > 1) {
-            drawFly(babyFly);
-            moveFly(babyFly);
-        }
+    if (population > 1) {
+        drawFly(babyFly);
+        moveFly(babyFly);
+    }
 
-        if (population > 2) {
-            drawFly(evolvedFly);
-            moveFly(evolvedFly);
-        }
+    if (population > 2) {
+        drawFly(evolvedFly);
+        moveFly(evolvedFly);
+    }
 
-        drawFrog();
-        moveFrog();
-        moveTongue();
+    if (population > 3) {
+        drawFly(travellerFly);
+        moveFly(travellerFly);
+    }
 
-        checkTongueFlyOverlap(eveTheFly);
-        checkTongueFlyOverlap(babyFly);
-        checkTongueFlyOverlap(evolvedFly);
+    drawFrog();
+    moveFrog();
+    moveTongue();
 
-        // End the game when there are no flies left
-        if (population < 1) {
-            // wait 3 seconds and end the game
-            // make a 3 seconds countdown here-
-            gameStarted = "false";
-        }
+    checkTongueFlyOverlap(eveTheFly);
+    checkTongueFlyOverlap(babyFly);
+    checkTongueFlyOverlap(evolvedFly);
+    checkTongueFlyOverlap(travellerFly);
+
+    // End the game when there are no flies left
+    if (population < 1) {
+        // End the game and wait 2 seconds before playing the end game animation
+        setTimeout(endGame, 2000);
     }
 }
 
@@ -200,7 +220,7 @@ function drawFrog() {
 
 function drawFrogTongue() {
     // Draw the tongue
-    if (gameStarted === "true") {
+    if (gameState === "game") {
         // Draw the tongue tip
         push();
         fill("#ff0000");
@@ -220,11 +240,11 @@ function drawFrogTongue() {
 function drawFrogBody() {
     // Draw the frog's body
     // In the start menu, the frog's body takes up the whole screen
-    if (gameStarted === "false" && population > 0) {
+    if (gameState === "menu") {
         background("#00ff00");
     }
     // In the game, the frog's body is smaller
-    else if (gameStarted === "true") {
+    else if (gameState === "game") {
         push();
         fill("#00ff00");
         noStroke();
@@ -232,7 +252,7 @@ function drawFrogBody() {
         pop();
     }
     // At the end of the game, the frog remains in its position as it starves
-    else if (gameStarted === "false" && population === 0) {
+    else if (gameState === "end") {
         push();
         fill("#00ff00");
         noStroke();
@@ -244,7 +264,7 @@ function drawFrogBody() {
 function drawFrogEyes() {
     // Draw the frog's eyes
     // In the start menu, the frog's eyes are bigger to be proportional to the body
-    if (gameStarted === "false") {
+    if (gameState === "menu") {
         // Eye whites
         push();
         noStroke();
@@ -258,11 +278,18 @@ function drawFrogEyes() {
         // Pupils
         push();
         fill(frog.eyes.pupils.fill);
-        ellipse(frog.eyes.left.x, frog.eyes.y, frog.eyes.size - 15);
-        ellipse(frog.eyes.right.x, frog.eyes.y, frog.eyes.size - 15);
+        // Make left pupil follow mouse X and mouse Y inside globe
+        frog.eyes.pupils.left.x = map(mouseX, 0, width, frog.eyes.left.x - 5, frog.eyes.left.x + 5);
+        frog.eyes.pupils.left.y = map(mouseY, 0, height, frog.eyes.y - 5, frog.eyes.y + 5);
+        ellipse(frog.eyes.pupils.left.x, frog.eyes.pupils.left.y, frog.eyes.size - 15);
+        // Make right pupil follow mouse X and mouse Y inside globe
+        frog.eyes.pupils.right.x = map(mouseX, 0, width, frog.eyes.right.x - 5, frog.eyes.right.x + 5);
+        frog.eyes.pupils.right.y = map(mouseY, 0, height, frog.eyes.y - 5, frog.eyes.y + 5);
+        ellipse(frog.eyes.pupils.right.x, frog.eyes.pupils.right.y, frog.eyes.size - 15);
         pop();
     }
-    if (gameStarted === "true") {
+
+    if (gameState === "game") {
         // Eye whites
         push();
         noStroke();
@@ -276,8 +303,14 @@ function drawFrogEyes() {
         // Pupils
         push();
         fill(frog.eyes.pupils.fill);
-        ellipse(frog.eyes.left.x, frog.eyes.y, frog.eyes.size - 60);
-        ellipse(frog.eyes.right.x, frog.eyes.y, frog.eyes.size - 60);
+        // Make left pupil follow mouse X and mouse Y inside globe
+        frog.eyes.pupils.left.x = map(mouseX, 0, width, frog.eyes.left.x - 5, frog.eyes.left.x + 5);
+        frog.eyes.pupils.left.y = map(mouseY, 0, height, frog.eyes.y - 5, frog.eyes.y + 5);
+        ellipse(frog.eyes.pupils.left.x, frog.eyes.pupils.left.y, frog.eyes.size - 60);
+        // Make right pupil follow mouse X and mouse Y inside globe
+        frog.eyes.pupils.right.x = map(mouseX, 0, width, frog.eyes.right.x - 5, frog.eyes.right.x + 5);
+        frog.eyes.pupils.right.y = map(mouseY, 0, height, frog.eyes.y - 5, frog.eyes.y + 5);
+        ellipse(frog.eyes.pupils.right.x, frog.eyes.pupils.right.y, frog.eyes.size - 60);
         pop();
     }
 
@@ -328,9 +361,9 @@ function checkTongueFlyOverlap(fly) {
     const eaten = (d < frog.tongue.size / 2 + fly.size / 2);
     if (eaten) {
         // Reset the fly and take one off population
-        resetFly(fly);
         population = population - 1;
         constrain(population, 0, 10);
+        resetFly(fly);
         // Bring back the tongue
         frog.tongue.state = "inbound";
     }
@@ -340,8 +373,8 @@ function checkTongueFlyOverlap(fly) {
 * Start the game (if it isn't started yet) and launch the tongue on click (if it's not launched yet)
 */
 function mousePressed() {
-    if (gameStarted === "false" && population > 0) {
-        gameStarted = "true";
+    if (gameState === "menu") {
+        gameState = "game";
     }
     if (frog.tongue.state === "idle") {
         frog.tongue.state = "outbound";
@@ -352,12 +385,11 @@ function mousePressed() {
  * Sets out the sequence to play at the end of the game
  */
 function endGame() {
-    if (gameStarted === "false" && population < 1) {
-        background(bg.fill.r, bg.fill.g, bg.fill.b);
-        bg.fill.r = constrain(bg.fill.r, 0, 255);
-        bg.fill.r -= 1;
-        console.log(bg.fill.r);
-        drawFrogBody();
-    }
+    gameState = "end";
+    colorMode(HSL);
+    background(bg.fill.h, bg.fill.s, bg.fill.l);
+    bg.fill.l = constrain(bg.fill.l, 0, 73);
+    bg.fill.l -= 0.3;
+    drawFrogBody();
 }
 
