@@ -11,6 +11,7 @@
  * 
  * Made with p5
  * https://p5js.org/
+ * Keyboard pictures by Julia Bellone : https://juliabellone.github.io/Arkanoid/ 
  */
 
 "use strict";
@@ -84,6 +85,7 @@ let eveTheFly = undefined;
 let babyFly = undefined;
 let evolvedFly = undefined;
 let travellerFly = undefined;
+let voraciousFly = undefined;
 
 // Starts the game on the start menu
 let gameState = "menu";
@@ -104,14 +106,16 @@ function setup() {
 
     eveTheFly = createFly(2, "Eve");
     babyFly = createFly(3, "Baby Fly");
-    evolvedFly = createFly(4, "Evolved Fly");
+    evolvedFly = createFly(3.5, "Evolved Fly");
     travellerFly = createFly(3.5, "Traveller Fly");
+    voraciousFly = createFly(3, "Voracious Fly");
 
     // Give the flies their first random position
     resetFly(eveTheFly);
     resetFly(babyFly);
     resetFly(evolvedFly);
     resetFly(travellerFly);
+    resetFly(voraciousFly);
 }
 
 function draw() {
@@ -128,11 +132,13 @@ function draw() {
  */
 function drawMenu() {
     // Start menu is a big frog body covering the screen
+    cursor(ARROW);
     drawFrog();
     rectMode(CENTER);
     textSize(14);
+    textFont('Courier New');
     text("*croak* sorry, I mean click anywhere to play", width / 2, 150, 150, 50);
-    text("use spacebar and arrows to play", width / 2, 400, 150, 50);
+    text("use spacebar and arrows", width / 2, 440, 150, 50);
     image(spacebar, width / 2 - 200, 410, 80, 40);
     image(arrowKeys, width / 2 + 100, 400, 70, 50);
 }
@@ -141,6 +147,7 @@ function drawMenu() {
  * Launches the game if the mouse is pressed
  */
 function runGame() {
+    noCursor();
     colorMode(RGB);
     background(bg.fill.r, bg.fill.g, bg.fill.b);
 
@@ -164,6 +171,11 @@ function runGame() {
         moveFly(travellerFly);
     }
 
+    if (population > 4) {
+        drawFly(voraciousFly);
+        moveFly(voraciousFly);
+    }
+
     drawFrog();
     checkInput();
     moveTongue();
@@ -172,6 +184,7 @@ function runGame() {
     checkTongueFlyOverlap(babyFly);
     checkTongueFlyOverlap(evolvedFly);
     checkTongueFlyOverlap(travellerFly);
+    checkTongueFlyOverlap(voraciousFly);
 
 
     // End the game when there are no flies left
@@ -186,7 +199,8 @@ function createFly(speed, name) {
     // Have a position, size, speed of horizontal movement, and a distance from the parent fly when new flies are created
     const fly = {
         x: 0,
-        y: random(0, 300),
+        y: random(0, height),
+        b: random(150, 400), // Will become the vertical shift of the sin function
         size: random(5, 10),
         speed: speed, // Will vary every iteration to be quicker and quicker
         name: name
@@ -214,7 +228,7 @@ function drawFly(fly) {
 function moveFly(fly) {
     // Move the fly in a sinusoidal pattern across the screen
     fly.x += fly.speed;
-    fly.y += 5 * sin(frameCount * 0.05);
+    fly.y = 5 * sin(frameCount * 0.25) + fly.b;
     // Handle the fly going off the canvas
     if (fly.x > width) {
         resetFly(fly);
@@ -224,20 +238,21 @@ function moveFly(fly) {
 }
 
 /**
+ * Resets the fly to the left with a random y
+ */
+function resetFly(fly) {
+    fly.x = 0;
+    fly.y = random(0, height);
+    fly.b = random(150, 400);
+    fly.spawn = random(-100, 100);
+}
+
+/**
  * Announces the birth of a new fly - this is too quick and I can't figure out how to put fly.name in the text as well
  */
 function birthAnnouncement(fly) {
     textSize(12);
     text("had a baby", width / 2, height / 2);
-}
-
-/**
- * Resets the fly to the left with a random y
- */
-function resetFly(fly) {
-    fly.x = 0;
-    fly.y = random(0, 300);
-    fly.spawn = random(-100, 100);
 }
 
 /**
