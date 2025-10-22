@@ -90,10 +90,10 @@ let gameState = "menu";
 function setup() {
     createCanvas(640, 480);
 
-    eveTheFly = createFly(2);
-    babyFly = createFly(3);
-    evolvedFly = createFly(4);
-    travellerFly = createFly(3.5);
+    eveTheFly = createFly(2, "Eve");
+    babyFly = createFly(3, "Baby Fly");
+    evolvedFly = createFly(4, "Evolved Fly");
+    travellerFly = createFly(3.5, "Traveller Fly");
 
     // Give the flies their first random position
     resetFly(eveTheFly);
@@ -147,13 +147,14 @@ function runGame() {
     }
 
     drawFrog();
-    moveFrog();
+    checkInput();
     moveTongue();
 
     checkTongueFlyOverlap(eveTheFly);
     checkTongueFlyOverlap(babyFly);
     checkTongueFlyOverlap(evolvedFly);
     checkTongueFlyOverlap(travellerFly);
+
 
     // End the game when there are no flies left
     if (population < 1) {
@@ -162,7 +163,7 @@ function runGame() {
     }
 }
 
-function createFly(speed) {
+function createFly(speed, name) {
     // Our flies
     // Have a position, size, speed of horizontal movement, and a distance from the parent fly when new flies are created
     const fly = {
@@ -170,7 +171,7 @@ function createFly(speed) {
         y: random(0, 300),
         size: random(5, 10),
         speed: speed, // Will vary every iteration to be quicker and quicker
-        spawn: 0
+        name: name
     };
     return fly;
 }
@@ -182,6 +183,8 @@ function drawFly(fly) {
     noStroke();
     fill("#000000");
     ellipse(fly.x, fly.y, fly.size);
+    // Displays the fly's name under it
+    text(fly.name, fly.x, fly.y + 15);
     pop();
 }
 
@@ -197,7 +200,15 @@ function moveFly(fly) {
     if (fly.x > width) {
         resetFly(fly);
         population = population + 1;
+        birthAnnouncement();
     }
+}
+
+/**
+ * Announces the birth of a new fly - this is too quick and I can't figure out how to put fly.name in the text as well
+ */
+function birthAnnouncement(fly) {
+    text("had a baby", width / 2, height / 2);
 }
 
 /**
@@ -244,15 +255,7 @@ function drawFrogBody() {
         background("#00ff00");
     }
     // In the game, the frog's body is smaller
-    else if (gameState === "game") {
-        push();
-        fill("#00ff00");
-        noStroke();
-        ellipse(frog.body.x, frog.body.y, frog.body.size);
-        pop();
-    }
-    // At the end of the game, the frog remains in its position as it starves
-    else if (gameState === "end") {
+    else if (gameState === "game" || gameState === "end") {
         push();
         fill("#00ff00");
         noStroke();
@@ -317,13 +320,6 @@ function drawFrogEyes() {
 }
 
 /**
- * Moves the frog to the mouse position on x
- */
-function moveFrog() {
-    frog.body.x = mouseX;
-}
-
-/**
  * Handles moving the tongue based on its state
  */
 function moveTongue() {
@@ -370,14 +366,29 @@ function checkTongueFlyOverlap(fly) {
 }
 
 /**
-* Start the game (if it isn't started yet) and launch the tongue on click (if it's not launched yet)
+* Start the game (if it isn't started yet)
 */
 function mousePressed() {
     if (gameState === "menu") {
         gameState = "game";
     }
-    if (frog.tongue.state === "idle") {
+}
+
+/**
+ * Checks the different keyboard inputs
+ */
+function checkInput() {
+    // Launch the tongue on spacebar click (if it's not launched yet)
+    if (keyIsDown(32) && frog.tongue.state === "idle") {
         frog.tongue.state = "outbound";
+    }
+    // Move the frog towards the left when the left arrow key is pressed
+    if (keyIsDown(LEFT_ARROW)) {
+        frog.body.x -= 5;
+    }
+    // Move the frog towards the right when the right arrow key is pressed
+    if (keyIsDown(RIGHT_ARROW)) {
+        frog.body.x += 5;
     }
 }
 
