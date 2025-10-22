@@ -15,6 +15,10 @@
 
 "use strict";
 
+// The images of the keys used in the game
+let spacebar;
+let arrowKeys;
+
 // The background's fill
 let bg = {
     fill: {
@@ -85,6 +89,14 @@ let travellerFly = undefined;
 let gameState = "menu";
 
 /**
+ * Preloads the images
+ */
+function preload() {
+    spacebar = loadImage('assets/images/spacebar.png');
+    arrowKeys = loadImage('assets/images/arrowKeys.png');
+}
+
+/**
  * Creates the canvas and initializes the fly
  */
 function setup() {
@@ -117,6 +129,12 @@ function draw() {
 function drawMenu() {
     // Start menu is a big frog body covering the screen
     drawFrog();
+    rectMode(CENTER);
+    textSize(14);
+    text("*croak* sorry, I mean click anywhere to play", width / 2, 150, 150, 50);
+    text("use spacebar and arrows to play", width / 2, 400, 150, 50);
+    image(spacebar, width / 2 - 200, 410, 80, 40);
+    image(arrowKeys, width / 2 + 100, 400, 70, 50);
 }
 
 /**
@@ -184,6 +202,7 @@ function drawFly(fly) {
     fill("#000000");
     ellipse(fly.x, fly.y, fly.size);
     // Displays the fly's name under it
+    textSize(10);
     text(fly.name, fly.x, fly.y + 15);
     pop();
 }
@@ -208,6 +227,7 @@ function moveFly(fly) {
  * Announces the birth of a new fly - this is too quick and I can't figure out how to put fly.name in the text as well
  */
 function birthAnnouncement(fly) {
+    textSize(12);
     text("had a baby", width / 2, height / 2);
 }
 
