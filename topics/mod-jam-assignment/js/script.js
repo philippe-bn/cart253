@@ -1,5 +1,5 @@
 /**
- * Frogfrogfrog (MODDED)
+ * SWAMP
  * Pippin Barr, modded by Philippe Beauchemin
  * 
  * A modded game of catching flies with your frog-tongue
@@ -131,26 +131,34 @@ function draw() {
  * Draws a game menu
  */
 function drawMenu() {
-    // Start menu is a big frog body covering the screen
     cursor(ARROW);
+    // Start menu is a big frog body covering the screen
     drawFrog();
-    rectMode(CENTER);
-    textSize(14);
+    // Write the text
     textFont('Courier New');
-    text("*croak* sorry, I mean click anywhere to play", width / 2, 150, 150, 50);
-    text("use spacebar and arrows", width / 2, 440, 150, 50);
-    image(spacebar, width / 2 - 200, 410, 80, 40);
-    image(arrowKeys, width / 2 + 100, 400, 70, 50);
+    push();
+    rectMode(CENTER);
+    // WELCOME TO THE SWAMP!
+    textSize(14);
+    text("*Croak* sorry, I mean click anywhere to play.", width / 2, 150, 300, 50);
+    textSize(12);
+    text("*Use the spacebar and arrows to catch the flies!*", width / 2 - 120, 440, 250, 50);
+    image(spacebar, width / 2 + 50, 410, 120, 40);
+    image(arrowKeys, width / 2 + 200, 400, 70, 50);
+    pop();
 }
 
 /**
  * Launches the game if the mouse is pressed
  */
 function runGame() {
+    // No cursor in-game so the player uses spacebar and arrows
     noCursor();
+    // Draw the sky
     colorMode(RGB);
     background(bg.fill.r, bg.fill.g, bg.fill.b);
 
+    // Draw the flies according to the population index
     if (population > 0) {
         drawFly(eveTheFly);
         moveFly(eveTheFly);
@@ -177,6 +185,7 @@ function runGame() {
     }
 
     drawFrog();
+    // Move the frog and its tongue based on the player's input
     checkInput();
     moveTongue();
 
@@ -303,6 +312,13 @@ function drawFrogEyes() {
     // Draw the frog's eyes
     // In the start menu, the frog's eyes are bigger to be proportional to the body
     if (gameState === "menu") {
+        // Eye tops
+        push()
+        noFill();
+        stroke(0);
+        arc(frog.eyes.left.x, frog.eyes.y - 10, 120, 120, PI, TWO_PI);
+        arc(frog.eyes.right.x, frog.eyes.y - 10, 120, 120, PI, TWO_PI);
+        pop();
         // Eye whites
         push();
         noStroke();
@@ -435,7 +451,13 @@ function endGame() {
     colorMode(HSL);
     background(bg.fill.h, bg.fill.s, bg.fill.l);
     bg.fill.l = constrain(bg.fill.l, 0, 73);
-    bg.fill.l -= 0.3;
+    bg.fill.l -= 0.5;
     drawFrogBody();
+    push();
+    textSize(80);
+    rectMode(CENTER);
+    fill('red');
+    text("YOU STARVED", width / 2 + 60, height - 80, width, height);
+    pop();
 }
 
