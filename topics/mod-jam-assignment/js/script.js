@@ -33,7 +33,7 @@ let bg = {
     }
 }
 
-// The fly population tracker
+// The fly population tracker - this will become useless and will be replaced by the index of the flies array (flies.index?)
 let population = 1;
 
 // Our frog
@@ -84,16 +84,35 @@ const frog = {
     }
 };
 
-// The first fly
-let eveTheFly = undefined;
-// The other flies
-let babyFly = undefined;
-let evolvedFly = undefined;
-let travellerFly = undefined;
-let voraciousFly = undefined;
+let retryButton = {
+    x: 300,
+    y: 400,
+    w: 70,
+    h: 30,
+    fill: "#00ff00"
+};
 
-// The distance between the frog's body and each fly
-let frogFlyDistance = [0];
+// Make an array of flies
+let flies = []; // will be pushed in after?
+let fly = undefined;
+// Make an array of possible names for them
+let names = [
+    "Baby Fly",
+    "Evolved Fly",
+    "Traveller Fly",
+    "Voracious Fly"
+];
+
+// // The first fly
+// let eveTheFly = undefined;
+// // The other flies
+// let babyFly = undefined;
+// let evolvedFly = undefined;
+// let travellerFly = undefined;
+// let voraciousFly = undefined;
+
+// The distance between the frog's body and each fly - this will contain the distance between the frog and each fly
+let frogFlyDistance = [];
 
 // The timer's time
 let timeElapsed = 0;
@@ -118,22 +137,36 @@ function setup() {
     // Set the font for the game
     textFont('Courier New');
 
-    // Create the flies and set their speed and name
-    eveTheFly = createFly(2, "Eve");
-    babyFly = createFly(3, "Baby Fly");
-    evolvedFly = createFly(3.5, "Evolved Fly");
-    travellerFly = createFly(3.5, "Traveller Fly");
-    voraciousFly = createFly(3, "Voracious Fly");
+    // Create the first fly and set up its speed and name
+    fly = createFly(2, "Eve");
+    flies.push(fly);
+    // evolvedFly = createFly(3.5, "Evolved Fly");
+    // travellerFly = createFly(3.5, "Traveller Fly");
+    // voraciousFly = createFly(3, "Voracious Fly");
+
 
     // Give the flies their first random position
-    resetFly(eveTheFly);
-    resetFly(babyFly);
-    resetFly(evolvedFly);
-    resetFly(travellerFly);
-    resetFly(voraciousFly);
+    for (let fly of flies) {
+        resetFly(fly);
+    }
 
     // If the game is running, this will add 1 to the timer every second
     setInterval(gameTimer, 1000);
+}
+
+function createFly(speed, name) {
+    // Our flies - will be pushed into array
+    // Have a position, size, colour, flight pattern, speed of horizontal movement, name
+    const fly = {
+        x: -30,
+        y: random(0, height),
+        b: random(150, 400), // Will become the vertical shift of the sin function
+        size: random(5, 10),
+        fill: "#000000",
+        speed: speed, // Will vary every iteration to be quicker and quicker
+        name: name
+    };
+    return fly;
 }
 
 /**
@@ -183,30 +216,10 @@ function runGame() {
     colorMode(RGB);
     background(bg.fill.r, bg.fill.g, bg.fill.b);
 
-    // Draw the flies according to the population index
-    if (population > 0) {
-        drawFly(eveTheFly);
-        moveFly(eveTheFly);
-    }
-
-    if (population > 1) {
-        drawFly(babyFly);
-        moveFly(babyFly);
-    }
-
-    if (population > 2) {
-        drawFly(evolvedFly);
-        moveFly(evolvedFly);
-    }
-
-    if (population > 3) {
-        drawFly(travellerFly);
-        moveFly(travellerFly);
-    }
-
-    if (population > 4) {
-        drawFly(voraciousFly);
-        moveFly(voraciousFly);
+    // Draw the flies according to the population index - this will become the index of the flies array
+    for (let fly of flies) {
+        drawFly(fly);
+        moveFly(fly);
     }
 
     drawFrog();
@@ -215,41 +228,25 @@ function runGame() {
     moveTongue();
 
     // Check if the tongue overlaps any fly
-    checkTongueFlyOverlap(eveTheFly);
-    checkTongueFlyOverlap(babyFly);
-    checkTongueFlyOverlap(evolvedFly);
-    checkTongueFlyOverlap(travellerFly);
-    checkTongueFlyOverlap(voraciousFly);
+    for (let fly of flies) {
+        checkTongueFlyOverlap(fly);
+    }
 
     drawTimer();
 
     // End the game when there are no flies left
-    if (population < 1) {
+    if (flies.length < 1) {
         // End the game and wait 2 seconds before playing the end game animation
         setTimeout(endGame, 2000);
     }
 
-    // End the game when there are too many flies - the maximum is 5, so 8 should be reached if the flies have reproduced three times more while the user is incapable of regulating the population
-    if (population > 7) {
+    // End the game when there are too many flies - the user is incapable of regulating the population
+    if (flies.length > 200) {
         // End the game and wait 2 seconds before playing the end game animation
         setTimeout(altEndGame, 2000);
     }
 }
 
-function createFly(speed, name) {
-    // Our flies
-    // Have a position, size, colour, flight pattern, speed of horizontal movement, name
-    const fly = {
-        x: 0,
-        y: random(0, height),
-        b: random(150, 400), // Will become the vertical shift of the sin function
-        size: random(5, 10),
-        fill: "#000000",
-        speed: speed, // Will vary every iteration to be quicker and quicker
-        name: name
-    };
-    return fly;
-}
 /**
  * Draws the fly as a black circle
  */
@@ -275,7 +272,8 @@ function moveFly(fly) {
     // Handle the fly going off the canvas
     if (fly.x > width) {
         resetFly(fly);
-        population = population + 1;
+        fly = createFly(random(3, 4), random(names));
+        flies.push(fly);
         // birthAnnouncement();
     }
 }
@@ -284,7 +282,7 @@ function moveFly(fly) {
  * Resets the fly to the left with a random y
  */
 function resetFly(fly) {
-    fly.x = 0;
+    fly.x = -30;
     fly.y = random(0, height);
     fly.b = random(150, 400);
     fly.spawn = random(-100, 100);
@@ -398,36 +396,37 @@ function drawFrogEyes() {
         // Pupils
         push();
         fill(frog.eyes.pupils.fill); // Black
-        // Make left pupil follow mouse X and mouse Y inside globe
-        frog.eyes.pupils.left.x = map(mouseX, 0, width, frog.eyes.left.x - 5, frog.eyes.left.x + 5);
-        frog.eyes.pupils.left.y = map(mouseY, 0, height, frog.eyes.y - 5, frog.eyes.y + 5);
+        // Check how close to the frog every fly on the screen is
+        const closestFly = flyWatch();
+        // Make left pupil follow the position of the closest fly
+        frog.eyes.pupils.left.x = map(closestFly.x, 0, width, frog.eyes.left.x - 5, frog.eyes.left.x + 5);
+        frog.eyes.pupils.left.y = map(closestFly.y, 0, height, frog.eyes.y - 15, frog.eyes.y + 5);
         ellipse(frog.eyes.pupils.left.x, frog.eyes.pupils.left.y, frog.eyes.size - 60);
-        // Make right pupil follow mouse X and mouse Y inside globe
-        frog.eyes.pupils.right.x = map(mouseX, 0, width, frog.eyes.right.x - 5, frog.eyes.right.x + 5);
-        frog.eyes.pupils.right.y = map(mouseY, 0, height, frog.eyes.y - 5, frog.eyes.y + 5);
+        // Make right pupil follow the position of the closest fly
+        frog.eyes.pupils.right.x = map(closestFly.x, 0, width, frog.eyes.right.x - 5, frog.eyes.right.x + 5);
+        frog.eyes.pupils.right.y = map(closestFly.y, 0, height, frog.eyes.y - 15, frog.eyes.y + 5);
         ellipse(frog.eyes.pupils.right.x, frog.eyes.pupils.right.y, frog.eyes.size - 60);
         pop();
-
-        flyWatch(eveTheFly);
-        flyWatch(babyFly);
-        flyWatch(evolvedFly);
-        flyWatch(travellerFly);
-        flyWatch(voraciousFly);
     }
 }
 
 /**
  * Calculate which fly is the closest to the frog
  */
-function flyWatch(fly) {
-    // Get the distance from the frog to any fly
-    const frogFly = dist(frog.body.x, frog.body.y, fly.x, fly.y);
-    // Add the distance with each fly to an array - this doesn't seem like it's working
-    frogFlyDistance.push(frogFly);
-    // Select the smallest one - I use the Math.min function and the ... to use the elements as arguments, according to my research https://stackoverflow.com/questions/8934877/obtain-smallest-value-from-array-in-javascript
-    const closestFly = Math.min(...frogFlyDistance);
-    // Return to mapping
-    return closestFly;
+function flyWatch() {
+    let closest = 100000;
+    let closestFly = undefined;
+    for (let fly of flies) {
+        // Get the distance from the frog to each fly
+        const frogFlyDistance = dist(frog.body.x, frog.body.y, fly.x, fly.y);
+        // Compare to the previous closest distance
+        if (frogFlyDistance < closest) {
+            // Update the closest fly and closest distance
+            closestFly = fly;
+            closest = frogFlyDistance;
+        }
+        return closestFly;
+    }
 }
 
 
@@ -468,10 +467,10 @@ function checkTongueFlyOverlap(fly) {
     // Check if it's an overlap
     const eaten = (tongueFly < frog.tongue.size / 2 + fly.size / 2);
     if (eaten) {
-        // Reset the fly and take one off population
-        population = population - 1;
-        constrain(population, 0, 10);
-        resetFly(fly);
+        // Determine which fly in the array got eaten
+        const eatenFlyIndex = flies.indexOf(fly);
+        // Take out that fly
+        flies.splice(eatenFlyIndex, 1);
         // Bring back the tongue
         frog.tongue.state = "inbound";
     }
@@ -499,11 +498,16 @@ function drawTimer() {
 }
 
 /**
-* Start the game (if it isn't started yet)
+* Start the game (if it isn't started yet) and restart if the "retry" button is pressed
 */
 function mousePressed() {
     if (gameState === "menu") {
         gameState = "game";
+    }
+    const retryButtonDistance = dist(mouseX, mouseY, retryButton.x, retryButton.y);
+    const retryButtonPressed = (retryButtonDistance < retryButton.w / 2);
+    if (retryButtonPressed) {
+        gameState === "menu";
     }
 }
 
@@ -515,6 +519,8 @@ function checkInput() {
     if (keyIsDown(32) && frog.tongue.state === "idle") {
         frog.tongue.state = "outbound";
     }
+
+    frog.body.x = constrain(frog.body.x, frog.body.size / 2, width - frog.body.size / 2);
     // Move the frog towards the left when the left arrow key is pressed
     if (keyIsDown(LEFT_ARROW)) {
         frog.body.x -= 5;
@@ -558,6 +564,9 @@ function endGameText() {
 
     // Write the final score
     finalScore();
+
+    // Retry button
+    drawRetryButton();
 }
 
 /**
@@ -582,6 +591,9 @@ function altEndGame() {
 
     // Write the final score
     finalScore();
+
+    // Retry button
+    drawRetryButton();
 }
 
 function finalScore() {
@@ -593,5 +605,17 @@ function finalScore() {
     text("You lasted", width / 2 + 60, height, width, height);
     text(timeElapsed, width / 2 + 320, height, width, height);
     text("seconds...", width / 2 + 370, height, width, height);
+    pop();
+}
+
+function drawRetryButton() {
+    push();
+    noStroke();
+    fill(retryButton.fill);
+    rect(retryButton.x, retryButton.y, retryButton.w, retryButton.h, 10);
+    pop();
+    push();
+    fill(0);
+    text("RETRY", retryButton.x + retryButton.w / 4, retryButton.y + retryButton.h / 2);
     pop();
 }
