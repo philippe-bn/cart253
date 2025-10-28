@@ -1,5 +1,5 @@
 /**
- * SWAMP
+ * The Swamp of Eden
  * Pippin Barr, modded by Philippe Beauchemin
  * 
  * A modded game of catching flies with your frog-tongue
@@ -38,11 +38,12 @@ let population = 1;
 
 // Our frog
 const frog = {
-    // The frog's body has a position and size
+    // The frog's body has a position, a size and a fill
     body: {
         x: 320,
         y: 520,
-        size: 150
+        size: 150,
+        fill: "#00ff00"
     },
     // The frog's tongue has a position, size, speed, and state
     tongue: {
@@ -52,6 +53,9 @@ const frog = {
         speed: 20,
         // Determines how the tongue moves each frame
         state: "idle" // State can be: idle, outbound, inbound
+    },
+    tympanum: {
+        size: 120
     },
     // The frog's eyes have globes and pupils of a colour and size and each their own position
     eyes: {
@@ -87,6 +91,9 @@ let evolvedFly = undefined;
 let travellerFly = undefined;
 let voraciousFly = undefined;
 
+// The timer's time
+let timeElapsed = 0;
+
 // Starts the game on the start menu
 let gameState = "menu";
 
@@ -116,6 +123,9 @@ function setup() {
     resetFly(evolvedFly);
     resetFly(travellerFly);
     resetFly(voraciousFly);
+
+    // If the game is running, this will add 1 to the timer every second
+    setInterval(gameTimer, 1000);
 }
 
 function draw() {
@@ -137,8 +147,11 @@ function drawMenu() {
     // Write the text
     textFont('Courier New');
     push();
+    textSize(50);
+    text("THE SWAMP OF EDEN", width / 2 - 260, 80);
+    pop();
+    push();
     rectMode(CENTER);
-    // WELCOME TO THE SWAMP!
     textSize(14);
     text("*Croak* sorry, I mean click anywhere to play.", width / 2, 150, 300, 50);
     textSize(12);
@@ -189,17 +202,25 @@ function runGame() {
     checkInput();
     moveTongue();
 
+    // Check if the tongue overlaps any fly
     checkTongueFlyOverlap(eveTheFly);
     checkTongueFlyOverlap(babyFly);
     checkTongueFlyOverlap(evolvedFly);
     checkTongueFlyOverlap(travellerFly);
     checkTongueFlyOverlap(voraciousFly);
 
+    drawTimer();
 
     // End the game when there are no flies left
     if (population < 1) {
         // End the game and wait 2 seconds before playing the end game animation
         setTimeout(endGame, 2000);
+    }
+
+    // End the game when there are too many flies - the maximum is 5, so 8 should be reached if the flies have reproduced three times more while the user is incapable of regulating the population
+    if (population > 7) {
+        // End the game and wait 2 seconds before playing the end game animation
+        setTimeout(altEndGame, 2000);
     }
 }
 
@@ -242,7 +263,7 @@ function moveFly(fly) {
     if (fly.x > width) {
         resetFly(fly);
         population = population + 1;
-        birthAnnouncement();
+        // birthAnnouncement();
     }
 }
 
@@ -256,13 +277,13 @@ function resetFly(fly) {
     fly.spawn = random(-100, 100);
 }
 
-/**
- * Announces the birth of a new fly - this is too quick and I can't figure out how to put fly.name in the text as well
- */
-function birthAnnouncement(fly) {
-    textSize(12);
-    text("had a baby", width / 2, height / 2);
-}
+// /**
+//  * Announces the birth of a new fly - this is too quick and I can't figure out how to put fly.name in the text as well
+//  */
+// function birthAnnouncement(fly) {
+//     textSize(12);
+//     text("had a baby", width / 2, height / 2);
+// }
 
 /**
  * Displays the tongue (tip and line connection) and the frog (body)
@@ -296,12 +317,12 @@ function drawFrogBody() {
     // Draw the frog's body
     // In the start menu, the frog's body takes up the whole screen
     if (gameState === "menu") {
-        background("#00ff00");
+        background(frog.body.fill);
     }
     // In the game, the frog's body is smaller
     else if (gameState === "game" || gameState === "end") {
         push();
-        fill("#00ff00");
+        fill(frog.body.fill);
         noStroke();
         ellipse(frog.body.x, frog.body.y, frog.body.size);
         pop();
@@ -312,12 +333,12 @@ function drawFrogEyes() {
     // Draw the frog's eyes
     // In the start menu, the frog's eyes are bigger to be proportional to the body
     if (gameState === "menu") {
-        // Eye tops
+        // Tympanums
         push()
         noFill();
         stroke(0);
-        arc(frog.eyes.left.x, frog.eyes.y - 10, 120, 120, PI, TWO_PI);
-        arc(frog.eyes.right.x, frog.eyes.y - 10, 120, 120, PI, TWO_PI);
+        arc(frog.eyes.left.x, frog.eyes.y - 10, frog.tympanum.size, frog.tympanum.size, PI, TWO_PI);
+        arc(frog.eyes.right.x, frog.eyes.y - 10, frog.tympanum.size, frog.tympanum.size, PI, TWO_PI);
         pop();
         // Eye whites
         push();
@@ -344,19 +365,26 @@ function drawFrogEyes() {
     }
 
     if (gameState === "game") {
+        // Tympanums
+        push();
+        noStroke();
+        fill(frog.body.fill); // Green
+        frog.eyes.y = frog.body.y - 60; // A little higher on the body
+        frog.eyes.left.x = frog.body.x - 35; // One offset to the left
+        frog.eyes.right.x = frog.body.x + 35; // One offset to the right
+        ellipse(frog.eyes.left.x, frog.eyes.y, frog.eyes.size - 40);
+        ellipse(frog.eyes.right.x, frog.eyes.y, frog.eyes.size - 40);
+        pop();
         // Eye whites
         push();
         noStroke();
-        fill(frog.eyes.globes.fill);
-        frog.eyes.y = frog.body.y - 60;
-        frog.eyes.left.x = frog.body.x - 35;
-        frog.eyes.right.x = frog.body.x + 35;
+        fill(frog.eyes.globes.fill); // White
         ellipse(frog.eyes.left.x, frog.eyes.y, frog.eyes.size - 50);
         ellipse(frog.eyes.right.x, frog.eyes.y, frog.eyes.size - 50);
         pop();
         // Pupils
         push();
-        fill(frog.eyes.pupils.fill);
+        fill(frog.eyes.pupils.fill); // Black
         // Make left pupil follow mouse X and mouse Y inside globe
         frog.eyes.pupils.left.x = map(mouseX, 0, width, frog.eyes.left.x - 5, frog.eyes.left.x + 5);
         frog.eyes.pupils.left.y = map(mouseY, 0, height, frog.eyes.y - 5, frog.eyes.y + 5);
@@ -367,7 +395,6 @@ function drawFrogEyes() {
         ellipse(frog.eyes.pupils.right.x, frog.eyes.pupils.right.y, frog.eyes.size - 60);
         pop();
     }
-
 }
 
 /**
@@ -417,6 +444,27 @@ function checkTongueFlyOverlap(fly) {
 }
 
 /**
+ * Add one to the timer every second during the game
+ */
+function gameTimer() {
+    if (gameState === "menu") {
+        timeElapsed = 0;
+    }
+    else if (gameState === "game") {
+        timeElapsed = timeElapsed + 1;
+    }
+}
+
+/**
+ * Display the timer
+ */
+function drawTimer() {
+    push();
+    text(timeElapsed, width - 25, 25);
+    pop();
+}
+
+/**
 * Start the game (if it isn't started yet)
 */
 function mousePressed() {
@@ -448,16 +496,68 @@ function checkInput() {
  */
 function endGame() {
     gameState = "end";
+
+    // Bring the cursor back
+    cursor(ARROW);
+
+    // Make the background go to black
     colorMode(HSL);
     background(bg.fill.h, bg.fill.s, bg.fill.l);
     bg.fill.l = constrain(bg.fill.l, 0, 73);
     bg.fill.l -= 0.5;
+
+    // Draw the dead frog
     drawFrogBody();
+
+    // Wait two seconds to write the end of game text
+    setTimeout(endGameText, 2000);
+}
+
+function endGameText() {
+    // Write the end of game text
     push();
     textSize(80);
     rectMode(CENTER);
     fill('red');
     text("YOU STARVED", width / 2 + 60, height - 80, width, height);
     pop();
+
+    // Write the final score
+    finalScore();
 }
 
+/**
+ * Sets out an alternative sequence to play at the end of the game
+ */
+function altEndGame() {
+    gameState = "end";
+
+    // Bring the cursor back
+    cursor(ARROW);
+
+    // Draw the dead frog
+    drawFrogBody();
+
+    // Indicate the user lost due to a swarm
+    push();
+    textSize(60);
+    rectMode(CENTER);
+    fill('red');
+    text("YOU WERE SWARMED", width / 2 + 40, height - 80, width, height);
+    pop();
+
+    // Write the final score
+    finalScore();
+}
+
+function finalScore() {
+    // Write the final score as a display of the time elapsed when the game ended
+    push();
+    textSize(40);
+    rectMode(CENTER);
+    fill('red');
+    text("You lasted", width / 2 + 60, height, width, height);
+    text(timeElapsed, width / 2 + 320, height, width, height);
+    text("seconds...", width / 2 + 370, height, width, height);
+    pop();
+}
