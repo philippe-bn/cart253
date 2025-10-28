@@ -52,7 +52,8 @@ const frog = {
         size: 20,
         speed: 20,
         // Determines how the tongue moves each frame
-        state: "idle" // State can be: idle, outbound, inbound
+        state: "idle", // State can be: idle, outbound, inbound
+        stroke: "#ff0000"
     },
     tympanum: {
         size: 120
@@ -111,6 +112,10 @@ function preload() {
 function setup() {
     createCanvas(640, 480);
 
+    // Set the font for the game
+    textFont('Courier New');
+
+    // Create the flies and set their speed and name
     eveTheFly = createFly(2, "Eve");
     babyFly = createFly(3, "Baby Fly");
     evolvedFly = createFly(3.5, "Evolved Fly");
@@ -128,6 +133,9 @@ function setup() {
     setInterval(gameTimer, 1000);
 }
 
+/**
+ * Run the program, draw either the menu or the game
+ */
 function draw() {
     if (gameState === "menu") {
         drawMenu();
@@ -142,14 +150,15 @@ function draw() {
  */
 function drawMenu() {
     cursor(ARROW);
+
     // Start menu is a big frog body covering the screen
     drawFrog();
-    // Write the text
-    textFont('Courier New');
+
     push();
     textSize(50);
     text("THE SWAMP OF EDEN", width / 2 - 260, 80);
     pop();
+
     push();
     rectMode(CENTER);
     textSize(14);
@@ -162,7 +171,7 @@ function drawMenu() {
 }
 
 /**
- * Launches the game if the mouse is pressed
+ * Launch the game if the mouse is pressed
  */
 function runGame() {
     // No cursor in-game so the player uses spacebar and arrows
@@ -226,12 +235,13 @@ function runGame() {
 
 function createFly(speed, name) {
     // Our flies
-    // Have a position, size, speed of horizontal movement, and a distance from the parent fly when new flies are created
+    // Have a position, size, colour, flight pattern, speed of horizontal movement, name
     const fly = {
         x: 0,
         y: random(0, height),
         b: random(150, 400), // Will become the vertical shift of the sin function
         size: random(5, 10),
+        fill: "#000000",
         speed: speed, // Will vary every iteration to be quicker and quicker
         name: name
     };
@@ -243,7 +253,7 @@ function createFly(speed, name) {
 function drawFly(fly) {
     push();
     noStroke();
-    fill("#000000");
+    fill(fly.fill);
     ellipse(fly.x, fly.y, fly.size);
     // Displays the fly's name under it
     textSize(10);
@@ -299,14 +309,14 @@ function drawFrogTongue() {
     if (gameState === "game") {
         // Draw the tongue tip
         push();
-        fill("#ff0000");
+        fill(frog.tongue.stroke);
         noStroke();
         ellipse(frog.tongue.x, frog.tongue.y, frog.tongue.size);
         pop();
 
         // Draw the rest of the tongue
         push();
-        stroke("#ff0000");
+        stroke(frog.tongue.stroke);
         strokeWeight(frog.tongue.size);
         line(frog.tongue.x, frog.tongue.y, frog.body.x, frog.body.y);
         pop();
