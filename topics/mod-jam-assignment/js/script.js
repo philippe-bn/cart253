@@ -92,6 +92,9 @@ let evolvedFly = undefined;
 let travellerFly = undefined;
 let voraciousFly = undefined;
 
+// The distance between the frog's body and each fly
+let frogFlyDistance = [0];
+
 // The timer's time
 let timeElapsed = 0;
 
@@ -404,11 +407,32 @@ function drawFrogEyes() {
         frog.eyes.pupils.right.y = map(mouseY, 0, height, frog.eyes.y - 5, frog.eyes.y + 5);
         ellipse(frog.eyes.pupils.right.x, frog.eyes.pupils.right.y, frog.eyes.size - 60);
         pop();
+
+        flyWatch(eveTheFly);
+        flyWatch(babyFly);
+        flyWatch(evolvedFly);
+        flyWatch(travellerFly);
+        flyWatch(voraciousFly);
     }
 }
 
 /**
- * Handles moving the tongue based on its state
+ * Calculate which fly is the closest to the frog
+ */
+function flyWatch(fly) {
+    // Get the distance from the frog to any fly
+    const frogFly = dist(frog.body.x, frog.body.y, fly.x, fly.y);
+    // Add the distance with each fly to an array - this doesn't seem like it's working
+    frogFlyDistance.push(frogFly);
+    // Select the smallest one - I use the Math.min function and the ... to use the elements as arguments, according to my research https://stackoverflow.com/questions/8934877/obtain-smallest-value-from-array-in-javascript
+    const closestFly = Math.min(...frogFlyDistance);
+    // Return to mapping
+    return closestFly;
+}
+
+
+/**
+ * Handle moving the tongue based on its state
  */
 function moveTongue() {
     // Tongue matches the frog's x
@@ -440,9 +464,9 @@ function moveTongue() {
  */
 function checkTongueFlyOverlap(fly) {
     // Get distance from tongue to fly
-    const d = dist(frog.tongue.x, frog.tongue.y, fly.x, fly.y);
+    const tongueFly = dist(frog.tongue.x, frog.tongue.y, fly.x, fly.y);
     // Check if it's an overlap
-    const eaten = (d < frog.tongue.size / 2 + fly.size / 2);
+    const eaten = (tongueFly < frog.tongue.size / 2 + fly.size / 2);
     if (eaten) {
         // Reset the fly and take one off population
         population = population - 1;
