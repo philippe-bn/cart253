@@ -51,15 +51,32 @@ function draw() {
 }
 
 /**
- * Places the hero in a random position
- * Unfortunately this is sometimes in the danger zone
- * Sorry hero
+ * Places the hero in a random position NOT in the danger zone
  */
 function placeHero() {
     // Choose a random spot for the hero
     hero.x = random(0, width);
     hero.y = random(0, height);
+
     // This COULD BE IN THE DANGER ZONE
+    // So let's use a while loop to keep checking that
+    // and repositioning the hero until we find a spot that
+    // isn't
+
+    // Get the distance between the hero and the zone
+    let d = dist(hero.x, hero.y, dangerZone.x, dangerZone.y);
+    // Check if there's an overlap between the hero and the zone
+    while (d < hero.size / 2 + dangerZone.size / 2) {
+        // If we get to here, then there *is* an overlap
+        // So we need try a new position
+        hero.x = random(0, width);
+        hero.y = random(0, height);
+        // And we need to recalculate the distance for out next time
+        // through the while-loop's condition above
+        d = dist(hero.x, hero.y, dangerZone.x, dangerZone.y);
+    }
+    // When we get to here (AFTER the while-loop) we know that the hero's
+    // current position does NOT overlap the danger zone!
 }
 
 /**
