@@ -2,16 +2,17 @@
  * The Swamp of Eden
  * Pippin Barr, modded by Philippe Beauchemin
  * 
- * A modded game of catching flies with your frog-tongue
+ * A modded game of catching flies with your frog-tongue.
  * 
  * Instructions:
- * - Move the frog with your mouse
- * - Click to launch the tongue
- * - Catch flies
+ * - Move the frog with the keyboard arrows
+ * - Click spacebar to launch the tongue
+ * - Catch flies and keep the fly population balanced for as long as possible
  * 
  * Made with p5
  * https://p5js.org/
  * Keyboard pictures by Julia Bellone : https://juliabellone.github.io/Arkanoid/ 
+ * Timer help by user T.J. Crowder on Stack Overflow: https://stackoverflow.com/questions/5978519/how-can-i-use-setinterval-and-clearinterval
  */
 
 "use strict";
@@ -85,7 +86,7 @@ const frog = {
 };
 
 let retryButton = {
-    x: 300,
+    x: 320,
     y: 400,
     w: 70,
     h: 30,
@@ -116,6 +117,8 @@ let frogFlyDistance = [];
 
 // The timer's time
 let timeElapsed = 0;
+// The timer's interval
+let timeFlow = setInterval(gameTimer, 1000);
 
 // Starts the game on the start menu
 let gameState = "menu";
@@ -150,8 +153,8 @@ function setup() {
         resetFly(fly);
     }
 
-    // If the game is running, this will add 1 to the timer every second
-    setInterval(gameTimer, 1000);
+    // As the game is running, this will add 1 to the timer every second
+    setInterval(timeFlow);
 }
 
 function createFly(speed, name) {
@@ -178,6 +181,12 @@ function draw() {
     }
     else if (gameState === "game") {
         runGame();
+    }
+    else if (gameState === "end") {
+        endGame();
+    }
+    else if (gameState === "alt end") {
+        altEndGame();
     }
 }
 
@@ -237,13 +246,13 @@ function runGame() {
     // End the game when there are no flies left
     if (flies.length < 1) {
         // End the game and wait 2 seconds before playing the end game animation
-        setTimeout(endGame, 2000);
+        gameState = "end";
     }
 
     // End the game when there are too many flies - the user is incapable of regulating the population
     if (flies.length > 200) {
         // End the game and wait 2 seconds before playing the end game animation
-        setTimeout(altEndGame, 2000);
+        gameState = "alt end";
     }
 }
 
@@ -274,7 +283,6 @@ function moveFly(fly) {
         resetFly(fly);
         fly = createFly(random(3, 4), random(names));
         flies.push(fly);
-        // birthAnnouncement();
     }
 }
 
@@ -287,14 +295,6 @@ function resetFly(fly) {
     fly.b = random(150, 400);
     fly.spawn = random(-100, 100);
 }
-
-// /**
-//  * Announces the birth of a new fly - this is too quick and I can't figure out how to put fly.name in the text as well
-//  */
-// function birthAnnouncement(fly) {
-//     textSize(12);
-//     text("had a baby", width / 2, height / 2);
-// }
 
 /**
  * Displays the tongue (tip and line connection) and the frog (body)
@@ -480,9 +480,11 @@ function checkTongueFlyOverlap(fly) {
  * Add one to the timer every second during the game
  */
 function gameTimer() {
+    // As long as the game isn't started, the time elapsed is 0
     if (gameState === "menu") {
         timeElapsed = 0;
     }
+    // The time elapsed increases by 1 every second
     else if (gameState === "game") {
         timeElapsed = timeElapsed + 1;
     }
@@ -498,16 +500,22 @@ function drawTimer() {
 }
 
 /**
-* Start the game (if it isn't started yet) and restart if the "retry" button is pressed
+* Start the game (if it isn't started yet) and restart if the "retry" button is pressed at the end of the game
 */
 function mousePressed() {
     if (gameState === "menu") {
         gameState = "game";
     }
-    const retryButtonDistance = dist(mouseX, mouseY, retryButton.x, retryButton.y);
-    const retryButtonPressed = (retryButtonDistance < retryButton.w / 2);
-    if (retryButtonPressed) {
-        gameState === "menu";
+
+    if (gameState === "end" || gameState === "alt end") {
+        if (checkRetryButtonOverlap(mouseX, mouseY, retryButton)) {
+            // Reset the time flow and time elapsed
+            timeFlow = 0;
+            timeElapsed = 0;
+            // Restart
+            setup();
+            gameState = "menu";
+        }
     }
 }
 
@@ -535,8 +543,6 @@ function checkInput() {
  * Sets out the sequence to play at the end of the game
  */
 function endGame() {
-    gameState = "end";
-
     // Bring the cursor back
     cursor(ARROW);
 
@@ -549,8 +555,10 @@ function endGame() {
     // Draw the dead frog
     drawFrogBody();
 
-    // Wait two seconds to write the end of game text
-    setTimeout(endGameText, 2000);
+    // When the sky gets dark, write the end text
+    if (bg.fill.l <= 10) {
+        endGameText();
+    }
 }
 
 function endGameText() {
@@ -573,7 +581,6 @@ function endGameText() {
  * Sets out an alternative sequence to play at the end of the game
  */
 function altEndGame() {
-    gameState = "end";
 
     // Bring the cursor back
     cursor(ARROW);
@@ -585,7 +592,7 @@ function altEndGame() {
     push();
     textSize(60);
     rectMode(CENTER);
-    fill('red');
+    fill('white');
     text("YOU WERE SWARMED", width / 2 + 40, height - 80, width, height);
     pop();
 
@@ -601,21 +608,34 @@ function finalScore() {
     push();
     textSize(40);
     rectMode(CENTER);
-    fill('red');
+    fill('white');
     text("You lasted", width / 2 + 60, height, width, height);
     text(timeElapsed, width / 2 + 320, height, width, height);
-    text("seconds...", width / 2 + 370, height, width, height);
+    if (timeElapsed === 1) {
+        text("second...", width / 2 + 370, height, width, height);
+    }
+    else {
+        text("seconds...", width / 2 + 370, height, width, height);
+    }
     pop();
 }
 
 function drawRetryButton() {
     push();
+    rectMode(CENTER);
     noStroke();
     fill(retryButton.fill);
     rect(retryButton.x, retryButton.y, retryButton.w, retryButton.h, 10);
     pop();
     push();
     fill(0);
-    text("RETRY", retryButton.x + retryButton.w / 4, retryButton.y + retryButton.h / 2);
+    text("RETRY", retryButton.x - retryButton.w / 4, retryButton.y + retryButton.h / 6);
     pop();
+}
+
+function checkRetryButtonOverlap(mouseX, mouseY, retryButton) {
+    return (mouseX > retryButton.x - retryButton.w / 2 &&
+        mouseX < retryButton.x + retryButton.w / 2 &&
+        mouseY > retryButton.y - retryButton.h / 2 &&
+        mouseY < retryButton.y + retryButton.h / 2);
 }
