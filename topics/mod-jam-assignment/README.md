@@ -31,6 +31,7 @@ The frog’s eyes follow the mouse in the main menu, effectively acting as a sur
 - Original project by Pippin Barr
     - [planning](./planning.md)
     - [pseudocode](./pseudocode.md)
+- Overlap code taken from Pippin Barr's CART253 repository: https://pippinbarr.com/cart253/assignments/challenges/functions/
 - Made with p5: https://p5js.org/
 - Keyboard pictures by Julia Bellone : https://juliabellone.github.io/Arkanoid/ 
 - Timer help by user T.J. Crowder on Stack Overflow: https://stackoverflow.com/questions/5978519/how-can-i-use-setinterval-and-clearinterval
