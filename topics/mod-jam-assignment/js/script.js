@@ -513,6 +513,8 @@ function mousePressed() {
             // Reset the time flow and time elapsed
             timeFlow = 0;
             timeElapsed = 0;
+            // Reset the flies
+            flies = [];
             // Restart
             setup();
             gameState = "menu";
