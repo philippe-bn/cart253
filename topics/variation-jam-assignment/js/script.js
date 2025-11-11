@@ -12,11 +12,29 @@
 
 let state = "menu";
 
+// A variable for our frog models
+let frogData;
+// A variable for our frog
+let frog;
+// A variable for our fly models
+let flyData;
+// A variable for our button models
+let buttonData;
+
+function preload() {
+    frogData = loadJSON("assets/data/frog.json");
+    flyData = loadJSON("assets/data/fly.json");
+    buttonData = loadJSON("assets/data/button.json");
+
+    menuPreload();
+}
+
 /**
  * Create the canvas
 */
 function setup() {
     createCanvas(640, 480);
+    menuSetup();
 }
 
 

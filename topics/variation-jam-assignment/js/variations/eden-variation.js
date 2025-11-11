@@ -34,54 +34,6 @@ let bg = {
 // The fly population tracker - this will become useless and will be replaced by the index of the flies array (flies.index?)
 let population = 1;
 
-// Our frog
-const frog = {
-    // The frog's body has a position, a size and a fill
-    body: {
-        x: 320,
-        y: 520,
-        size: 150,
-        fill: "#00ff00"
-    },
-    // The frog's tongue has a position, size, speed, and state
-    tongue: {
-        x: undefined,
-        y: 480,
-        size: 20,
-        speed: 20,
-        // Determines how the tongue moves each frame
-        state: "idle", // State can be: idle, outbound, inbound
-        stroke: "#ff0000"
-    },
-    tympanum: {
-        size: 120
-    },
-    // The frog's eyes have globes and pupils of a colour and size and each their own position
-    eyes: {
-        y: undefined,
-        size: 80,
-        globes: {
-            fill: "#FFFFFF",
-        },
-        pupils: {
-            y: undefined,
-            fill: "#000000",
-            left: {
-                x: undefined,
-            },
-            right: {
-                x: undefined,
-            }
-        },
-        left: {
-            x: undefined,
-        },
-        right: {
-            x: undefined,
-        }
-    }
-};
-
 let retryButton = {
     x: 320,
     y: 400,
@@ -117,6 +69,10 @@ let gameState = "game";
 function edenSetup() {
     createCanvas(640, 480); // could maybe be deleted?
 
+    // In the Eden Variation, we use a specific frog
+    frog = frogData.frog.eden;
+    console.log(frog)
+
     // Create the first fly and set up its speed and name
     fly = createFly(2, "Eve");
     flies.push(fly);
@@ -131,18 +87,10 @@ function edenSetup() {
 }
 
 function createFly(speed, name) {
-    // Our flies - will be pushed into array
-    // Have a position, size, colour, flight pattern, speed of horizontal movement, name
-    const fly = {
-        x: -30,
-        y: random(0, height),
-        b: random(150, 400), // Will become the vertical shift of the sin function
-        size: random(5, 10),
-        fill: "#000000",
-        speed: speed, // Will vary every iteration to be quicker and quicker
-        name: name
-    };
-    return fly;
+    const newFly = structuredClone(flyData.fly);
+    newFly.speed = speed;
+    newFly.name = name;
+    return newFly;
 }
 
 /**
@@ -491,7 +439,8 @@ function altEndGame() {
     textSize(60);
     rectMode(CENTER);
     fill('white');
-    text("YOU WERE SWARMED", width / 2 + 40, height - 80, width, height);
+    textAlign(CENTER);
+    text("YOU WERE SWARMED", width / 2, height - 80, width, height);
     pop();
 
     // Write the final score

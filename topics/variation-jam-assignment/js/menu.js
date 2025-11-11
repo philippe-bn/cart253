@@ -8,59 +8,30 @@
 let spacebar;
 let arrowKeys;
 
-// Our frog
-const frog = {
-    // The frog's body has a position, a size and a fill
-    body: {
-        x: 320,
-        y: 520,
-        size: 150,
-        fill: "#00ff00"
-    },
-    tympanum: {
-        size: 120
-    },
-    // The frog's eyes have globes and pupils of a colour and size and each their own position
-    eyes: {
-        y: undefined,
-        size: 80,
-        globes: {
-            fill: "#FFFFFF",
-        },
-        pupils: {
-            y: undefined,
-            fill: "#000000",
-            left: {
-                x: undefined,
-            },
-            right: {
-                x: undefined,
-            }
-        },
-        left: {
-            x: undefined,
-        },
-        right: {
-            x: undefined,
-        }
-    }
-};
+let buttons = [];
 
 /**
  * Preloads the images
  */
-function preload() {
+function menuPreload() {
     spacebar = loadImage('assets/images/spacebar.png');
     arrowKeys = loadImage('assets/images/arrowKeys.png');
 }
 
 function menuSetup() {
+    // In the menu, we use a specific frog which we will retrieve from the frog JSON file
+    frog = frogData.frog.menu;
+    console.log(frog);
+
     // Set the font for the game
     textFont('Courier New');
     // Make each button object a recognizable "button"
-    button = createVariationButton(100, "The Swamp of Eden");
-    button = createVariationButton(250, "Paradise");
-    button = createVariationButton(400, "Hell");
+    button1 = createVariationButton(100, 140, "The Swamp of Eden");
+    buttons.push(button1);
+    button2 = createVariationButton(250, 70, "Paradise");
+    buttons.push(button2);
+    button3 = createVariationButton(400, 60, "Hell");
+    buttons.push(button3);
 }
 
 /**
@@ -87,7 +58,13 @@ function menuDraw() {
     image(arrowKeys, width / 2 + 200, 400, 70, 50);
     pop();
 
-    drawVariationButtons();
+    for (let button of buttons) {
+        drawVariationButtons(button);
+    }
+
+    for (let button of buttons) {
+        checkButtonOverlap(mouseX, mouseY, button);
+    }
 }
 
 /**
@@ -95,17 +72,17 @@ function menuDraw() {
  */
 function menuMousePressed() {
     switch (state) {
-        case eden:
+        case "menu": //and mouse overlaps menu button?
             state = "eden-variation";
             edenSetup();
             break;
 
-        case paradise:
+        case "menu":
             state = "paradise-variation";
             paradiseSetup();
             break;
 
-        case hell:
+        case "menu":
             state = "hell-variation";
             hellSetup();
             break;
@@ -157,18 +134,12 @@ function drawFrogEyes() {
     pop();
 }
 
-function createVariationButton(y, text) {
-    // Our buttons
-    // Have a position, size, colour and text
-    const button = {
-        x: 320,
-        y: y,
-        w: 70,
-        h: 30,
-        fill: "#00ff00",
-        text: text
-    };
-    return button;
+function createVariationButton(y, w, text) {
+    const newButton = structuredClone(buttonData);
+    newButton.y = y;
+    newButton.w = w;
+    newButton.text = text;
+    return newButton;
 }
 
 // Draw the buttons for each variation
@@ -180,8 +151,9 @@ function drawVariationButtons(button) {
     rect(button.x, button.y, button.w, button.h, 10);
     pop();
     push();
+    textAlign(CENTER, CENTER);
     fill(0);
-    text(button.text, button.x - button.w / 4, button.y + button.h / 6);
+    text(button.text, button.x, button.y);
     pop();
 }
 

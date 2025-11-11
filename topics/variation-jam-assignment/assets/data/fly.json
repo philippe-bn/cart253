@@ -1,0 +1,12 @@
+{
+    "description": "Our fly model",
+    "fly": {
+        "x": -30,
+        "y": "random(0, height)",
+        "b": "random(150, 400)",
+        "size": "random(5, 10)",
+        "fill": "#000000",
+        "speed": "speed",
+        "name": "name"
+    }
+}
