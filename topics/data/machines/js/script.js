@@ -10,6 +10,37 @@
 
 "use strict";
 
+const machineWidth = 100;
+const machineHeight = 100;
+
+// An array of machines data
+let machines = [
+    {
+        type: "incinerator",
+        x: 0,
+        y: 100,
+        width: machineWidth,
+        height: machineHeight,
+        fill: "#ff4400",
+    },
+    {
+        type: "freezer",
+        x: 150,
+        y: 100,
+        width: machineWidth,
+        height: machineHeight,
+        fill: "#bbbbff",
+    },
+    {
+        type: "crusher",
+        x: 300,
+        y: 100,
+        width: machineWidth,
+        height: machineHeight,
+        fill: "#777777"
+    }
+];
+
 /**
  * Create the canvas
  */
@@ -23,24 +54,17 @@ function setup() {
 function draw() {
     background(0);
 
-    // Incinerator
-    push();
-    noStroke();
-    fill("#ff4400");
-    rect(0, 100, 100, 100);
-    pop();
+    // Go through the machine in the array and draw them
+    for (let machine of machines) {
+        drawMachine(machine);
+    }
 
-    // Freezer
-    push();
-    noStroke();
-    fill("#bbbbff");
-    rect(150, 100, 100, 100);
-    pop();
+}
 
-    // Crusher
+function drawMachine(machine) {
     push();
     noStroke();
-    fill("#777777");
-    rect(300, 100, 100, 100);
+    fill(machine.fill);
+    rect(machine.x, machine.y, machine.width, machine.height);
     pop();
 }
