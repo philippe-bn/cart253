@@ -1,0 +1,17 @@
+***Frog Feaster 3000* by Yelena Arakelian**
+I really liked the game's soundtrack right away, I found it matched the game's aesthetic well and had nice gradual increasing dynamics which matched the "opening" of the game. I found that typing "frog" to start the game was creative and surprising, although it felt a bit random. I also found the red text on green background a bit hard to read as someone with colorblindness. I particularly liked the frog eating sound effect and the horsefly "hurt" sound effect, although they were both simple they worked to make the game very satisfying. Additionally, I liked that there were two frogs "spectating" the action - I liked how the artist mapped their eyes to the main frog so that they were actively following the frog. I found it interesting to see the artist used vectors for this dynamic. I found it compelling that the artist added a "distraction" GIF happening at a recurring time interval; it effectively distracted me during my playthrough and resulted in a game over.
+
+Link to the running project:
+https://yelenaarakelian.github.io/cart253/topics/mod-jam/
+
+***Am I a Frog?* by Yvonne Arriola Lerin**
+I liked the aesthetic of the game. I found that the combination of the colours, background, title, song and GIFs gave the game a very friendly, cute vibe. I was surprised by the "spawning" of the flies in selected random positions, it meant I found myself hitting the ladybugs accidentally. I found the scoring system a bit confusing at first but when I understood it, I found it compelling: I must have misread the instructions at the start of the game, because I first thought the ladybugs were dangerous to eat, so I focused on eating the flies. I hadn't understood that letting the flies get away meant getting a strike: for this I wondered what was the thought behind this mechanic, what it meant to get a strike because a fly got away? This is what helped me understand that the game was judging whether or not the player "is a frog" based on whether or not they eat the flies in front of them. Funny! I liked how the scoring system was also built so that a player could choose to eat ladybugs to remove a strike but that it meant that they would lose a point and how the artist tied this back to the main narrative: if the player is eating too many ladybugs, they are not a frog!
+
+Link to the running project:
+https://scarlett253.github.io/CART253/Topics/mod-jam/
+
+***HUNGRY FROG* by Amélie Barrette**
+I loved the implementation of a start menu with the option of simply reading the instructions. I found that using a variable "MENU" for storing values for the different menus was quite smart! I found that the game had a very clear concept and that it was very fun to play. I liked trying to survive the entire game, and once I did, I liked trying to beat my high score. I found the "starving" event surprising and interesting, and spent a long while trying to figure it out by myself without looking at the code: I found it very compelling that the artist used a "placement" variable to represent the frog's hunger and used it to determine when it starved.
+
+Link to the running project:
+https://nounoune666.github.io/cart253/topics/Mod_Jam/
