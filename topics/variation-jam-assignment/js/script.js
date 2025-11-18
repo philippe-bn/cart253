@@ -18,13 +18,25 @@ let frogData;
 let frog;
 // A variable for our fly models
 let flyData;
+// A variable for a fly
+let fly;
 // A variable for our button models
 let buttonData;
+// A variable for our names array
+let namesData;
+// A variable for our names
+let names;
+
+/**
+ * Our array containing our future flies
+ */
+let flies = [];
 
 function preload() {
     frogData = loadJSON("assets/data/frog.json");
     flyData = loadJSON("assets/data/fly.json");
     buttonData = loadJSON("assets/data/button.json");
+    namesData = loadJSON("assets/data/names.json");
 
     menuPreload();
 }
@@ -77,4 +89,17 @@ function mousePressed() {
             hellMousePressed();
             break;
     }
+}
+
+/**
+ * Create a fly based on a fly model with a specific speed and name and returns it
+ */
+function createFly(speed, name) {
+    const newFly = structuredClone(flyData.fly);
+    newFly.y = random(0, height);
+    newFly.b = random(150, 400);
+    newFly.size = random(5, 10);
+    newFly.speed = speed;
+    newFly.name = name;
+    return newFly;
 }

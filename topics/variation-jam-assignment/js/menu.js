@@ -4,10 +4,11 @@
  * This keeps the stuff the menu needs to do *separate* from the rest of the program.
  */
 
-// The images of the keys used in the game
+// The images of the keys used in the menu
 let spacebar;
 let arrowKeys;
 
+// An array for our buttons
 let buttons = [];
 
 /**
@@ -21,17 +22,16 @@ function menuPreload() {
 function menuSetup() {
     // In the menu, we use a specific frog which we will retrieve from the frog JSON file
     frog = frogData.frog.menu;
-    console.log(frog);
 
     // Set the font for the game
     textFont('Courier New');
     // Make each button object a recognizable "button"
-    button1 = createVariationButton(100, 140, "The Swamp of Eden");
-    buttons.push(button1);
-    button2 = createVariationButton(250, 70, "Paradise");
-    buttons.push(button2);
-    button3 = createVariationButton(400, 60, "Hell");
-    buttons.push(button3);
+    edenButton = createVariationButton(100, 140, "The Swamp of Eden");
+    buttons.push(edenButton);
+    paradiseButton = createVariationButton(250, 70, "Paradise");
+    buttons.push(paradiseButton);
+    hellButton = createVariationButton(400, 60, "Hell");
+    buttons.push(hellButton);
 }
 
 /**
@@ -72,19 +72,19 @@ function menuDraw() {
  */
 function menuMousePressed() {
     switch (state) {
-        case "menu": //and mouse overlaps menu button?
-            state = "eden-variation";
-            edenSetup();
-            break;
-
         case "menu":
-            state = "paradise-variation";
-            paradiseSetup();
-            break;
-
-        case "menu":
-            state = "hell-variation";
-            hellSetup();
+            if (checkButtonOverlap(mouseX, mouseY, edenButton)) {
+                state = "eden-variation";
+                edenSetup();
+            }
+            if (checkButtonOverlap(mouseX, mouseY, paradiseButton)) {
+                state = "paradise-variation";
+                paradiseSetup();
+            }
+            if (checkButtonOverlap(mouseX, mouseY, hellButton)) {
+                state = "hell-variation";
+                hellSetup();
+            }
             break;
     }
 }

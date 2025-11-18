@@ -1,6 +1,6 @@
 /**
  * Hell
- * Pippin Barr, modded by Philippe Beauchemin
+ * Philippe Beauchemin
  * 
  * A modded game of catching flies with your frog-tongue.
  * 
@@ -17,3 +17,490 @@
  */
 
 "use strict";
+
+/**
+ * The background's fill
+ */
+let hellBg = {
+    fill: {
+        r: 135,
+        g: 206,
+        b: 235,
+
+        h: 197,
+        s: 71,
+        l: 73,
+    }
+}
+
+/**
+ * The retry button
+ */
+let hellRetryButton = {
+    x: 320,
+    y: 400,
+    w: 70,
+    h: 30,
+    fill: "#00ff00"
+};
+
+/**
+ * The distance between the frog's body and each fly - this will contain the distance between the frog and each fly
+ */
+let hellFrogFlyDistance = [];
+
+/**
+ * No notion of time in Hell
+ */
+let hellTimeElapsed = 0;
+// /**
+//  * The timer's interval
+//  */
+// let timeFlow = setInterval(gameTimer, 1000);
+
+/**
+ * The game's state
+ */
+let hellGameState = undefined;
+
+/**
+ * Creates the canvas and initializes the fly
+ */
+function hellSetup() {
+    createCanvas(640, 480); // could maybe be deleted?
+
+    // In the Hell Variation, we use a specific frog
+    frog = frogData.frog.hell;
+    names = namesData.names;
+
+    // Create the first fly and set up its speed and name
+    fly = createFly(2, "Eve");
+    flies.push(fly);
+
+    // Give the flies their first random position
+    for (let fly of flies) {
+        resetFly(fly);
+    }
+
+    // // As the game is running, this will add 1 to the timer every second
+    // setInterval(timeFlow);
+
+    hellGameState = "game";
+}
+
+/**
+ * Run the program, draw either the game or an ending
+ */
+function hellDraw() {
+    if (hellGameState === "game") {
+        hellRunGame();
+    }
+    else if (hellGameState === "end") {
+        hellEndGame();
+    }
+    else if (hellGameState === "alt end") {
+        altHellEndGame();
+    }
+}
+
+/**
+ * Launch the game if the mouse is pressed
+ */
+function hellRunGame() {
+    // No cursor in-game so the player uses spacebar and arrows
+    noCursor();
+    // Draw the sky
+    colorMode(RGB);
+    background(hellBg.fill.r, hellBg.fill.g, hellBg.fill.b);
+
+    // Draw the flies according to the population index - this will become the index of the flies array
+    for (let fly of flies) {
+        drawFly(fly);
+        moveFly(fly);
+    }
+
+    // Draw the frog
+    drawHellFrog();
+    // Move the frog and its tongue based on the player's input
+    checkInput();
+    moveTongue();
+
+    // Check if the tongue overlaps any fly
+    for (let fly of flies) {
+        checkTongueFlyOverlap(fly);
+    }
+
+    // Draw the timer on the screen
+    drawHellTimer();
+
+    // End the game when there are no flies left
+    if (flies.length < 1) {
+        // End the game and wait 2 seconds before playing the end game animation
+        hellGameState = "end";
+    }
+
+    // End the game when there are too many flies - the user is incapable of regulating the population
+    if (flies.length > 200) {
+        // End the game and wait 2 seconds before playing the end game animation
+        hellGameState = "alt end";
+    }
+}
+
+/**
+ * Draws the fly as a black circle with a name
+ */
+function drawFly(fly) {
+    push();
+    noStroke();
+    fill(fly.fill);
+    ellipse(fly.x, fly.y, fly.size);
+    // Displays the fly's name under it
+    textSize(10);
+    text(fly.name, fly.x, fly.y + 15);
+    pop();
+}
+
+/**
+ * Moves the fly according to its speed
+ * Resets the fly if it gets all the way to the right
+ */
+function moveFly(fly) {
+    // Move the fly in a sinusoidal pattern across the screen
+    fly.x += fly.speed;
+    fly.y = 5 * sin(frameCount * 0.25) + fly.b;
+    // Handle the fly going off the canvas
+    if (fly.x > width) {
+        resetFly(fly);
+        fly = createFly(random(3, 4), random(names));
+        flies.push(fly);
+    }
+}
+
+/**
+ * Resets the fly to the left with a random y
+ */
+function resetFly(fly) {
+    fly.x = -30;
+    fly.y = random(0, height);
+    fly.b = random(150, 400);
+    fly.spawn = random(-100, 100);
+}
+
+/**
+ * Displays the tongue (tip and line connection) and the frog (body)
+ */
+function drawHellFrog() {
+    drawHellFrogTongue();
+    drawHellFrogBody();
+    drawHellFrogEyes();
+}
+
+/**
+ * Displays the tongue (tip and line connection)
+ */
+function drawHellFrogTongue() {
+    // Draw the tongue
+    if (hellGameState === "game") {
+        // Draw the tongue tip
+        push();
+        fill(frog.tongue.stroke);
+        noStroke();
+        ellipse(frog.tongue.x, frog.tongue.y, frog.tongue.size);
+        pop();
+
+        // Draw the rest of the tongue
+        push();
+        stroke(frog.tongue.stroke);
+        strokeWeight(frog.tongue.size);
+        line(frog.tongue.x, frog.tongue.y, frog.body.x, frog.body.y);
+        pop();
+    }
+}
+
+/**
+ * Displays the frog's body
+ */
+function drawHellFrogBody() {
+    push();
+    fill(frog.body.fill);
+    noStroke();
+    ellipse(frog.body.x, frog.body.y, frog.body.size);
+    pop();
+}
+
+/**
+ * Displays the frog's eyes
+ */
+function drawHellFrogEyes() {
+    // Tympanums
+    push();
+    noStroke();
+    fill(frog.body.fill); // Green
+    frog.eyes.y = frog.body.y - 60; // A little higher on the body
+    frog.eyes.left.x = frog.body.x - 35; // One offset to the left
+    frog.eyes.right.x = frog.body.x + 35; // One offset to the right
+    ellipse(frog.eyes.left.x, frog.eyes.y, frog.eyes.size - 40);
+    ellipse(frog.eyes.right.x, frog.eyes.y, frog.eyes.size - 40);
+    pop();
+    // Eye whites
+    push();
+    noStroke();
+    fill(frog.eyes.globes.fill); // White
+    ellipse(frog.eyes.left.x, frog.eyes.y, frog.eyes.size - 50);
+    ellipse(frog.eyes.right.x, frog.eyes.y, frog.eyes.size - 50);
+    pop();
+    // Pupils
+    push();
+    fill(frog.eyes.pupils.fill); // Black
+    // Check how close to the frog every fly on the screen is
+    const closestFly = flyWatch();
+    // Make left pupil follow the position of the closest fly
+    frog.eyes.pupils.left.x = map(closestFly.x, 0, width, frog.eyes.left.x - 5, frog.eyes.left.x + 5);
+    frog.eyes.pupils.left.y = map(closestFly.y, 0, height, frog.eyes.y - 15, frog.eyes.y + 5);
+    ellipse(frog.eyes.pupils.left.x, frog.eyes.pupils.left.y, frog.eyes.size - 60);
+    // Make right pupil follow the position of the closest fly
+    frog.eyes.pupils.right.x = map(closestFly.x, 0, width, frog.eyes.right.x - 5, frog.eyes.right.x + 5);
+    frog.eyes.pupils.right.y = map(closestFly.y, 0, height, frog.eyes.y - 15, frog.eyes.y + 5);
+    ellipse(frog.eyes.pupils.right.x, frog.eyes.pupils.right.y, frog.eyes.size - 60);
+    pop();
+}
+
+/**
+ * Calculate which fly is the closest to the frog
+ */
+function flyWatch() {
+    let closest = 100000;
+    let closestFly = undefined;
+    for (let fly of flies) {
+        // Get the distance from the frog to each fly
+        const hellFrogFlyDistance = dist(frog.body.x, frog.body.y, fly.x, fly.y);
+        // Compare to the previous closest distance
+        if (hellFrogFlyDistance < closest) {
+            // Update the closest fly and closest distance
+            closestFly = fly;
+            closest = hellFrogFlyDistance;
+        }
+        return closestFly;
+    }
+}
+
+
+/**
+ * Handle moving the tongue based on its state
+ */
+function moveTongue() {
+    // Tongue matches the frog's x
+    frog.tongue.x = frog.body.x;
+    // If the tongue is idle, it doesn't do anything
+    if (frog.tongue.state === "idle") {
+        // Do nothing
+    }
+    // If the tongue is outbound, it moves up
+    else if (frog.tongue.state === "outbound") {
+        frog.tongue.y += -frog.tongue.speed;
+        // The tongue bounces back if it hits the top
+        if (frog.tongue.y <= 0) {
+            frog.tongue.state = "inbound";
+        }
+    }
+    // If the tongue is inbound, it moves down
+    else if (frog.tongue.state === "inbound") {
+        frog.tongue.y += frog.tongue.speed;
+        // The tongue stops if it hits the bottom
+        if (frog.tongue.y >= height) {
+            frog.tongue.state = "idle";
+        }
+    }
+}
+
+/**
+ * Handles the tongue overlapping any fly
+ */
+function checkTongueFlyOverlap(fly) {
+    // Get distance from tongue to fly
+    const tongueFly = dist(frog.tongue.x, frog.tongue.y, fly.x, fly.y);
+    // Check if it's an overlap
+    const eaten = (tongueFly < frog.tongue.size / 2 + fly.size / 2);
+    if (eaten) {
+        // Determine which fly in the array got eaten
+        const eatenFlyIndex = flies.indexOf(fly);
+        // Take out that fly
+        flies.splice(eatenFlyIndex, 1);
+        // Bring back the tongue
+        frog.tongue.state = "inbound";
+    }
+}
+
+// /**
+//  * Add one to the timer every second during the game
+//  */
+// function gameTimer() {
+//     // The time elapsed increases by 1 every second
+//     if (hellGameState === "game") {
+//         timeElapsed = timeElapsed + 1;
+//     }
+// }
+
+/**
+ * Display the timer
+ */
+function drawHellTimer() {
+    push();
+    text(hellTimeElapsed, width - 25, 25);
+    pop();
+}
+
+/**
+* Go back to the menu if the "retry" button is pressed at the end of the game
+*/
+function hellMousePressed() {
+    if (hellGameState === "end" || hellGameState === "alt end") {
+        if (checkHellRetryButtonOverlap(mouseX, mouseY, hellRetryButton)) {
+            // Reset the time flow and time elapsed
+            // timeFlow = 0;
+            hellTimeElapsed = 0;
+            // Reset the flies
+            flies = [];
+            // Restart
+            switch (state) {
+                case "hell-variation":
+                    state = "menu"
+                    break;
+            }
+        }
+    }
+}
+
+/**
+ * Checks the different keyboard inputs
+ */
+function checkInput() {
+    // Launch the tongue on spacebar click (if it's not launched yet)
+    if (keyIsDown(32) && frog.tongue.state === "idle") {
+        frog.tongue.state = "outbound";
+    }
+
+    frog.body.x = constrain(frog.body.x, frog.body.size / 2, width - frog.body.size / 2);
+    // Move the frog towards the left when the left arrow key is pressed
+    if (keyIsDown(LEFT_ARROW)) {
+        frog.body.x -= 5;
+    }
+    // Move the frog towards the right when the right arrow key is pressed
+    if (keyIsDown(RIGHT_ARROW)) {
+        frog.body.x += 5;
+    }
+}
+
+/**
+ * Sets out the sequence to play at the end of the game
+ */
+function hellEndGame() {
+    // Bring the cursor back
+    cursor(ARROW);
+
+    // Make the background go to black
+    colorMode(HSL);
+    background(hellBg.fill.h, hellBg.fill.s, hellBg.fill.l);
+    hellBg.fill.l = constrain(hellBg.fill.l, 0, 73);
+    hellBg.fill.l -= 0.5;
+
+    // Draw the dead frog
+    drawHellFrogBody();
+
+    // When the sky gets dark, write the end text
+    if (hellBg.fill.l <= 10) {
+        hellEndGameText();
+    }
+}
+
+/**
+ * Displays the end of game text
+ */
+function hellEndGameText() {
+    push();
+    textSize(80);
+    rectMode(CENTER);
+    fill('red');
+    text("YOU STARVED", width / 2 + 60, height - 80, width, height);
+    pop();
+
+    // Write the final score
+    finalScore();
+
+    // Retry button
+    drawHellRetryButton();
+}
+
+/**
+ * Sets out an alternative sequence to play at the end of the game
+ */
+function altHellEndGame() {
+
+    // Bring the cursor back
+    cursor(ARROW);
+
+    // Draw the dead frog
+    drawHellFrogBody();
+
+    // Indicate the user lost due to a swarm
+    push();
+    textSize(60);
+    rectMode(CENTER);
+    fill('white');
+    textAlign(CENTER);
+    text("YOU WERE SWARMED", width / 2, height - 80, width, height);
+    pop();
+
+    // Write the final score
+    finalScore();
+
+    // Retry button
+    drawHellRetryButton();
+}
+
+/**
+ * Displays the final score
+ */
+function finalScore() {
+    // Write the final score as a display of the time elapsed when the game ended
+    push();
+    textSize(40);
+    rectMode(CENTER);
+    fill('white');
+    text("You lasted", width / 2 + 60, height, width, height);
+    text(hellTimeElapsed, width / 2 + 320, height, width, height);
+    if (hellTimeElapsed === 1) {
+        text("second...", width / 2 + 370, height, width, height);
+    }
+    else {
+        text("seconds...", width / 2 + 370, height, width, height);
+    }
+    pop();
+}
+
+/**
+ * Displays the "retry" button
+ */
+function drawHellRetryButton() {
+    push();
+    rectMode(CENTER);
+    noStroke();
+    fill(hellRetryButton.fill);
+    rect(hellRetryButton.x, hellRetryButton.y, hellRetryButton.w, hellRetryButton.h, 10);
+    pop();
+    push();
+    textAlign(CENTER, CENTER);
+    fill(0);
+    text("RETRY", hellRetryButton.x, hellRetryButton.y);
+    pop();
+}
+
+/**
+ * Checks if the mouse is overlapping the "retry" button
+ */
+function checkHellRetryButtonOverlap(mouseX, mouseY, hellRetryButton) {
+    return (mouseX > hellRetryButton.x - hellRetryButton.w / 2 &&
+        mouseX < hellRetryButton.x + hellRetryButton.w / 2 &&
+        mouseY > hellRetryButton.y - hellRetryButton.h / 2 &&
+        mouseY < hellRetryButton.y + hellRetryButton.h / 2);
+}

@@ -18,8 +18,10 @@
 
 "use strict";
 
-// The background's fill
-let bg = {
+/**
+ * The background's fill
+ */
+let edenBg = {
     fill: {
         r: 135,
         g: 206,
@@ -31,10 +33,10 @@ let bg = {
     }
 }
 
-// The fly population tracker - this will become useless and will be replaced by the index of the flies array (flies.index?)
-let population = 1;
-
-let retryButton = {
+/**
+ * The retry button
+ */
+let edenRetryButton = {
     x: 320,
     y: 400,
     w: 70,
@@ -42,26 +44,24 @@ let retryButton = {
     fill: "#00ff00"
 };
 
-// Make an array of flies
-let flies = []; // will be pushed in after?
-let fly = undefined;
-// Make an array of possible names for them
-let names = [
-    "Baby Fly",
-    "Evolved Fly",
-    "Traveller Fly",
-    "Voracious Fly"
-];
+/**
+ * The distance between the frog's body and each fly - this will contain the distance between the frog and each fly
+ */
+let edenFrogFlyDistance = [];
 
-// The distance between the frog's body and each fly - this will contain the distance between the frog and each fly
-let frogFlyDistance = [];
-
-// The timer's time
+/**
+ * The timer's time
+ */
 let timeElapsed = 0;
-// The timer's interval
+/**
+ * The timer's interval
+ */
 let timeFlow = setInterval(gameTimer, 1000);
 
-let gameState = "game";
+/**
+ * The game's state
+ */
+let edenGameState = undefined;
 
 /**
  * Creates the canvas and initializes the fly
@@ -71,7 +71,7 @@ function edenSetup() {
 
     // In the Eden Variation, we use a specific frog
     frog = frogData.frog.eden;
-    console.log(frog)
+    names = namesData.names;
 
     // Create the first fly and set up its speed and name
     fly = createFly(2, "Eve");
@@ -84,39 +84,34 @@ function edenSetup() {
 
     // As the game is running, this will add 1 to the timer every second
     setInterval(timeFlow);
-}
 
-function createFly(speed, name) {
-    const newFly = structuredClone(flyData.fly);
-    newFly.speed = speed;
-    newFly.name = name;
-    return newFly;
+    edenGameState = "game";
 }
 
 /**
  * Run the program, draw either the game or an ending
  */
 function edenDraw() {
-    if (gameState === "game") {
-        runGame();
+    if (edenGameState === "game") {
+        edenRunGame();
     }
-    else if (gameState === "end") {
-        endGame();
+    else if (edenGameState === "end") {
+        edenEndGame();
     }
-    else if (gameState === "alt end") {
-        altEndGame();
+    else if (edenGameState === "alt end") {
+        altEdenEndGame();
     }
 }
 
 /**
  * Launch the game if the mouse is pressed
  */
-function runGame() {
+function edenRunGame() {
     // No cursor in-game so the player uses spacebar and arrows
     noCursor();
     // Draw the sky
     colorMode(RGB);
-    background(bg.fill.r, bg.fill.g, bg.fill.b);
+    background(edenBg.fill.r, edenBg.fill.g, edenBg.fill.b);
 
     // Draw the flies according to the population index - this will become the index of the flies array
     for (let fly of flies) {
@@ -124,7 +119,8 @@ function runGame() {
         moveFly(fly);
     }
 
-    drawFrog();
+    // Draw the frog
+    drawEdenFrog();
     // Move the frog and its tongue based on the player's input
     checkInput();
     moveTongue();
@@ -134,23 +130,24 @@ function runGame() {
         checkTongueFlyOverlap(fly);
     }
 
+    // Draw the timer on the screen
     drawTimer();
 
     // End the game when there are no flies left
     if (flies.length < 1) {
         // End the game and wait 2 seconds before playing the end game animation
-        gameState = "end";
+        edenGameState = "end";
     }
 
     // End the game when there are too many flies - the user is incapable of regulating the population
     if (flies.length > 200) {
         // End the game and wait 2 seconds before playing the end game animation
-        gameState = "alt end";
+        edenGameState = "alt end";
     }
 }
 
 /**
- * Draws the fly as a black circle
+ * Draws the fly as a black circle with a name
  */
 function drawFly(fly) {
     push();
@@ -192,15 +189,18 @@ function resetFly(fly) {
 /**
  * Displays the tongue (tip and line connection) and the frog (body)
  */
-function drawFrog() {
-    drawFrogTongue();
-    drawFrogBody();
-    drawFrogEyes();
+function drawEdenFrog() {
+    drawEdenFrogTongue();
+    drawEdenFrogBody();
+    drawEdenFrogEyes();
 }
 
-function drawFrogTongue() {
+/**
+ * Displays the tongue (tip and line connection)
+ */
+function drawEdenFrogTongue() {
     // Draw the tongue
-    if (gameState === "game") {
+    if (edenGameState === "game") {
         // Draw the tongue tip
         push();
         fill(frog.tongue.stroke);
@@ -217,9 +217,10 @@ function drawFrogTongue() {
     }
 }
 
-function drawFrogBody() {
-    // Draw the frog's body
-    // In the game, the frog's body is smaller
+/**
+ * Displays the frog's body
+ */
+function drawEdenFrogBody() {
     push();
     fill(frog.body.fill);
     noStroke();
@@ -227,8 +228,10 @@ function drawFrogBody() {
     pop();
 }
 
-function drawFrogEyes() {
-    // Draw the frog's eyes
+/**
+ * Displays the frog's eyes
+ */
+function drawEdenFrogEyes() {
     // Tympanums
     push();
     noStroke();
@@ -270,12 +273,12 @@ function flyWatch() {
     let closestFly = undefined;
     for (let fly of flies) {
         // Get the distance from the frog to each fly
-        const frogFlyDistance = dist(frog.body.x, frog.body.y, fly.x, fly.y);
+        const edenFrogFlyDistance = dist(frog.body.x, frog.body.y, fly.x, fly.y);
         // Compare to the previous closest distance
-        if (frogFlyDistance < closest) {
+        if (edenFrogFlyDistance < closest) {
             // Update the closest fly and closest distance
             closestFly = fly;
-            closest = frogFlyDistance;
+            closest = edenFrogFlyDistance;
         }
         return closestFly;
     }
@@ -333,7 +336,7 @@ function checkTongueFlyOverlap(fly) {
  */
 function gameTimer() {
     // The time elapsed increases by 1 every second
-    if (gameState === "game") {
+    if (edenGameState === "game") {
         timeElapsed = timeElapsed + 1;
     }
 }
@@ -348,19 +351,22 @@ function drawTimer() {
 }
 
 /**
-* Restart if the "retry" button is pressed at the end of the game
+* Go back to the menu if the "retry" button is pressed at the end of the game
 */
 function edenMousePressed() {
-    if (gameState === "end" || gameState === "alt end") {
-        if (checkRetryButtonOverlap(mouseX, mouseY, retryButton)) {
+    if (edenGameState === "end" || edenGameState === "alt end") {
+        if (checkEdenRetryButtonOverlap(mouseX, mouseY, edenRetryButton)) {
             // Reset the time flow and time elapsed
             timeFlow = 0;
             timeElapsed = 0;
             // Reset the flies
             flies = [];
             // Restart
-            setup();
-            gameState = "menu";
+            switch (state) {
+                case "eden-variation":
+                    state = "menu"
+                    break;
+            }
         }
     }
 }
@@ -388,27 +394,29 @@ function checkInput() {
 /**
  * Sets out the sequence to play at the end of the game
  */
-function endGame() {
+function edenEndGame() {
     // Bring the cursor back
     cursor(ARROW);
 
     // Make the background go to black
     colorMode(HSL);
-    background(bg.fill.h, bg.fill.s, bg.fill.l);
-    bg.fill.l = constrain(bg.fill.l, 0, 73);
-    bg.fill.l -= 0.5;
+    background(edenBg.fill.h, edenBg.fill.s, edenBg.fill.l);
+    edenBg.fill.l = constrain(edenBg.fill.l, 0, 73);
+    edenBg.fill.l -= 0.5;
 
     // Draw the dead frog
-    drawFrogBody();
+    drawEdenFrogBody();
 
     // When the sky gets dark, write the end text
-    if (bg.fill.l <= 10) {
-        endGameText();
+    if (edenBg.fill.l <= 10) {
+        edenEndGameText();
     }
 }
 
-function endGameText() {
-    // Write the end of game text
+/**
+ * Displays the end of game text
+ */
+function edenEndGameText() {
     push();
     textSize(80);
     rectMode(CENTER);
@@ -420,19 +428,19 @@ function endGameText() {
     finalScore();
 
     // Retry button
-    drawRetryButton();
+    drawEdenRetryButton();
 }
 
 /**
  * Sets out an alternative sequence to play at the end of the game
  */
-function altEndGame() {
+function altEdenEndGame() {
 
     // Bring the cursor back
     cursor(ARROW);
 
     // Draw the dead frog
-    drawFrogBody();
+    drawEdenFrogBody();
 
     // Indicate the user lost due to a swarm
     push();
@@ -447,9 +455,12 @@ function altEndGame() {
     finalScore();
 
     // Retry button
-    drawRetryButton();
+    drawEdenRetryButton();
 }
 
+/**
+ * Displays the final score
+ */
 function finalScore() {
     // Write the final score as a display of the time elapsed when the game ended
     push();
@@ -467,22 +478,29 @@ function finalScore() {
     pop();
 }
 
-function drawRetryButton() {
+/**
+ * Displays the "retry" button
+ */
+function drawEdenRetryButton() {
     push();
     rectMode(CENTER);
     noStroke();
-    fill(retryButton.fill);
-    rect(retryButton.x, retryButton.y, retryButton.w, retryButton.h, 10);
+    fill(edenRetryButton.fill);
+    rect(edenRetryButton.x, edenRetryButton.y, edenRetryButton.w, edenRetryButton.h, 10);
     pop();
     push();
+    textAlign(CENTER, CENTER);
     fill(0);
-    text("RETRY", retryButton.x - retryButton.w / 4, retryButton.y + retryButton.h / 6);
+    text("RETRY", edenRetryButton.x, edenRetryButton.y);
     pop();
 }
 
-function checkRetryButtonOverlap(mouseX, mouseY, retryButton) {
-    return (mouseX > retryButton.x - retryButton.w / 2 &&
-        mouseX < retryButton.x + retryButton.w / 2 &&
-        mouseY > retryButton.y - retryButton.h / 2 &&
-        mouseY < retryButton.y + retryButton.h / 2);
+/**
+ * Checks if the mouse is overlapping the "retry" button
+ */
+function checkEdenRetryButtonOverlap(mouseX, mouseY, edenRetryButton) {
+    return (mouseX > edenRetryButton.x - edenRetryButton.w / 2 &&
+        mouseX < edenRetryButton.x + edenRetryButton.w / 2 &&
+        mouseY > edenRetryButton.y - edenRetryButton.h / 2 &&
+        mouseY < edenRetryButton.y + edenRetryButton.h / 2);
 }
