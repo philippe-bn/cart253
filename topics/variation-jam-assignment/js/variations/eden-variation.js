@@ -10,21 +10,6 @@
  */
 
 /**
- * The background's fill
- */
-let edenBg = {
-    fill: {
-        r: 135,
-        g: 206,
-        b: 235,
-
-        h: 197,
-        s: 71,
-        l: 73,
-    }
-}
-
-/**
  * The distance between the frog's body and each fly - this will contain the distance between the frog and each fly
  */
 let edenFrogFlyDistance = [];
@@ -51,19 +36,21 @@ function edenSetup() {
 
     // In the Eden Variation, we use a specific frog
     frog = frogData.frog.eden;
-    // Load the possible fly names
-    names = namesData.names;
+    // Load the text to be displayed
+    textDisplay = textData.text.eden;
+    // Load the background to be displayed
+    backgroundDisplay = backgroundsData.backgrounds.eden;
 
     // Create the retry button
-    edenRetryButton = createPersonalizedButton(400, 70, "RETRY");
+    edenRetryButton = createPersonalizedButton(400, 70, textDisplay.retryButton);
 
     // Create the first fly and set up its speed and name
-    fly = createFly(2, "Eve");
+    fly = createFly(2, textDisplay.firstFly);
     flies.push(fly);
 
     // Give the flies their first random position
     for (let fly of flies) {
-        resetFly(fly);
+        resetEdenFly(fly);
     }
 
     // As the game is running, this will add 1 to the timer every second
@@ -95,19 +82,19 @@ function edenRunGame() {
     noCursor();
     // Draw the sky
     colorMode(RGB);
-    background(edenBg.fill.r, edenBg.fill.g, edenBg.fill.b);
+    background(backgroundDisplay.fill.r, backgroundDisplay.fill.g, backgroundDisplay.fill.b);
 
     // Draw the flies according to the population index - this will become the index of the flies array
     for (let fly of flies) {
-        drawFly(fly);
-        moveFly(fly);
+        drawEdenFly(fly);
+        moveEdenFly(fly);
     }
 
     // Draw the frog
     drawEdenFrog();
     // Move the frog and its tongue based on the player's input
-    checkInput();
-    moveTongue();
+    checkEdenInput();
+    moveEdenTongue();
 
     // Check if the tongue overlaps any fly
     for (let fly of flies) {
@@ -115,7 +102,7 @@ function edenRunGame() {
     }
 
     // Draw the timer on the screen
-    drawTimer();
+    drawEdenTimer();
 
     // End the game when there are no flies left
     if (flies.length < 1) {
@@ -133,7 +120,7 @@ function edenRunGame() {
 /**
  * Draws the fly as a black circle with a name
  */
-function drawFly(fly) {
+function drawEdenFly(fly) {
     push();
     noStroke();
     fill(fly.fill);
@@ -148,14 +135,14 @@ function drawFly(fly) {
  * Moves the fly according to its speed
  * Resets the fly if it gets all the way to the right
  */
-function moveFly(fly) {
+function moveEdenFly(fly) {
     // Move the fly in a sinusoidal pattern across the screen
     fly.x += fly.speed;
     fly.y = 5 * sin(frameCount * 0.25) + fly.b;
     // Handle the fly going off the canvas
     if (fly.x > width) {
         resetFly(fly);
-        fly = createFly(random(3, 4), random(names));
+        fly = createFly(random(3, 4), random(textDisplay.names));
         flies.push(fly);
     }
 }
@@ -163,7 +150,7 @@ function moveFly(fly) {
 /**
  * Resets the fly to the left with a random y
  */
-function resetFly(fly) {
+function resetEdenFly(fly) {
     fly.x = -30;
     fly.y = random(0, height);
     fly.b = random(150, 400);
@@ -272,7 +259,7 @@ function flyWatch() {
 /**
  * Handle moving the tongue based on its state
  */
-function moveTongue() {
+function moveEdenTongue() {
     // Tongue matches the frog's x
     frog.tongue.x = frog.body.x;
     // If the tongue is idle, it doesn't do anything
@@ -328,7 +315,7 @@ function gameTimer() {
 /**
  * Display the timer
  */
-function drawTimer() {
+function drawEdenTimer() {
     push();
     text(timeElapsed, width - 25, 25);
     pop();
@@ -358,7 +345,7 @@ function edenMousePressed() {
 /**
  * Checks the different keyboard inputs
  */
-function checkInput() {
+function checkEdenInput() {
     // Launch the tongue on spacebar click (if it's not launched yet)
     if (keyIsDown(32) && frog.tongue.state === "idle") {
         frog.tongue.state = "outbound";
@@ -384,15 +371,15 @@ function edenEndGame() {
 
     // Make the background go to black
     colorMode(HSL);
-    background(edenBg.fill.h, edenBg.fill.s, edenBg.fill.l);
-    edenBg.fill.l = constrain(edenBg.fill.l, 0, 73);
-    edenBg.fill.l -= 0.5;
+    background(backgroundDisplay.fill.h, backgroundDisplay.fill.s, backgroundDisplay.fill.l);
+    backgroundDisplay.fill.l = constrain(backgroundDisplay.fill.l, 0, 73);
+    backgroundDisplay.fill.l -= 0.5;
 
     // Draw the dead frog
     drawEdenFrogBody();
 
     // When the sky gets dark, write the end text
-    if (edenBg.fill.l <= 10) {
+    if (backgroundDisplay.fill.l <= 10) {
         edenEndGameText();
     }
 }
@@ -405,7 +392,7 @@ function edenEndGameText() {
     textSize(80);
     rectMode(CENTER);
     fill('red');
-    text("YOU STARVED", width / 2 + 60, height - 80, width, height);
+    text(textDisplay.end, width / 2 + 60, height - 80, width, height);
     pop();
 
     // Write the final score
@@ -432,7 +419,7 @@ function altEdenEndGame() {
     rectMode(CENTER);
     fill('white');
     textAlign(CENTER);
-    text("YOU WERE SWARMED", width / 2, height - 80, width, height);
+    text(textDisplay.altEnd, width / 2, height - 80, width, height);
     pop();
 
     // Write the final score
@@ -451,13 +438,13 @@ function finalScore() {
     textSize(40);
     rectMode(CENTER);
     fill('white');
-    text("You lasted", width / 2 + 60, height, width, height);
+    text(textDisplay.scoreAnnouncement, width / 2 + 60, height, width, height);
     text(timeElapsed, width / 2 + 320, height, width, height);
     if (timeElapsed === 1) {
-        text("second...", width / 2 + 370, height, width, height);
+        text(textDisplay.score1, width / 2 + 370, height, width, height);
     }
     else {
-        text("seconds...", width / 2 + 370, height, width, height);
+        text(textDisplay.score, width / 2 + 370, height, width, height);
     }
     pop();
 }

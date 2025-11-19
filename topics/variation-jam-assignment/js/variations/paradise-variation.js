@@ -10,21 +10,6 @@
  */
 
 /**
- * The background's fill
- */
-let paradiseBg = {
-    fill: {
-        r: 135,
-        g: 206,
-        b: 235,
-
-        h: 197,
-        s: 71,
-        l: 73,
-    }
-}
-
-/**
  * The distance between the frog's body and each fly - this will contain the distance between the frog and each fly
  */
 let paradiseFrogFlyDistance = [];
@@ -51,14 +36,16 @@ function paradiseSetup() {
 
     // In the Paradise Variation, we use a specific frog
     frog = frogData.frog.paradise;
-    // Load the possible fly names
-    names = namesData.names;
+    // Same for the text
+    textDisplay = textData.text.paradise;
+    // Load the background to be displayed
+    backgroundDisplay = backgroundsData.backgrounds.paradise;
 
     // Create the retry button
-    paradiseRetryButton = createPersonalizedButton(400, 70, "RETRY");
+    paradiseRetryButton = createPersonalizedButton(400, 70, textDisplay.retryButton);
 
     // Create the first fly and set up its speed and name
-    fly = createFly(2, "Eve");
+    fly = createFly(2, textDisplay.firstFly);
     flies.push(fly);
 
     // Give the flies their first random position
@@ -95,7 +82,7 @@ function paradiseRunGame() {
     noCursor();
     // Draw the sky
     colorMode(RGB);
-    background(paradiseBg.fill.r, paradiseBg.fill.g, paradiseBg.fill.b);
+    background(backgroundDisplay.fill.r, backgroundDisplay.fill.g, backgroundDisplay.fill.b);
 
     // Draw the flies according to the population index - this will become the index of the flies array
     for (let fly of flies) {
@@ -155,7 +142,7 @@ function moveFly(fly) {
     // Handle the fly going off the canvas
     if (fly.x > width) {
         resetFly(fly);
-        fly = createFly(random(3, 4), random(names));
+        fly = createFly(random(3, 4), random(textDisplay.names));
         flies.push(fly);
     }
 }
@@ -384,15 +371,15 @@ function paradiseEndGame() {
 
     // Make the background go to black
     colorMode(HSL);
-    background(paradiseBg.fill.h, paradiseBg.fill.s, paradiseBg.fill.l);
-    paradiseBg.fill.l = constrain(paradiseBg.fill.l, 0, 73);
-    paradiseBg.fill.l -= 0.5;
+    background(backgroundDisplay.fill.h, backgroundDisplay.fill.s, backgroundDisplay.fill.l);
+    backgroundDisplay.fill.l = constrain(backgroundDisplay.fill.l, 0, 73);
+    backgroundDisplay.fill.l -= 0.5;
 
     // Draw the dead frog
     drawParadiseFrogBody();
 
     // When the sky gets dark, write the end text
-    if (paradiseBg.fill.l <= 10) {
+    if (backgroundDisplay.fill.l <= 10) {
         paradiseEndGameText();
     }
 }
@@ -405,7 +392,7 @@ function paradiseEndGameText() {
     textSize(80);
     rectMode(CENTER);
     fill('red');
-    text("YOU STARVED", width / 2 + 60, height - 80, width, height);
+    text(textDisplay.end, width / 2 + 60, height - 80, width, height);
     pop();
 
     // Write the final score
@@ -432,7 +419,7 @@ function altParadiseEndGame() {
     rectMode(CENTER);
     fill('white');
     textAlign(CENTER);
-    text("YOU WERE SWARMED", width / 2, height - 80, width, height);
+    text(textDisplay.altEnd, width / 2, height - 80, width, height);
     pop();
 
     // Write the final score
@@ -451,14 +438,9 @@ function finalScore() {
     textSize(40);
     rectMode(CENTER);
     fill('white');
-    text("You lasted", width / 2 + 60, height, width, height);
+    text(textDisplay.scoreAnnouncement, width / 2 + 60, height, width, height);
     text(paradiseTimeElapsed, width / 2 + 320, height, width, height);
-    if (paradiseTimeElapsed === 1) {
-        text("second...", width / 2 + 370, height, width, height);
-    }
-    else {
-        text("seconds...", width / 2 + 370, height, width, height);
-    }
+    text(textDisplay.score, width / 2 + 370, height, width, height);
     pop();
 }
 

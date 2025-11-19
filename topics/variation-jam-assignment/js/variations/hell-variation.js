@@ -10,21 +10,6 @@
  */
 
 /**
- * The background's fill
- */
-let hellBg = {
-    fill: {
-        r: 135,
-        g: 206,
-        b: 235,
-
-        h: 197,
-        s: 71,
-        l: 73,
-    }
-}
-
-/**
  * The distance between the frog's body and each fly - this will contain the distance between the frog and each fly
  */
 let hellFrogFlyDistance = [];
@@ -51,19 +36,21 @@ function hellSetup() {
 
     // In the Hell Variation, we use a specific frog
     frog = frogData.frog.hell;
-    // Load the possible fly names
-    names = namesData.names;
+    // Same for the text
+    textDisplay = textData.text.hell;
+    // Load the background to be displayed
+    backgroundDisplay = backgroundsData.backgrounds.hell;
 
     // Create the retry button
-    hellRetryButton = createPersonalizedButton(400, 70, "RETRY");
+    hellRetryButton = createPersonalizedButton(400, 70, textDisplay.retryButton);
 
     // Create the first fly and set up its speed and name
-    fly = createFly(2, "Eve");
+    fly = createFly(2, textDisplay.firstFly);
     flies.push(fly);
 
     // Give the flies their first random position
     for (let fly of flies) {
-        resetFly(fly);
+        resetHellFly(fly);
     }
 
     // // As the game is running, this will add 1 to the timer every second
@@ -95,7 +82,7 @@ function hellRunGame() {
     noCursor();
     // Draw the sky
     colorMode(RGB);
-    background(hellBg.fill.r, hellBg.fill.g, hellBg.fill.b);
+    background(backgroundDisplay.fill.r, backgroundDisplay.fill.g, backgroundDisplay.fill.b);
 
     // Draw the flies according to the population index - this will become the index of the flies array
     for (let fly of flies) {
@@ -106,8 +93,8 @@ function hellRunGame() {
     // Draw the frog
     drawHellFrog();
     // Move the frog and its tongue based on the player's input
-    checkInput();
-    moveTongue();
+    checkHellInput();
+    moveHellTongue();
 
     // Check if the tongue overlaps any fly
     for (let fly of flies) {
@@ -154,8 +141,8 @@ function moveFly(fly) {
     fly.y = 5 * sin(frameCount * 0.25) + fly.b;
     // Handle the fly going off the canvas
     if (fly.x > width) {
-        resetFly(fly);
-        fly = createFly(random(3, 4), random(names));
+        resetHellFly(fly);
+        fly = createFly(random(3, 4), random(textDisplay.names));
         flies.push(fly);
     }
 }
@@ -163,7 +150,7 @@ function moveFly(fly) {
 /**
  * Resets the fly to the left with a random y
  */
-function resetFly(fly) {
+function resetHellFly(fly) {
     fly.x = -30;
     fly.y = random(0, height);
     fly.b = random(150, 400);
@@ -272,7 +259,7 @@ function flyWatch() {
 /**
  * Handle moving the tongue based on its state
  */
-function moveTongue() {
+function moveHellTongue() {
     // Tongue matches the frog's x
     frog.tongue.x = frog.body.x;
     // If the tongue is idle, it doesn't do anything
@@ -358,7 +345,7 @@ function hellMousePressed() {
 /**
  * Checks the different keyboard inputs
  */
-function checkInput() {
+function checkHellInput() {
     // Launch the tongue on spacebar click (if it's not launched yet)
     if (keyIsDown(32) && frog.tongue.state === "idle") {
         frog.tongue.state = "outbound";
@@ -384,15 +371,15 @@ function hellEndGame() {
 
     // Make the background go to black
     colorMode(HSL);
-    background(hellBg.fill.h, hellBg.fill.s, hellBg.fill.l);
-    hellBg.fill.l = constrain(hellBg.fill.l, 0, 73);
-    hellBg.fill.l -= 0.5;
+    background(backgroundDisplay.fill.h, backgroundDisplay.fill.s, backgroundDisplay.fill.l);
+    backgroundDisplay.fill.l = constrain(backgroundDisplay.fill.l, 0, 73);
+    backgroundDisplay.fill.l -= 0.5;
 
     // Draw the dead frog
     drawHellFrogBody();
 
     // When the sky gets dark, write the end text
-    if (hellBg.fill.l <= 10) {
+    if (backgroundDisplay.fill.l <= 10) {
         hellEndGameText();
     }
 }
@@ -405,7 +392,7 @@ function hellEndGameText() {
     textSize(80);
     rectMode(CENTER);
     fill('red');
-    text("YOU STARVED", width / 2 + 60, height - 80, width, height);
+    text(textDisplay.end, width / 2 + 60, height - 80, width, height);
     pop();
 
     // Write the final score
@@ -430,9 +417,9 @@ function altHellEndGame() {
     push();
     textSize(60);
     rectMode(CENTER);
-    fill('white');
+    fill('black');
     textAlign(CENTER);
-    text("YOU WERE SWARMED", width / 2, height - 80, width, height);
+    text(textDisplay.altEnd, width / 2, height - 80, width, height);
     pop();
 
     // Write the final score
@@ -451,14 +438,9 @@ function finalScore() {
     textSize(40);
     rectMode(CENTER);
     fill('white');
-    text("You lasted", width / 2 + 60, height, width, height);
+    text(textDisplay.scoreAnnouncement, width / 2 + 60, height, width, height);
     text(hellTimeElapsed, width / 2 + 320, height, width, height);
-    if (hellTimeElapsed === 1) {
-        text("second...", width / 2 + 370, height, width, height);
-    }
-    else {
-        text("seconds...", width / 2 + 370, height, width, height);
-    }
+    text(textDisplay.score, width / 2 + 370, height, width, height);
     pop();
 }
 

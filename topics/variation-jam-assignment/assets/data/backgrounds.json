@@ -1,0 +1,35 @@
+{
+    "description": "The various background features of each variation",
+    "backgrounds": {
+        "eden": {
+            "fill": {
+                "r": 135,
+                "g": 206,
+                "b": 235,
+                "h": 197,
+                "s": 71,
+                "l": 73
+            }
+        },
+        "hell": {
+            "fill": {
+                "r": 255,
+                "g": 0,
+                "b": 0,
+                "h": 0,
+                "s": 100,
+                "l": 50
+            }
+        },
+        "paradise": {
+            "fill": {
+                "r": 135,
+                "g": 206,
+                "b": 235,
+                "h": 197,
+                "s": 71,
+                "l": 73
+            }
+        }
+    }
+}

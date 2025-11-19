@@ -26,10 +26,14 @@ let flyData;
 let fly;
 // A variable for our button models
 let buttonData;
-// A variable for our names array
-let namesData;
-// A variable for our names
-let names;
+// A variable for our in-game text
+let textData;
+// A variable for the in-game text as displayed
+let textDisplay;
+// A variable for our different backgrounds
+let backgroundsData;
+// A variable for the background as displayed
+let backgroundDisplay;
 
 /**
  * Our array containing our future flies
@@ -40,7 +44,8 @@ function preload() {
     frogData = loadJSON("assets/data/frog.json");
     flyData = loadJSON("assets/data/fly.json");
     buttonData = loadJSON("assets/data/button.json");
-    namesData = loadJSON("assets/data/names.json");
+    textData = loadJSON("assets/data/text.json");
+    backgroundsData = loadJSON("assets/data/backgrounds.json");
 
     menuPreload();
 }
@@ -51,6 +56,7 @@ function preload() {
 function setup() {
     createCanvas(640, 480);
     menuSetup();
+    textFont('Courier New');
 }
 
 

@@ -1,0 +1,55 @@
+{
+    "description": "All of my in-game text",
+    "text": {
+        "menu": {
+            "edenButton": "Eden",
+            "hellButton": "Hell",
+            "paradiseButton": "Paradise",
+            "title": "THE SWAMP OF EDEN",
+            "instruction1": "*Croak* sorry, I mean click anywhere to play.",
+            "instruction2": "*Use the spacebar and arrows to catch the flies!*"
+        },
+        "eden": {
+            "retryButton": "RETRY",
+            "firstFly": "Eve",
+            "names": [
+                "Baby Fly",
+                "Evolved Fly",
+                "Traveller Fly",
+                "Voracious Fly"
+            ],
+            "end": "YOU STARVED",
+            "altEnd": "YOU WERE SWARMED",
+            "scoreAnnouncement": "You lasted",
+            "score1": "second...",
+            "score": "seconds..."
+        },
+        "hell": {
+            "retryButton": "RETRY",
+            "firstFly": "Toad The Devil",
+            "names": [
+                "Evil Fly",
+                "Mean Fly",
+                "Devil Fly",
+                "Sinful Fly"
+            ],
+            "end": "YOU STARVED",
+            "altEnd": "YOU WERE SWARMED",
+            "scoreAnnouncement": "You lasted",
+            "score1": "second...",
+            "score": "seconds..."
+        },
+        "paradise": {
+            "retryButton": "RETRY",
+            "firstFly": "Angel Fly",
+            "names": [
+                "Angel Fly"
+            ],
+            "end": "YOU STARVED",
+            "altEnd": "YOU WERE SWARMED",
+            "scoreAnnouncement": "You lasted",
+            "score1": "second...",
+            "score": "seconds..."
+        }
+    }
+}
