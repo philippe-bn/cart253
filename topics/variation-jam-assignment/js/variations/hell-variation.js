@@ -1,6 +1,5 @@
 /**
  * Hell
- * Philippe Beauchemin
  * 
  * A modded game of catching flies with your frog-tongue.
  * 
@@ -8,15 +7,7 @@
  * - Move the frog with the keyboard arrows
  * - Click spacebar to launch the tongue
  * - Catch flies and keep the fly population balanced for as long as possible
- * 
- * Made with p5
- * https://p5js.org/
- * Keyboard pictures by Julia Bellone : https://juliabellone.github.io/Arkanoid/ 
- * Timer help by user T.J. Crowder on Stack Overflow: https://stackoverflow.com/questions/5978519/how-can-i-use-setinterval-and-clearinterval
- * Overlap code taken from Pippin Barr's CART253 repository: https://pippinbarr.com/cart253/assignments/challenges/functions/
  */
-
-"use strict";
 
 /**
  * The background's fill
@@ -32,17 +23,6 @@ let hellBg = {
         l: 73,
     }
 }
-
-/**
- * The retry button
- */
-let hellRetryButton = {
-    x: 320,
-    y: 400,
-    w: 70,
-    h: 30,
-    fill: "#00ff00"
-};
 
 /**
  * The distance between the frog's body and each fly - this will contain the distance between the frog and each fly
@@ -71,7 +51,11 @@ function hellSetup() {
 
     // In the Hell Variation, we use a specific frog
     frog = frogData.frog.hell;
+    // Load the possible fly names
     names = namesData.names;
+
+    // Create the retry button
+    hellRetryButton = createPersonalizedButton(400, 70, "RETRY");
 
     // Create the first fly and set up its speed and name
     fly = createFly(2, "Eve");
@@ -428,7 +412,7 @@ function hellEndGameText() {
     finalScore();
 
     // Retry button
-    drawHellRetryButton();
+    drawHellRetryButton(hellRetryButton);
 }
 
 /**
@@ -455,7 +439,7 @@ function altHellEndGame() {
     finalScore();
 
     // Retry button
-    drawHellRetryButton();
+    drawHellRetryButton(hellRetryButton);
 }
 
 /**
@@ -481,7 +465,7 @@ function finalScore() {
 /**
  * Displays the "retry" button
  */
-function drawHellRetryButton() {
+function drawHellRetryButton(hellRetryButton) {
     push();
     rectMode(CENTER);
     noStroke();
@@ -491,7 +475,7 @@ function drawHellRetryButton() {
     push();
     textAlign(CENTER, CENTER);
     fill(0);
-    text("RETRY", hellRetryButton.x, hellRetryButton.y);
+    text(hellRetryButton.text, hellRetryButton.x, hellRetryButton.y);
     pop();
 }
 

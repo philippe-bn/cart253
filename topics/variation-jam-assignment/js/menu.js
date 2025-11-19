@@ -25,12 +25,13 @@ function menuSetup() {
 
     // Set the font for the game
     textFont('Courier New');
+
     // Make each button object a recognizable "button"
-    edenButton = createVariationButton(100, 140, "The Swamp of Eden");
+    edenButton = createPersonalizedButton(100, 140, "The Swamp of Eden");
     buttons.push(edenButton);
-    paradiseButton = createVariationButton(250, 70, "Paradise");
+    paradiseButton = createPersonalizedButton(250, 70, "Paradise");
     buttons.push(paradiseButton);
-    hellButton = createVariationButton(400, 60, "Hell");
+    hellButton = createPersonalizedButton(400, 60, "Hell");
     buttons.push(hellButton);
 }
 
@@ -132,14 +133,6 @@ function drawFrogEyes() {
     frog.eyes.pupils.right.y = map(mouseY, 0, height, frog.eyes.y - 5, frog.eyes.y + 5);
     ellipse(frog.eyes.pupils.right.x, frog.eyes.pupils.right.y, frog.eyes.size - 15);
     pop();
-}
-
-function createVariationButton(y, w, text) {
-    const newButton = structuredClone(buttonData);
-    newButton.y = y;
-    newButton.w = w;
-    newButton.text = text;
-    return newButton;
 }
 
 // Draw the buttons for each variation
