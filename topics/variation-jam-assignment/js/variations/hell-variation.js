@@ -396,7 +396,7 @@ function hellEndGameText() {
     pop();
 
     // Write the final score
-    finalScore();
+    finalHellScore();
 
     // Retry button
     drawHellRetryButton(hellRetryButton);
@@ -423,7 +423,7 @@ function altHellEndGame() {
     pop();
 
     // Write the final score
-    finalScore();
+    finalHellScore();
 
     // Retry button
     drawHellRetryButton(hellRetryButton);
@@ -432,15 +432,14 @@ function altHellEndGame() {
 /**
  * Displays the final score
  */
-function finalScore() {
+function finalHellScore() {
     // Write the final score as a display of the time elapsed when the game ended
     push();
     textSize(40);
     rectMode(CENTER);
     fill('white');
-    text(textDisplay.scoreAnnouncement, width / 2 + 60, height, width, height);
-    text(hellTimeElapsed, width / 2 + 320, height, width, height);
-    text(textDisplay.score, width / 2 + 370, height, width, height);
+    textAlign(CENTER, CENTER);
+    text(textDisplay.scoreAnnouncement, width / 2, height / 2 + 10);
     pop();
 }
 

@@ -396,7 +396,7 @@ function edenEndGameText() {
     pop();
 
     // Write the final score
-    finalScore();
+    finalEdenScore();
 
     // Retry button
     drawEdenRetryButton(edenRetryButton);
@@ -423,7 +423,7 @@ function altEdenEndGame() {
     pop();
 
     // Write the final score
-    finalScore();
+    finalEdenScore();
 
     // Retry button
     drawEdenRetryButton(edenRetryButton);
@@ -432,7 +432,7 @@ function altEdenEndGame() {
 /**
  * Displays the final score
  */
-function finalScore() {
+function finalEdenScore() {
     // Write the final score as a display of the time elapsed when the game ended
     push();
     textSize(40);

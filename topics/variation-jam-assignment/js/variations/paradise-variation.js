@@ -396,7 +396,7 @@ function paradiseEndGameText() {
     pop();
 
     // Write the final score
-    finalScore();
+    finalParadiseScore();
 
     // Retry button
     drawParadiseRetryButton(paradiseRetryButton);
@@ -423,7 +423,7 @@ function altParadiseEndGame() {
     pop();
 
     // Write the final score
-    finalScore();
+    finalParadiseScore();
 
     // Retry button
     drawParadiseRetryButton(paradiseRetryButton);
@@ -432,15 +432,14 @@ function altParadiseEndGame() {
 /**
  * Displays the final score
  */
-function finalScore() {
+function finalParadiseScore() {
     // Write the final score as a display of the time elapsed when the game ended
     push();
     textSize(40);
     rectMode(CENTER);
     fill('white');
-    text(textDisplay.scoreAnnouncement, width / 2 + 60, height, width, height);
-    text(paradiseTimeElapsed, width / 2 + 320, height, width, height);
-    text(textDisplay.score, width / 2 + 370, height, width, height);
+    textAlign(CENTER, CENTER);
+    text(textDisplay.scoreAnnouncement, width / 2, height / 2 + 10);
     pop();
 }
 

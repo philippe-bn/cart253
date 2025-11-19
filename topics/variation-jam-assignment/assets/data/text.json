@@ -33,11 +33,9 @@
                 "Devil Fly",
                 "Sinful Fly"
             ],
-            "end": "YOU STARVED",
-            "altEnd": "YOU WERE SWARMED",
-            "scoreAnnouncement": "You lasted",
-            "score1": "second...",
-            "score": "seconds..."
+            "end": "YOU ARE A SINNER",
+            "altEnd": "YOU DESERVE SUFFERING",
+            "scoreAnnouncement": "You failed your frog duties and you must now live with Toad the Devil..."
         },
         "paradise": {
             "retryButton": "RETRY",
@@ -47,9 +45,7 @@
             ],
             "end": "YOU STARVED",
             "altEnd": "YOU WERE SWARMED",
-            "scoreAnnouncement": "You lasted",
-            "score1": "second...",
-            "score": "seconds..."
+            "scoreAnnouncement": "You lasted"
         }
     }
 }
