@@ -11,6 +11,9 @@ let arrowKeys;
 // An array for our buttons
 let buttons = [];
 
+// The state of the menu
+let menuState = undefined;
+
 /**
  * Preloads the images
  */
@@ -32,38 +35,47 @@ function menuSetup() {
     buttons.push(paradiseButton);
     hellButton = createPersonalizedButton(400, 60, textDisplay.hellButton);
     buttons.push(hellButton);
+
+    // Start the menu state at 1
+    menuState = 1;
 }
 
 /**
  * Draws a game menu
  */
 function menuDraw() {
-    cursor(ARROW);
+    if (menuState === 1) {
+        cursor(ARROW);
 
-    // Start menu is a big frog body covering the screen
-    drawFrog();
+        // Start menu is a big frog body covering the screen
+        drawFrog();
 
-    push();
-    textSize(50);
-    text(textDisplay.title, width / 2 - 260, 80);
-    pop();
+        push();
+        textSize(50);
+        text(textDisplay.title, width / 2 - 260, 80);
+        pop();
 
-    push();
-    rectMode(CENTER);
-    textSize(14);
-    text(textDisplay.instruction1, width / 2, 150, 300, 50);
-    textSize(12);
-    text(textDisplay.instruction2, width / 2 - 120, 440, 250, 50);
-    image(spacebar, width / 2 + 50, 410, 120, 40);
-    image(arrowKeys, width / 2 + 200, 400, 70, 50);
-    pop();
-
-    for (let button of buttons) {
-        drawVariationButtons(button);
+        push();
+        rectMode(CENTER);
+        textSize(14);
+        text(textDisplay.instruction1, width / 2, 150, 300, 50);
+        textSize(12);
+        text(textDisplay.instruction2, width / 2 - 120, 440, 250, 50);
+        image(spacebar, width / 2 + 50, 410, 120, 40);
+        image(arrowKeys, width / 2 + 200, 400, 70, 50);
+        pop();
     }
+    // The menu with the buttons
+    if (menuState === 2) {
+        cursor(HAND);
+        drawFrog();
+        for (let button of buttons) {
+            drawVariationButtons(button);
+        }
 
-    for (let button of buttons) {
-        checkButtonOverlap(mouseX, mouseY, button);
+        for (let button of buttons) {
+            checkButtonOverlap(mouseX, mouseY, button);
+        }
     }
 }
 
@@ -71,6 +83,12 @@ function menuDraw() {
  * This will be called whenever the mouse is pressed while the menu is active
  */
 function menuMousePressed() {
+    // Switch the menu to the one with the buttons
+    if (menuState === 1) {
+        menuState = 2;
+        console.log(menuState)
+    }
+    // Switch the game state to a variation by checking which button was clicked
     switch (state) {
         case "menu":
             if (checkButtonOverlap(mouseX, mouseY, edenButton)) {
