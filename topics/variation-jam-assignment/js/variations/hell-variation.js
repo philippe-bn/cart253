@@ -86,8 +86,8 @@ function hellRunGame() {
 
     // Draw the flies according to the population index - this will become the index of the flies array
     for (let fly of flies) {
-        drawFly(fly);
-        moveFly(fly);
+        drawHellFly(fly);
+        moveHellFly(fly);
     }
 
     // Draw the frog
@@ -120,7 +120,7 @@ function hellRunGame() {
 /**
  * Draws the fly as a black circle with a name
  */
-function drawFly(fly) {
+function drawHellFly(fly) {
     push();
     noStroke();
     fill(fly.fill);
@@ -135,7 +135,7 @@ function drawFly(fly) {
  * Moves the fly according to its speed
  * Resets the fly if it gets all the way to the right
  */
-function moveFly(fly) {
+function moveHellFly(fly) {
     // Move the fly in a sinusoidal pattern across the screen
     fly.x += fly.speed;
     fly.y = 5 * sin(frameCount * 0.25) + fly.b;

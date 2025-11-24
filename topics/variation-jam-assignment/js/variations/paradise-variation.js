@@ -86,8 +86,8 @@ function paradiseRunGame() {
 
     // Draw the flies according to the population index - this will become the index of the flies array
     for (let fly of flies) {
-        drawFly(fly);
-        moveFly(fly);
+        drawParadiseFly(fly);
+        moveParadiseFly(fly);
     }
 
     // Draw the frog
@@ -95,6 +95,11 @@ function paradiseRunGame() {
     // Move the frog and its tongue based on the player's input
     checkInput();
     moveTongue();
+
+    // Make the flies swarm the frog
+    for (let fly of flies) {
+        swarmParadiseFly(fly);
+    }
 
     // Check if the tongue overlaps any fly
     for (let fly of flies) {
@@ -120,10 +125,10 @@ function paradiseRunGame() {
 /**
  * Draws the fly as a black circle with a name
  */
-function drawFly(fly) {
+function drawParadiseFly(fly) {
     push();
     noStroke();
-    fill(fly.fill);
+    fill('white');
     ellipse(fly.x, fly.y, fly.size);
     // Displays the fly's name under it
     textSize(10);
@@ -135,7 +140,7 @@ function drawFly(fly) {
  * Moves the fly according to its speed
  * Resets the fly if it gets all the way to the right
  */
-function moveFly(fly) {
+function moveParadiseFly(fly) {
     // Move the fly in a sinusoidal pattern across the screen
     fly.x += fly.speed;
     fly.y = 5 * sin(frameCount * 0.25) + fly.b;
@@ -302,6 +307,15 @@ function checkTongueFlyOverlap(fly) {
     }
 }
 
+function swarmParadiseFly(fly) {
+    // the fly flies towards the frog - it needs to fly on a diagonal
+    // the frog is always at y = 0
+    // the fly just needs to know how far on the x axis to go
+    const flyFrogX = dist(fly.x, frog.body.x);
+    const flyFrogY = dist(fly.y, frog.body.y);
+    // move on X until that distance is 0
+    // move on Y until that distance is 0
+}
 // /**
 //  * Add one to the timer every second during the game
 //  */

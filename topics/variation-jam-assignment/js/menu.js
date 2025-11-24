@@ -86,7 +86,6 @@ function menuMousePressed() {
     // Switch the menu to the one with the buttons
     if (menuState === 1) {
         menuState = 2;
-        console.log(menuState)
     }
     // Switch the game state to a variation by checking which button was clicked
     switch (state) {
