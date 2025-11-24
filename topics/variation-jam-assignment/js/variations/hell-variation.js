@@ -389,10 +389,11 @@ function hellEndGame() {
  */
 function hellEndGameText() {
     push();
-    textSize(80);
+    textSize(60);
     rectMode(CENTER);
     fill('red');
-    text(textDisplay.end, width / 2 + 60, height - 80, width, height);
+    textAlign(CENTER, CENTER)
+    text(textDisplay.end, width / 2, height / 2 - 10);
     pop();
 
     // Write the final score
@@ -435,11 +436,11 @@ function altHellEndGame() {
 function finalHellScore() {
     // Write the final score as a display of the time elapsed when the game ended
     push();
-    textSize(40);
+    textSize(25);
     rectMode(CENTER);
     fill('white');
     textAlign(CENTER, CENTER);
-    text(textDisplay.scoreAnnouncement, width / 2, height / 2 + 10);
+    text(textDisplay.scoreAnnouncement, width / 2, height / 2 + 30, width - 30);
     pop();
 }
 

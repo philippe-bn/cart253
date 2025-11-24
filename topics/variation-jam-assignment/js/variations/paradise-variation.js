@@ -50,7 +50,7 @@ function paradiseSetup() {
 
     // Give the flies their first random position
     for (let fly of flies) {
-        resetFly(fly);
+        resetParadiseFly(fly);
     }
 
     // // As the game is running, this will add 1 to the timer every second
@@ -96,10 +96,10 @@ function paradiseRunGame() {
     checkInput();
     moveTongue();
 
-    // Make the flies swarm the frog
-    for (let fly of flies) {
-        swarmParadiseFly(fly);
-    }
+    // // Make the flies swarm the frog
+    // for (let fly of flies) {
+    //     swarmParadiseFly(fly);
+    // }
 
     // Check if the tongue overlaps any fly
     for (let fly of flies) {
@@ -146,7 +146,7 @@ function moveParadiseFly(fly) {
     fly.y = 5 * sin(frameCount * 0.25) + fly.b;
     // Handle the fly going off the canvas
     if (fly.x > width) {
-        resetFly(fly);
+        resetParadiseFly(fly);
         fly = createFly(random(3, 4), random(textDisplay.names));
         flies.push(fly);
     }
@@ -155,7 +155,7 @@ function moveParadiseFly(fly) {
 /**
  * Resets the fly to the left with a random y
  */
-function resetFly(fly) {
+function resetParadiseFly(fly) {
     fly.x = -30;
     fly.y = random(0, height);
     fly.b = random(150, 400);
@@ -307,15 +307,22 @@ function checkTongueFlyOverlap(fly) {
     }
 }
 
-function swarmParadiseFly(fly) {
-    // the fly flies towards the frog - it needs to fly on a diagonal
-    // the frog is always at y = 0
-    // the fly just needs to know how far on the x axis to go
-    const flyFrogX = dist(fly.x, frog.body.x);
-    const flyFrogY = dist(fly.y, frog.body.y);
-    // move on X until that distance is 0
-    // move on Y until that distance is 0
-}
+// function swarmParadiseFly(fly) {
+//     // the fly flies towards the frog - it needs to fly on a diagonal
+//     // the frog is always at y = 0
+//     // the fly just needs to know how far on the x axis to go
+//     const flyFrogX = dist(fly.x, frog.body.x);
+//     const flyFrogY = dist(fly.y, frog.body.y);
+//     // move on X until that distance is 0
+//     if (flyFrogX === 0) {
+//         resetParadiseFly(fly);
+//     }
+//     // move on Y until that distance is 0
+//     if (flyFrogY === 0) {
+//         resetParadiseFly(fly);
+//     }
+// }
+
 // /**
 //  * Add one to the timer every second during the game
 //  */

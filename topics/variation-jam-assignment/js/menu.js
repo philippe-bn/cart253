@@ -45,16 +45,18 @@ function menuSetup() {
  */
 function menuDraw() {
     if (menuState === 1) {
-        cursor(ARROW);
+        cursor(HAND);
 
         // Start menu is a big frog body covering the screen
         drawFrog();
 
+        // Write the title
         push();
         textSize(50);
         text(textDisplay.title, width / 2 - 260, 80);
         pop();
 
+        // Write the instructions
         push();
         rectMode(CENTER);
         textSize(14);
@@ -68,7 +70,9 @@ function menuDraw() {
     // The menu with the buttons
     if (menuState === 2) {
         cursor(HAND);
+
         drawFrog();
+
         for (let button of buttons) {
             drawVariationButtons(button);
         }
@@ -84,25 +88,26 @@ function menuDraw() {
  */
 function menuMousePressed() {
     // Switch the menu to the one with the buttons
-    if (menuState === 1) {
-        menuState = 2;
-    }
+    menuState += 1;
+
     // Switch the game state to a variation by checking which button was clicked
-    switch (state) {
-        case "menu":
-            if (checkButtonOverlap(mouseX, mouseY, edenButton)) {
-                state = "eden-variation";
-                edenSetup();
-            }
-            if (checkButtonOverlap(mouseX, mouseY, paradiseButton)) {
-                state = "paradise-variation";
-                paradiseSetup();
-            }
-            if (checkButtonOverlap(mouseX, mouseY, hellButton)) {
-                state = "hell-variation";
-                hellSetup();
-            }
-            break;
+    if (menuState === 3) {
+        switch (state) {
+            case "menu":
+                if (checkButtonOverlap(mouseX, mouseY, edenButton)) {
+                    state = "eden-variation";
+                    edenSetup();
+                }
+                if (checkButtonOverlap(mouseX, mouseY, paradiseButton)) {
+                    state = "paradise-variation";
+                    paradiseSetup();
+                }
+                if (checkButtonOverlap(mouseX, mouseY, hellButton)) {
+                    state = "hell-variation";
+                    hellSetup();
+                }
+                break;
+        }
     }
 }
 
