@@ -125,7 +125,7 @@ function drawEdenLand() {
     push();
     noStroke();
     fill(backgroundDisplay.land.fill.r, backgroundDisplay.land.fill.g, backgroundDisplay.land.fill.b);
-    rect(0, 2 * height / 3, width, height);
+    rect(backgroundDisplay.land.x, backgroundDisplay.land.y, backgroundDisplay.land.x2, backgroundDisplay.land.y2);
     pop();
 }
 
