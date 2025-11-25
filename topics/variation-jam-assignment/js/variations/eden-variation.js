@@ -80,9 +80,13 @@ function edenDraw() {
 function edenRunGame() {
     // No cursor in-game so the player uses spacebar and arrows
     noCursor();
+
     // Draw the sky
     colorMode(RGB);
     background(backgroundDisplay.fill.r, backgroundDisplay.fill.g, backgroundDisplay.fill.b);
+
+    // Draw the land
+    drawEdenLand();
 
     // Draw the flies according to the population index - this will become the index of the flies array
     for (let fly of flies) {
@@ -117,6 +121,14 @@ function edenRunGame() {
     }
 }
 
+function drawEdenLand() {
+    push();
+    noStroke();
+    fill(backgroundDisplay.land.fill.r, backgroundDisplay.land.fill.g, backgroundDisplay.land.fill.b);
+    rect(0, 2 * height / 3, width, height);
+    pop();
+}
+
 /**
  * Draws the fly as a black circle with a name
  */
@@ -141,7 +153,7 @@ function moveEdenFly(fly) {
     fly.y = 5 * sin(frameCount * 0.25) + fly.b;
     // Handle the fly going off the canvas
     if (fly.x > width) {
-        resetFly(fly);
+        resetEdenFly(fly);
         fly = createFly(random(3, 4), random(textDisplay.names));
         flies.push(fly);
     }
@@ -154,7 +166,6 @@ function resetEdenFly(fly) {
     fly.x = -30;
     fly.y = random(0, height);
     fly.b = random(150, 400);
-    fly.spawn = random(-100, 100);
 }
 
 /**
@@ -227,11 +238,11 @@ function drawEdenFrogEyes() {
     const closestFly = flyWatch();
     // Make left pupil follow the position of the closest fly
     frog.eyes.pupils.left.x = map(closestFly.x, 0, width, frog.eyes.left.x - 5, frog.eyes.left.x + 5);
-    frog.eyes.pupils.left.y = map(closestFly.y, 0, height, frog.eyes.y - 15, frog.eyes.y + 5);
+    frog.eyes.pupils.left.y = map(closestFly.y, 0, height, frog.eyes.y - 13, frog.eyes.y);
     ellipse(frog.eyes.pupils.left.x, frog.eyes.pupils.left.y, frog.eyes.size - 60);
     // Make right pupil follow the position of the closest fly
     frog.eyes.pupils.right.x = map(closestFly.x, 0, width, frog.eyes.right.x - 5, frog.eyes.right.x + 5);
-    frog.eyes.pupils.right.y = map(closestFly.y, 0, height, frog.eyes.y - 15, frog.eyes.y + 5);
+    frog.eyes.pupils.right.y = map(closestFly.y, 0, height, frog.eyes.y - 13, frog.eyes.y);
     ellipse(frog.eyes.pupils.right.x, frog.eyes.pupils.right.y, frog.eyes.size - 60);
     pop();
 }
@@ -336,6 +347,7 @@ function edenMousePressed() {
             switch (state) {
                 case "eden-variation":
                     state = "menu"
+                    menuState = 2;
                     break;
             }
         }
@@ -369,9 +381,12 @@ function edenEndGame() {
     // Bring the cursor back
     cursor(ARROW);
 
+    // Draw the land
+    drawEdenLand();
+
     // Make the background go to black
     colorMode(HSL);
-    background(backgroundDisplay.fill.h, backgroundDisplay.fill.s, backgroundDisplay.fill.l);
+    background(backgroundDisplay.fill.h, backgroundDisplay.fill.s, backgroundDisplay.fill.l, 0.5);
     backgroundDisplay.fill.l = constrain(backgroundDisplay.fill.l, 0, 73);
     backgroundDisplay.fill.l -= 0.5;
 

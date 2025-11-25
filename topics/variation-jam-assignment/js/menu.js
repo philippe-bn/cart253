@@ -52,23 +52,28 @@ function menuDraw() {
 
         // Write the title
         push();
-        textSize(50);
-        text(textDisplay.title, width / 2 - 260, 80);
+        textSize(70);
+        textAlign(CENTER);
+        text(textDisplay.title, width / 2, 100);
         pop();
 
         // Write the instructions
         push();
         rectMode(CENTER);
-        textSize(14);
-        text(textDisplay.instruction1, width / 2, 150, 300, 50);
+        textSize(16);
+        textAlign(CENTER);
+        text(textDisplay.instruction1, width / 2, 150, width / 2);
+        pop();
+        push();
         textSize(12);
-        text(textDisplay.instruction2, width / 2 - 120, 440, 250, 50);
+        textAlign(LEFT);
+        text(textDisplay.instruction2, width / 9, 8 * height / 9 - 10, 250, 50);
         image(spacebar, width / 2 + 50, 410, 120, 40);
         image(arrowKeys, width / 2 + 200, 400, 70, 50);
         pop();
     }
     // The menu with the buttons
-    if (menuState === 2) {
+    if (menuState === 2 || menuState === 3) {
         cursor(HAND);
 
         drawFrog();
@@ -89,6 +94,7 @@ function menuDraw() {
 function menuMousePressed() {
     // Switch the menu to the one with the buttons
     menuState += 1;
+    menuState = constrain(menuState, 1, 3);
 
     // Switch the game state to a variation by checking which button was clicked
     if (menuState === 3) {

@@ -159,7 +159,6 @@ function resetParadiseFly(fly) {
     fly.x = -30;
     fly.y = random(0, height);
     fly.b = random(150, 400);
-    fly.spawn = random(-100, 100);
 }
 
 /**
@@ -232,11 +231,11 @@ function drawParadiseFrogEyes() {
     const closestFly = flyWatch();
     // Make left pupil follow the position of the closest fly
     frog.eyes.pupils.left.x = map(closestFly.x, 0, width, frog.eyes.left.x - 5, frog.eyes.left.x + 5);
-    frog.eyes.pupils.left.y = map(closestFly.y, 0, height, frog.eyes.y - 15, frog.eyes.y + 5);
+    frog.eyes.pupils.left.y = map(closestFly.y, 0, height, frog.eyes.y - 13, frog.eyes.y);
     ellipse(frog.eyes.pupils.left.x, frog.eyes.pupils.left.y, frog.eyes.size - 60);
     // Make right pupil follow the position of the closest fly
     frog.eyes.pupils.right.x = map(closestFly.x, 0, width, frog.eyes.right.x - 5, frog.eyes.right.x + 5);
-    frog.eyes.pupils.right.y = map(closestFly.y, 0, height, frog.eyes.y - 15, frog.eyes.y + 5);
+    frog.eyes.pupils.right.y = map(closestFly.y, 0, height, frog.eyes.y - 13, frog.eyes.y);
     ellipse(frog.eyes.pupils.right.x, frog.eyes.pupils.right.y, frog.eyes.size - 60);
     pop();
 }
@@ -357,6 +356,7 @@ function paradiseMousePressed() {
             switch (state) {
                 case "paradise-variation":
                     state = "menu"
+                    menuState = 2;
                     break;
             }
         }
@@ -381,6 +381,16 @@ function checkInput() {
     if (keyIsDown(RIGHT_ARROW)) {
         frog.body.x += 5;
     }
+
+    // // Allow the frog to fly when the up arrow key is pressed
+    // if (keyIsDown(UP_ARROW)) {
+    //     frog.body.y -= 5;
+    // }
+
+    // // Allow the frog to fly down when the down arrow key is pressed
+    // if (keyIsDown(DOWN_ARROW)) {
+    //     frog.body.y += 5;
+    // }
 }
 
 /**
@@ -393,14 +403,18 @@ function paradiseEndGame() {
     // Make the background go to black
     colorMode(HSL);
     background(backgroundDisplay.fill.h, backgroundDisplay.fill.s, backgroundDisplay.fill.l);
-    backgroundDisplay.fill.l = constrain(backgroundDisplay.fill.l, 0, 73);
-    backgroundDisplay.fill.l -= 0.5;
+    backgroundDisplay.fill.h = constrain(backgroundDisplay.fill.h, 0, 200);
+    backgroundDisplay.fill.s = constrain(backgroundDisplay.fill.s, 71, 100);
+    backgroundDisplay.fill.l = constrain(backgroundDisplay.fill.l, 50, 73);
+    backgroundDisplay.fill.h -= 20;
+    backgroundDisplay.fill.s += 5;
+    backgroundDisplay.fill.l -= 5;
 
     // Draw the dead frog
     drawParadiseFrogBody();
 
     // When the sky gets dark, write the end text
-    if (backgroundDisplay.fill.l <= 10) {
+    if (backgroundDisplay.fill.h <= 10) {
         paradiseEndGameText();
     }
 }
@@ -410,10 +424,11 @@ function paradiseEndGame() {
  */
 function paradiseEndGameText() {
     push();
-    textSize(80);
+    textSize(50);
     rectMode(CENTER);
-    fill('red');
-    text(textDisplay.end, width / 2 + 60, height - 80, width, height);
+    fill('black');
+    textAlign(CENTER, CENTER);
+    text(textDisplay.end, width / 2, height / 2 - 20);
     pop();
 
     // Write the final score
@@ -436,11 +451,12 @@ function altParadiseEndGame() {
 
     // Indicate the user lost due to a swarm
     push();
-    textSize(60);
+    textSize(50);
     rectMode(CENTER);
-    fill('white');
-    textAlign(CENTER);
-    text(textDisplay.altEnd, width / 2, height - 80, width, height);
+    fill('black');
+    textAlign(CENTER, CENTER);
+    textLeading(40);
+    text(textDisplay.altEnd, width / 2, height / 2 - 50, width - 30);
     pop();
 
     // Write the final score
@@ -456,11 +472,11 @@ function altParadiseEndGame() {
 function finalParadiseScore() {
     // Write the final score as a display of the time elapsed when the game ended
     push();
-    textSize(40);
+    textSize(25);
     rectMode(CENTER);
-    fill('white');
+    fill('black');
     textAlign(CENTER, CENTER);
-    text(textDisplay.scoreAnnouncement, width / 2, height / 2 + 10);
+    text(textDisplay.scoreAnnouncement, width / 2, height / 2 + 20, width);
     pop();
 }
 

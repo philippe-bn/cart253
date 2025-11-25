@@ -1,5 +1,5 @@
 /**
- * Variation Jam
+ * FROG TRIALS
  * Philippe Beauchemin
  * 
  * A game with different variations

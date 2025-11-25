@@ -5,7 +5,7 @@
             "edenButton": "Eden",
             "hellButton": "Hell",
             "paradiseButton": "Paradise",
-            "title": "THE SWAMP OF EDEN",
+            "title": "FROG TRIALS",
             "instruction1": "*Croak* sorry, I mean click anywhere to play.",
             "instruction2": "*Use the spacebar and arrows to catch the flies!*"
         },
@@ -43,9 +43,9 @@
             "names": [
                 "Angel Fly"
             ],
-            "end": "YOU STARVED",
-            "altEnd": "YOU WERE SWARMED",
-            "scoreAnnouncement": "You lasted"
+            "end": "GO TO HELL!!!",
+            "altEnd": "THIS IS NO PLACE FOR A FROG",
+            "scoreAnnouncement": "You have been banned from Fly Paradise for partaking in unethical acts..."
         }
     }
 }

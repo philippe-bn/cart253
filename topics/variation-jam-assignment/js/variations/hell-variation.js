@@ -137,7 +137,7 @@ function drawHellFly(fly) {
  */
 function moveHellFly(fly) {
     // Move the fly in a sinusoidal pattern across the screen
-    fly.x += fly.speed;
+    fly.x += fly.speed * 1.5; // in the Hell variation, the flies move faster
     fly.y = 5 * sin(frameCount * 0.25) + fly.b;
     // Handle the fly going off the canvas
     if (fly.x > width) {
@@ -154,7 +154,6 @@ function resetHellFly(fly) {
     fly.x = -30;
     fly.y = random(0, height);
     fly.b = random(150, 400);
-    fly.spawn = random(-100, 100);
 }
 
 /**
@@ -227,11 +226,11 @@ function drawHellFrogEyes() {
     const closestFly = flyWatch();
     // Make left pupil follow the position of the closest fly
     frog.eyes.pupils.left.x = map(closestFly.x, 0, width, frog.eyes.left.x - 5, frog.eyes.left.x + 5);
-    frog.eyes.pupils.left.y = map(closestFly.y, 0, height, frog.eyes.y - 15, frog.eyes.y + 5);
+    frog.eyes.pupils.left.y = map(closestFly.y, 0, height, frog.eyes.y - 13, frog.eyes.y);
     ellipse(frog.eyes.pupils.left.x, frog.eyes.pupils.left.y, frog.eyes.size - 60);
     // Make right pupil follow the position of the closest fly
     frog.eyes.pupils.right.x = map(closestFly.x, 0, width, frog.eyes.right.x - 5, frog.eyes.right.x + 5);
-    frog.eyes.pupils.right.y = map(closestFly.y, 0, height, frog.eyes.y - 15, frog.eyes.y + 5);
+    frog.eyes.pupils.right.y = map(closestFly.y, 0, height, frog.eyes.y - 13, frog.eyes.y);
     ellipse(frog.eyes.pupils.right.x, frog.eyes.pupils.right.y, frog.eyes.size - 60);
     pop();
 }
@@ -336,6 +335,7 @@ function hellMousePressed() {
             switch (state) {
                 case "hell-variation":
                     state = "menu"
+                    menuState = 2;
                     break;
             }
         }
@@ -416,11 +416,11 @@ function altHellEndGame() {
 
     // Indicate the user lost due to a swarm
     push();
-    textSize(60);
+    textSize(50);
     rectMode(CENTER);
     fill('black');
-    textAlign(CENTER);
-    text(textDisplay.altEnd, width / 2, height - 80, width, height);
+    textAlign(CENTER, CENTER);
+    text(textDisplay.altEnd, width / 2, height / 2);
     pop();
 
     // Write the final score
