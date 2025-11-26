@@ -42,7 +42,7 @@ function hellSetup() {
     backgroundDisplay = backgroundsData.backgrounds.hell;
 
     // Create the retry button
-    hellRetryButton = createPersonalizedButton(400, 70, textDisplay.retryButton);
+    hellRetryButton = createPersonalizedButton(320, 400, 70, textDisplay.retryButton);
 
     // Create the first fly and set up its speed and name
     fly = createFly(2, textDisplay.firstFly);

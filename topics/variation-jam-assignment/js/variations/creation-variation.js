@@ -1,5 +1,5 @@
 /**
- * Eden
+ * Creation
  * 
  * A modded game of catching flies with your frog-tongue.
  * 
@@ -12,37 +12,37 @@
 /**
  * The distance between the frog's body and each fly - this will contain the distance between the frog and each fly
  */
-let edenFrogFlyDistance = [];
+let creationFrogFlyDistance = [];
 
 /**
  * The timer's time
  */
-let edenTimeElapsed = 0;
+let creationTimeElapsed = 0;
 /**
  * The timer's interval
  */
-let edenTimeFlow = setInterval(edenGameTimer, 1000);
+let creationTimeFlow = setInterval(creationGameTimer, 1000);
 
 /**
  * The game's state
  */
-let edenGameState = undefined;
+let creationGameState = undefined;
 
 /**
  * Creates the canvas and initializes the fly
  */
-function edenSetup() {
+function creationSetup() {
     createCanvas(640, 480); // could maybe be deleted?
 
-    // In the Eden Variation, we use a specific frog
-    frog = frogData.frog.eden;
+    // In the Creation Variation, we use a specific frog
+    frog = frogData.frog.creation;
     // Load the text to be displayed
-    textDisplay = textData.text.eden;
+    textDisplay = textData.text.creation;
     // Load the background to be displayed
-    backgroundDisplay = backgroundsData.backgrounds.eden;
+    backgroundDisplay = backgroundsData.backgrounds.creation;
 
     // Create the retry button
-    edenRetryButton = createPersonalizedButton(320, 400, 70, textDisplay.retryButton);
+    creationRetryButton = createPersonalizedButton(320, 400, 70, textDisplay.retryButton);
 
     // Create the first fly and set up its speed and name
     fly = createFly(2, textDisplay.firstFly);
@@ -50,34 +50,34 @@ function edenSetup() {
 
     // Give the flies their first random position
     for (let fly of flies) {
-        resetEdenFly(fly);
+        resetCreationFly(fly);
     }
 
     // As the game is running, this will add 1 to the timer every second
-    setInterval(edenTimeFlow);
+    setInterval(creationTimeFlow);
 
-    edenGameState = "game";
+    creationGameState = "game";
 }
 
 /**
  * Run the program, draw either the game or an ending
  */
-function edenDraw() {
-    if (edenGameState === "game") {
-        edenRunGame();
+function creationDraw() {
+    if (creationGameState === "game") {
+        creationRunGame();
     }
-    else if (edenGameState === "end") {
-        edenEndGame();
+    else if (creationGameState === "end") {
+        creationEndGame();
     }
-    else if (edenGameState === "alt end") {
-        altEdenEndGame();
+    else if (creationGameState === "alt end") {
+        altCreationEndGame();
     }
 }
 
 /**
  * Launch the game if the mouse is pressed
  */
-function edenRunGame() {
+function creationRunGame() {
     // No cursor in-game so the player uses spacebar and arrows
     noCursor();
 
@@ -85,20 +85,17 @@ function edenRunGame() {
     colorMode(RGB);
     background(backgroundDisplay.fill.r, backgroundDisplay.fill.g, backgroundDisplay.fill.b);
 
-    // Draw the land
-    drawEdenLand();
-
     // Draw the flies according to the population index - this will become the index of the flies array
     for (let fly of flies) {
-        drawEdenFly(fly);
-        moveEdenFly(fly);
+        drawCreationFly(fly);
+        moveCreationFly(fly);
     }
 
     // Draw the frog
-    drawEdenFrog();
+    drawCreationFrog();
     // Move the frog and its tongue based on the player's input
-    checkEdenInput();
-    moveEdenTongue();
+    checkCreationInput();
+    moveCreationTongue();
 
     // Check if the tongue overlaps any fly
     for (let fly of flies) {
@@ -106,39 +103,28 @@ function edenRunGame() {
     }
 
     // Draw the timer on the screen
-    drawEdenTimer();
+    drawCreationTimer();
 
     // End the game when there are no flies left
     if (flies.length < 1) {
         // End the game and wait 2 seconds before playing the end game animation
-        edenGameState = "end";
+        creationGameState = "end";
     }
 
     // End the game when there are too many flies - the user is incapable of regulating the population
-    if (flies.length > 200) {
+    if (flies.length > 400) {
         // End the game and wait 2 seconds before playing the end game animation
-        edenGameState = "alt end";
+        creationGameState = "alt end";
     }
-}
-
-/**
- * Draws the land
- */
-function drawEdenLand() {
-    push();
-    noStroke();
-    fill(backgroundDisplay.land.fill.r, backgroundDisplay.land.fill.g, backgroundDisplay.land.fill.b);
-    rect(backgroundDisplay.land.x, backgroundDisplay.land.y, backgroundDisplay.land.x2, backgroundDisplay.land.y2);
-    pop();
 }
 
 /**
  * Draws the fly as a black circle with a name
  */
-function drawEdenFly(fly) {
+function drawCreationFly(fly) {
     push();
     noStroke();
-    fill(fly.fill);
+    fill('white');
     ellipse(fly.x, fly.y, fly.size);
     // Displays the fly's name under it
     textSize(10);
@@ -150,13 +136,12 @@ function drawEdenFly(fly) {
  * Moves the fly according to its speed
  * Resets the fly if it gets all the way to the right
  */
-function moveEdenFly(fly) {
+function moveCreationFly(fly) {
     // Move the fly in a sinusoidal pattern across the screen
     fly.x += fly.speed;
-    fly.y = 5 * sin(frameCount * 0.25) + fly.b;
     // Handle the fly going off the canvas
     if (fly.x > width) {
-        resetEdenFly(fly);
+        resetCreationFly(fly);
         fly = createFly(random(3, 4), random(textDisplay.names));
         flies.push(fly);
     }
@@ -165,7 +150,7 @@ function moveEdenFly(fly) {
 /**
  * Resets the fly to the left with a random y
  */
-function resetEdenFly(fly) {
+function resetCreationFly(fly) {
     fly.x = -30;
     fly.y = random(0, height);
     fly.b = random(150, 400);
@@ -174,18 +159,18 @@ function resetEdenFly(fly) {
 /**
  * Displays the tongue (tip and line connection) and the frog (body)
  */
-function drawEdenFrog() {
-    drawEdenFrogTongue();
-    drawEdenFrogBody();
-    drawEdenFrogEyes();
+function drawCreationFrog() {
+    drawCreationFrogTongue();
+    drawCreationFrogBody();
+    drawCreationFrogEyes();
 }
 
 /**
  * Displays the tongue (tip and line connection)
  */
-function drawEdenFrogTongue() {
+function drawCreationFrogTongue() {
     // Draw the tongue
-    if (edenGameState === "game") {
+    if (creationGameState === "game") {
         // Draw the tongue tip
         push();
         fill(frog.tongue.stroke);
@@ -205,7 +190,7 @@ function drawEdenFrogTongue() {
 /**
  * Displays the frog's body
  */
-function drawEdenFrogBody() {
+function drawCreationFrogBody() {
     push();
     fill(frog.body.fill);
     noStroke();
@@ -216,7 +201,7 @@ function drawEdenFrogBody() {
 /**
  * Displays the frog's eyes
  */
-function drawEdenFrogEyes() {
+function drawCreationFrogEyes() {
     // Tympanums
     push();
     noStroke();
@@ -258,12 +243,12 @@ function flyWatch() {
     let closestFly = undefined;
     for (let fly of flies) {
         // Get the distance from the frog to each fly
-        const edenFrogFlyDistance = dist(frog.body.x, frog.body.y, fly.x, fly.y);
+        const creationFrogFlyDistance = dist(frog.body.x, frog.body.y, fly.x, fly.y);
         // Compare to the previous closest distance
-        if (edenFrogFlyDistance < closest) {
+        if (creationFrogFlyDistance < closest) {
             // Update the closest fly and closest distance
             closestFly = fly;
-            closest = edenFrogFlyDistance;
+            closest = creationFrogFlyDistance;
         }
         return closestFly;
     }
@@ -273,7 +258,7 @@ function flyWatch() {
 /**
  * Handle moving the tongue based on its state
  */
-function moveEdenTongue() {
+function moveCreationTongue() {
     // Tongue matches the frog's x
     frog.tongue.x = frog.body.x;
     // If the tongue is idle, it doesn't do anything
@@ -319,36 +304,36 @@ function checkTongueFlyOverlap(fly) {
 /**
  * Add one to the timer every second during the game
  */
-function edenGameTimer() {
+function creationGameTimer() {
     // The time elapsed increases by 1 every second
-    if (edenGameState === "game") {
-        edenTimeElapsed = edenTimeElapsed + 1;
+    if (creationGameState === "game") {
+        creationTimeElapsed = creationTimeElapsed + 1;
     }
 }
 
 /**
  * Display the timer
  */
-function drawEdenTimer() {
+function drawCreationTimer() {
     push();
-    text(edenTimeElapsed, width - 25, 25);
+    text(creationTimeElapsed, width - 25, 25);
     pop();
 }
 
 /**
 * Go back to the menu if the "retry" button is pressed at the end of the game
 */
-function edenMousePressed() {
-    if (edenGameState === "end" || edenGameState === "alt end") {
-        if (checkEdenRetryButtonOverlap(mouseX, mouseY, edenRetryButton)) {
+function creationMousePressed() {
+    if (creationGameState === "end" || creationGameState === "alt end") {
+        if (checkCreationRetryButtonOverlap(mouseX, mouseY, creationRetryButton)) {
             // Reset the time flow and time elapsed
-            edenTimeFlow = 0;
-            edenTimeElapsed = 0;
+            creationTimeFlow = 0;
+            creationTimeElapsed = 0;
             // Reset the flies
             flies = [];
             // Restart
             switch (state) {
-                case "eden-variation":
+                case "creation-variation":
                     state = "menu"
                     menuState = 2;
                     break;
@@ -360,7 +345,7 @@ function edenMousePressed() {
 /**
  * Checks the different keyboard inputs
  */
-function checkEdenInput() {
+function checkCreationInput() {
     // Launch the tongue on spacebar click (if it's not launched yet)
     if (keyIsDown(32) && frog.tongue.state === "idle") {
         frog.tongue.state = "outbound";
@@ -380,116 +365,129 @@ function checkEdenInput() {
 /**
  * Sets out the sequence to play at the end of the game
  */
-function edenEndGame() {
+function creationEndGame() {
     // Bring the cursor back
     cursor(ARROW);
 
-    // Draw the land
-    drawEdenLand();
-
     // Make the background go to black
     colorMode(HSL);
-    background(backgroundDisplay.fill.h, backgroundDisplay.fill.s, backgroundDisplay.fill.l, 0.5);
-    backgroundDisplay.fill.l = constrain(backgroundDisplay.fill.l, 0, 73);
-    backgroundDisplay.fill.l -= 0.5;
+    background(backgroundDisplay.fill.h, backgroundDisplay.fill.s, backgroundDisplay.fill.l);
 
     // Draw the dead frog
-    drawEdenFrogBody();
+    drawCreationFrogBody();
 
     // When the sky gets dark, write the end text
     if (backgroundDisplay.fill.l <= 10) {
-        edenEndGameText();
+        creationEndGameText();
     }
 }
 
 /**
  * Displays the end of game text
  */
-function edenEndGameText() {
+function creationEndGameText() {
     push();
     textSize(80);
     rectMode(CENTER);
-    fill('red');
-    text(textDisplay.end, width / 2 + 60, height - 80, width, height);
+    fill(frog.body.fill);
+    textAlign(CENTER, CENTER);
+    text(textDisplay.end, width / 2, height / 2 - 60);
     pop();
 
     // Write the final score
-    finalEdenScore();
+    finalCreationScore();
 
     // Retry button
-    drawEdenRetryButton(edenRetryButton);
+    drawCreationRetryButton(creationRetryButton);
 }
 
 /**
  * Sets out an alternative sequence to play at the end of the game
  */
-function altEdenEndGame() {
+function altCreationEndGame() {
 
     // Bring the cursor back
     cursor(ARROW);
 
     // Draw the dead frog
-    drawEdenFrogBody();
+    drawCreationFrogBody();
 
     // Indicate the user lost due to a swarm
     push();
     textSize(60);
     rectMode(CENTER);
-    fill('white');
-    textAlign(CENTER);
-    text(textDisplay.altEnd, width / 2, height - 80, width, height);
+    fill(frog.body.fill);
+    textAlign(CENTER, CENTER);
+    text(textDisplay.altEnd, width / 2, height / 2 - 60);
     pop();
 
     // Write the final score
-    finalEdenScore();
+    altFinalCreationScore();
 
     // Retry button
-    drawEdenRetryButton(edenRetryButton);
+    drawCreationRetryButton(creationRetryButton);
 }
 
 /**
  * Displays the final score
  */
-function finalEdenScore() {
+function finalCreationScore() {
     // Write the final score as a display of the time elapsed when the game ended
     push();
-    textSize(40);
+    textSize(25);
     rectMode(CENTER);
-    fill('white');
-    text(textDisplay.scoreAnnouncement, width / 2 + 60, height, width, height);
-    text(edenTimeElapsed, width / 2 + 318, height, width, height);
-    if (edenTimeElapsed === 1) {
-        text(textDisplay.score1, width / 2 + 370, height, width, height);
+    fill(frog.body.fill);
+    textAlign(CENTER, CENTER);
+    text(textDisplay.scoreAnnouncement, width / 2, height / 2, width);
+    text(creationTimeElapsed, width / 2 - 150, height / 2 + 40, width);
+    if (creationTimeElapsed === 1) {
+        text(textDisplay.score1, width / 2 + 10, height / 2 + 40, width / 2);
     }
     else {
-        text(textDisplay.score, width / 2 + 370, height, width, height);
+        text(textDisplay.score, width / 2 + 15, height / 2 + 40, width / 2);
     }
+    pop();
+}
+
+/**
+ * Displays the final score in the alternative ending
+ */
+function altFinalCreationScore() {
+    // Write the final score as a display of the time elapsed when the game ended
+    push();
+    textSize(25);
+    rectMode(CENTER);
+    fill(frog.body.fill);
+    textAlign(CENTER, CENTER);
+    text(textDisplay.scoreAnnouncement2, width / 2, height / 2, width);
+    text(creationTimeElapsed, width / 2 - 165, height / 2 + 40, width);
+    text(textDisplay.scoreAlt, width / 2, height / 2 + 40, width / 2);
     pop();
 }
 
 /**
  * Displays the "retry" button
  */
-function drawEdenRetryButton(edenRetryButton) {
+function drawCreationRetryButton(creationRetryButton) {
     push();
     rectMode(CENTER);
     noStroke();
-    fill(edenRetryButton.fill);
-    rect(edenRetryButton.x, edenRetryButton.y, edenRetryButton.w, edenRetryButton.h, 10);
+    fill(creationRetryButton.fill);
+    rect(creationRetryButton.x, creationRetryButton.y, creationRetryButton.w, creationRetryButton.h, 10);
     pop();
     push();
     textAlign(CENTER, CENTER);
     fill(0);
-    text(edenRetryButton.text, edenRetryButton.x, edenRetryButton.y);
+    text(creationRetryButton.text, creationRetryButton.x, creationRetryButton.y);
     pop();
 }
 
 /**
  * Checks if the mouse is overlapping the "retry" button
  */
-function checkEdenRetryButtonOverlap(mouseX, mouseY, edenRetryButton) {
-    return (mouseX > edenRetryButton.x - edenRetryButton.w / 2 &&
-        mouseX < edenRetryButton.x + edenRetryButton.w / 2 &&
-        mouseY > edenRetryButton.y - edenRetryButton.h / 2 &&
-        mouseY < edenRetryButton.y + edenRetryButton.h / 2);
+function checkCreationRetryButtonOverlap(mouseX, mouseY, creationRetryButton) {
+    return (mouseX > creationRetryButton.x - creationRetryButton.w / 2 &&
+        mouseX < creationRetryButton.x + creationRetryButton.w / 2 &&
+        mouseY > creationRetryButton.y - creationRetryButton.h / 2 &&
+        mouseY < creationRetryButton.y + creationRetryButton.h / 2);
 }

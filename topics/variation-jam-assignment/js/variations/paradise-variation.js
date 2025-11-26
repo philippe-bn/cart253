@@ -29,6 +29,11 @@ let paradiseTimeElapsed = 0;
 let paradiseGameState = undefined;
 
 /**
+ * The state of crime
+ */
+let crime = undefined;
+
+/**
  * Creates the canvas and initializes the fly
  */
 function paradiseSetup() {
@@ -42,7 +47,7 @@ function paradiseSetup() {
     backgroundDisplay = backgroundsData.backgrounds.paradise;
 
     // Create the retry button
-    paradiseRetryButton = createPersonalizedButton(400, 70, textDisplay.retryButton);
+    paradiseRetryButton = createPersonalizedButton(320, 400, 70, textDisplay.retryButton);
 
     // Create the first fly and set up its speed and name
     fly = createFly(2, textDisplay.firstFly);
@@ -56,7 +61,11 @@ function paradiseSetup() {
     // // As the game is running, this will add 1 to the timer every second
     // setInterval(timeFlow);
 
+    // Set the state to game at the start
     paradiseGameState = "game";
+
+    // Set the state of crime to safe
+    crime = "safe";
 }
 
 /**
@@ -303,6 +312,8 @@ function checkTongueFlyOverlap(fly) {
         flies.splice(eatenFlyIndex, 1);
         // Bring back the tongue
         frog.tongue.state = "inbound";
+        // Indicate a fly was eaten
+        crime = "committed";
     }
 }
 
@@ -400,7 +411,7 @@ function paradiseEndGame() {
     // Bring the cursor back
     cursor(ARROW);
 
-    // Make the background go to black
+    // Make the background go to red
     colorMode(HSL);
     background(backgroundDisplay.fill.h, backgroundDisplay.fill.s, backgroundDisplay.fill.l);
     backgroundDisplay.fill.h = constrain(backgroundDisplay.fill.h, 0, 200);
@@ -456,7 +467,12 @@ function altParadiseEndGame() {
     fill('black');
     textAlign(CENTER, CENTER);
     textLeading(40);
-    text(textDisplay.altEnd, width / 2, height / 2 - 50, width - 30);
+    if (crime === "committed") {
+        text(textDisplay.altEnd, width / 2, height / 2 - 50, width - 30);
+    }
+    else if (crime === "safe") {
+        text(textDisplay.altEnd2, width / 2, height / 2 - 50, width - 30);
+    }
     pop();
 
     // Write the final score
@@ -476,7 +492,12 @@ function finalParadiseScore() {
     rectMode(CENTER);
     fill('black');
     textAlign(CENTER, CENTER);
-    text(textDisplay.scoreAnnouncement, width / 2, height / 2 + 20, width);
+    if (crime === "committed") {
+        text(textDisplay.scoreAnnouncement, width / 2, height / 2 + 20, width);
+    }
+    else if (crime === "safe") {
+        text(textDisplay.scoreAnnouncement2, width / 2, height / 2 + 20, width);
+    }
     pop();
 }
 

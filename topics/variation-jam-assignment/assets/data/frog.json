@@ -35,6 +35,48 @@
                 }
             }
         },
+        "creation": {
+            "body": {
+                "x": 320,
+                "y": 520,
+                "size": 150,
+                "fill": "#00ff00"
+            },
+            "tongue": {
+                "x": "undefined",
+                "y": 480,
+                "size": 20,
+                "speed": 20,
+                "state": "idle",
+                "stroke": "#ff0000"
+            },
+            "tympanum": {
+                "size": 120
+            },
+            "eyes": {
+                "y": "undefined",
+                "size": 80,
+                "globes": {
+                    "fill": "#FFFFFF"
+                },
+                "pupils": {
+                    "y": "undefined",
+                    "fill": "#000000",
+                    "left": {
+                        "x": "undefined"
+                    },
+                    "right": {
+                        "x": "undefined"
+                    }
+                },
+                "left": {
+                    "x": "undefined"
+                },
+                "right": {
+                    "x": "undefined"
+                }
+            }
+        },
         "eden": {
             "body": {
                 "x": 320,
@@ -90,7 +132,7 @@
                 "size": 20,
                 "speed": 20,
                 "state": "idle",
-                "stroke": "#ff0000"
+                "stroke": "#ff3030"
             },
             "tympanum": {
                 "size": 120

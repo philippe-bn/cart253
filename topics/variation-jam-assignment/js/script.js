@@ -68,6 +68,9 @@ function draw() {
         case "menu":
             menuDraw();
             break;
+        case "creation-variation":
+            creationDraw();
+            break;
         case "eden-variation":
             edenDraw();
             break
@@ -88,6 +91,9 @@ function mousePressed() {
     switch (state) {
         case "menu":
             menuMousePressed();
+            break;
+        case "creation-variation":
+            creationMousePressed();
             break;
         case "eden-variation":
             edenMousePressed();
@@ -117,8 +123,9 @@ function createFly(speed, name) {
 /**
  * Create a button based on a button model with a specific y position, width and text and returns it
  */
-function createPersonalizedButton(y, w, text) {
+function createPersonalizedButton(x, y, w, text) {
     const newButton = structuredClone(buttonData);
+    newButton.x = x;
     newButton.y = y;
     newButton.w = w;
     newButton.text = text;

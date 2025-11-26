@@ -29,11 +29,13 @@ function menuSetup() {
     textDisplay = textData.text.menu;
 
     // Make each button object a recognizable "button"
-    edenButton = createPersonalizedButton(100, 60, textDisplay.edenButton);
+    creationButton = createPersonalizedButton(200, 100, 70, textDisplay.creationButton);
+    buttons.push(creationButton);
+    edenButton = createPersonalizedButton(440, 100, 70, textDisplay.edenButton);
     buttons.push(edenButton);
-    paradiseButton = createPersonalizedButton(250, 70, textDisplay.paradiseButton);
+    paradiseButton = createPersonalizedButton(200, 400, 70, textDisplay.paradiseButton);
     buttons.push(paradiseButton);
-    hellButton = createPersonalizedButton(400, 60, textDisplay.hellButton);
+    hellButton = createPersonalizedButton(440, 400, 70, textDisplay.hellButton);
     buttons.push(hellButton);
 
     // Start the menu state at 1
@@ -100,6 +102,10 @@ function menuMousePressed() {
     if (menuState === 3) {
         switch (state) {
             case "menu":
+                if (checkButtonOverlap(mouseX, mouseY, creationButton)) {
+                    state = "creation-variation";
+                    creationSetup();
+                }
                 if (checkButtonOverlap(mouseX, mouseY, edenButton)) {
                     state = "eden-variation";
                     edenSetup();

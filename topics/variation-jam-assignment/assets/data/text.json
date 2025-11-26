@@ -2,12 +2,29 @@
     "description": "All of my in-game text",
     "text": {
         "menu": {
+            "creationButton": "Creation",
             "edenButton": "Eden",
             "hellButton": "Hell",
             "paradiseButton": "Paradise",
             "title": "FROG TRIALS",
             "instruction1": "*Croak* sorry, I mean click anywhere to play.",
             "instruction2": "*Use the spacebar and arrows to catch the flies!*"
+        },
+        "creation": {
+            "retryButton": "RETRY",
+            "firstFly": "..-..-..-.--",
+            "names": [
+                "..-.",
+                ".-..",
+                "-.--"
+            ],
+            "end": "DESTRUCTION",
+            "altEnd": "CREATION",
+            "scoreAnnouncement": "Uh oh...",
+            "scoreAnnouncement2": "Welcome...",
+            "score1": "second... The world is nothing without flies.",
+            "score": "seconds... The world is nothing without flies.",
+            "scoreAlt": "seconds... The world is born from flies"
         },
         "eden": {
             "retryButton": "RETRY",
@@ -45,7 +62,9 @@
             ],
             "end": "GO TO HELL!!!",
             "altEnd": "THIS IS NO PLACE FOR A FROG",
-            "scoreAnnouncement": "You have been banned from Fly Paradise for committing unethical acts..."
+            "altEnd2": "WHAT A NICE FROG",
+            "scoreAnnouncement": "You have been banned from Fly Paradise for committing unethical acts...",
+            "scoreAnnouncement2": "You've earned yourself a spot in Fly Paradise!"
         }
     }
 }
