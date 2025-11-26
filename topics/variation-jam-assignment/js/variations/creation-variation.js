@@ -1,16 +1,9 @@
 /**
  * Creation
- * 
- * A modded game of catching flies with your frog-tongue.
- * 
- * Instructions:
- * - Move the frog with the keyboard arrows
- * - Click spacebar to launch the tongue
- * - Catch flies and keep the fly population balanced for as long as possible
  */
 
 /**
- * The distance between the frog's body and each fly - this will contain the distance between the frog and each fly
+ * The distance between the frog's body and each fly
  */
 let creationFrogFlyDistance = [];
 
@@ -32,7 +25,7 @@ let creationGameState = undefined;
  * Creates the canvas and initializes the fly
  */
 function creationSetup() {
-    createCanvas(640, 480); // could maybe be deleted?
+    createCanvas(640, 480);
 
     // In the Creation Variation, we use a specific frog
     frog = frogData.frog.creation;
@@ -56,6 +49,7 @@ function creationSetup() {
     // As the game is running, this will add 1 to the timer every second
     setInterval(creationTimeFlow);
 
+    // Set the state to game at the start
     creationGameState = "game";
 }
 
@@ -93,6 +87,7 @@ function creationRunGame() {
 
     // Draw the frog
     drawCreationFrog();
+
     // Move the frog and its tongue based on the player's input
     checkCreationInput();
     moveCreationTongue();
@@ -414,7 +409,7 @@ function altCreationEndGame() {
     // Draw the dead frog
     drawCreationFrogBody();
 
-    // Indicate the user lost due to a swarm
+    // Indicate what happens now
     push();
     textSize(60);
     rectMode(CENTER);

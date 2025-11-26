@@ -1,16 +1,9 @@
 /**
  * Paradise
- * 
- * A modded game of catching flies with your frog-tongue.
- * 
- * Instructions:
- * - Move the frog with the keyboard arrows
- * - Click spacebar to launch the tongue
- * - Catch flies and keep the fly population balanced for as long as possible
  */
 
 /**
- * The distance between the frog's body and each fly - this will contain the distance between the frog and each fly
+ * The distance between the frog's body and each fly
  */
 let paradiseFrogFlyDistance = [];
 
@@ -18,10 +11,6 @@ let paradiseFrogFlyDistance = [];
  * No notion of time in Paradise
  */
 let paradiseTimeElapsed = 0;
-// /**
-//  * The timer's interval
-//  */
-// let timeFlow = setInterval(gameTimer, 1000);
 
 /**
  * The game's state
@@ -37,7 +26,7 @@ let crime = undefined;
  * Creates the canvas and initializes the fly
  */
 function paradiseSetup() {
-    createCanvas(640, 480); // could maybe be deleted?
+    createCanvas(640, 480);
 
     // In the Paradise Variation, we use a specific frog
     frog = frogData.frog.paradise;
@@ -57,9 +46,6 @@ function paradiseSetup() {
     for (let fly of flies) {
         resetParadiseFly(fly);
     }
-
-    // // As the game is running, this will add 1 to the timer every second
-    // setInterval(timeFlow);
 
     // Set the state to game at the start
     paradiseGameState = "game";
@@ -89,6 +75,7 @@ function paradiseDraw() {
 function paradiseRunGame() {
     // No cursor in-game so the player uses spacebar and arrows
     noCursor();
+
     // Draw the sky
     colorMode(RGB);
     background(backgroundDisplay.fill.r, backgroundDisplay.fill.g, backgroundDisplay.fill.b);
@@ -101,14 +88,10 @@ function paradiseRunGame() {
 
     // Draw the frog
     drawParadiseFrog();
+
     // Move the frog and its tongue based on the player's input
     checkInput();
     moveTongue();
-
-    // // Make the flies swarm the frog
-    // for (let fly of flies) {
-    //     swarmParadiseFly(fly);
-    // }
 
     // Check if the tongue overlaps any fly
     for (let fly of flies) {
@@ -317,32 +300,6 @@ function checkTongueFlyOverlap(fly) {
     }
 }
 
-// function swarmParadiseFly(fly) {
-//     // the fly flies towards the frog - it needs to fly on a diagonal
-//     // the frog is always at y = 0
-//     // the fly just needs to know how far on the x axis to go
-//     const flyFrogX = dist(fly.x, frog.body.x);
-//     const flyFrogY = dist(fly.y, frog.body.y);
-//     // move on X until that distance is 0
-//     if (flyFrogX === 0) {
-//         resetParadiseFly(fly);
-//     }
-//     // move on Y until that distance is 0
-//     if (flyFrogY === 0) {
-//         resetParadiseFly(fly);
-//     }
-// }
-
-// /**
-//  * Add one to the timer every second during the game
-//  */
-// function gameTimer() {
-//     // The time elapsed increases by 1 every second
-//     if (paradiseGameState === "game") {
-//         timeElapsed = timeElapsed + 1;
-//     }
-// }
-
 /**
  * Display the timer
  */
@@ -358,9 +315,6 @@ function drawParadiseTimer() {
 function paradiseMousePressed() {
     if (paradiseGameState === "end" || paradiseGameState === "alt end") {
         if (checkParadiseRetryButtonOverlap(mouseX, mouseY, paradiseRetryButton)) {
-            // Reset the time flow and time elapsed
-            // timeFlow = 0;
-            // timeElapsed = 0;
             // Reset the flies
             flies = [];
             // Restart
@@ -394,16 +348,6 @@ function checkInput() {
     if (keyIsDown(RIGHT_ARROW)) {
         frog.body.x += 5;
     }
-
-    // // Allow the frog to fly when the up arrow key is pressed
-    // if (keyIsDown(UP_ARROW)) {
-    //     frog.body.y -= 5;
-    // }
-
-    // // Allow the frog to fly down when the down arrow key is pressed
-    // if (keyIsDown(DOWN_ARROW)) {
-    //     frog.body.y += 5;
-    // }
 }
 
 /**
@@ -426,7 +370,7 @@ function paradiseEndGame() {
     // Draw the dead frog
     drawParadiseFrogBody();
 
-    // When the sky gets dark, write the end text
+    // When the sky gets red, write the end text
     if (backgroundDisplay.fill.h <= 10) {
         paradiseEndGameText();
     }
@@ -462,16 +406,18 @@ function altParadiseEndGame() {
     // Draw the dead frog
     drawParadiseFrogBody();
 
-    // Indicate the user lost due to a swarm
+    // Indicate the end
     push();
     textSize(50);
     rectMode(CENTER);
     fill('black');
     textAlign(CENTER, CENTER);
     textLeading(40);
+    // If the player ate flies, be upset
     if (crime === "committed") {
         text(textDisplay.altEnd, width / 2, height / 2 - 50, width - 30);
     }
+    // If the player did not eat any flies, congratulate them
     else if (crime === "safe") {
         text(textDisplay.altEnd2, width / 2, height / 2 - 50, width - 30);
     }
@@ -494,9 +440,11 @@ function finalParadiseScore() {
     rectMode(CENTER);
     fill('black');
     textAlign(CENTER, CENTER);
+    // If the player ate flies, expulse them from Paradise
     if (crime === "committed") {
         text(textDisplay.scoreAnnouncement, width / 2, height / 2 + 20, width);
     }
+    // If the player did not eat any flies, they're welcomed in Paradise
     else if (crime === "safe") {
         text(textDisplay.scoreAnnouncement2, width / 2, height / 2 + 20, width);
     }

@@ -1,16 +1,9 @@
 /**
  * Eden
- * 
- * A modded game of catching flies with your frog-tongue.
- * 
- * Instructions:
- * - Move the frog with the keyboard arrows
- * - Click spacebar to launch the tongue
- * - Catch flies and keep the fly population balanced for as long as possible
  */
 
 /**
- * The distance between the frog's body and each fly - this will contain the distance between the frog and each fly
+ * The distance between the frog's body and each fly
  */
 let edenFrogFlyDistance = [];
 
@@ -32,7 +25,7 @@ let edenGameState = undefined;
  * Creates the canvas and initializes the fly
  */
 function edenSetup() {
-    createCanvas(640, 480); // could maybe be deleted?
+    createCanvas(640, 480);
 
     // In the Eden Variation, we use a specific frog
     frog = frogData.frog.eden;
@@ -56,6 +49,7 @@ function edenSetup() {
     // As the game is running, this will add 1 to the timer every second
     setInterval(edenTimeFlow);
 
+    // Set the state to game at the start
     edenGameState = "game";
 }
 
@@ -96,6 +90,7 @@ function edenRunGame() {
 
     // Draw the frog
     drawEdenFrog();
+
     // Move the frog and its tongue based on the player's input
     checkEdenInput();
     moveEdenTongue();

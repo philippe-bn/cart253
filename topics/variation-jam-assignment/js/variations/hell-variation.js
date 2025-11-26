@@ -1,16 +1,9 @@
 /**
  * Hell
- * 
- * A modded game of catching flies with your frog-tongue.
- * 
- * Instructions:
- * - Move the frog with the keyboard arrows
- * - Click spacebar to launch the tongue
- * - Catch flies and keep the fly population balanced for as long as possible
  */
 
 /**
- * The distance between the frog's body and each fly - this will contain the distance between the frog and each fly
+ * The distance between the frog's body and each fly
  */
 let hellFrogFlyDistance = [];
 
@@ -18,10 +11,6 @@ let hellFrogFlyDistance = [];
  * No notion of time in Hell
  */
 let hellTimeElapsed = 0;
-// /**
-//  * The timer's interval
-//  */
-// let timeFlow = setInterval(gameTimer, 1000);
 
 /**
  * The game's state
@@ -32,7 +21,7 @@ let hellGameState = undefined;
  * Creates the canvas and initializes the fly
  */
 function hellSetup() {
-    createCanvas(640, 480); // could maybe be deleted?
+    createCanvas(640, 480);
 
     // In the Hell Variation, we use a specific frog
     frog = frogData.frog.hell;
@@ -53,9 +42,7 @@ function hellSetup() {
         resetHellFly(fly);
     }
 
-    // // As the game is running, this will add 1 to the timer every second
-    // setInterval(timeFlow);
-
+    // Set the state to game at the start
     hellGameState = "game";
 }
 
@@ -80,6 +67,7 @@ function hellDraw() {
 function hellRunGame() {
     // No cursor in-game so the player uses spacebar and arrows
     noCursor();
+
     // Draw the sky
     colorMode(RGB);
     background(backgroundDisplay.fill.r, backgroundDisplay.fill.g, backgroundDisplay.fill.b);
@@ -92,6 +80,7 @@ function hellRunGame() {
 
     // Draw the frog
     drawHellFrog();
+
     // Move the frog and its tongue based on the player's input
     checkHellInput();
     moveHellTongue();
@@ -301,16 +290,6 @@ function checkTongueFlyOverlap(fly) {
     }
 }
 
-// /**
-//  * Add one to the timer every second during the game
-//  */
-// function gameTimer() {
-//     // The time elapsed increases by 1 every second
-//     if (hellGameState === "game") {
-//         timeElapsed = timeElapsed + 1;
-//     }
-// }
-
 /**
  * Display the timer
  */
@@ -326,9 +305,6 @@ function drawHellTimer() {
 function hellMousePressed() {
     if (hellGameState === "end" || hellGameState === "alt end") {
         if (checkHellRetryButtonOverlap(mouseX, mouseY, hellRetryButton)) {
-            // Reset the time flow and time elapsed
-            // timeFlow = 0;
-            hellTimeElapsed = 0;
             // Reset the flies
             flies = [];
             // Restart
@@ -436,7 +412,7 @@ function altHellEndGame() {
  * Displays the final score
  */
 function finalHellScore() {
-    // Write the final score as a display of the time elapsed when the game ended
+    // Write the final score
     push();
     textSize(25);
     rectMode(CENTER);

@@ -48,6 +48,7 @@ function menuSetup() {
  * Draws a game menu
  */
 function menuDraw() {
+    // The start menu
     if (menuState === 1) {
         cursor(HAND);
 
@@ -76,6 +77,7 @@ function menuDraw() {
         image(arrowKeys, width / 2 + 200, 400, 70, 50);
         pop();
     }
+
     // The menu with the buttons
     if (menuState === 2 || menuState === 3) {
         cursor(HAND);
@@ -180,7 +182,9 @@ function drawFrogEyes() {
     pop();
 }
 
-// Draw the buttons for each variation
+/**
+ * Draw the buttons for each variation and the return button
+ */
 function drawVariationButtons(button) {
     push();
     rectMode(CENTER);
@@ -195,6 +199,9 @@ function drawVariationButtons(button) {
     pop();
 }
 
+/**
+ * Checks for any button overlap
+ */
 function checkButtonOverlap(mouseX, mouseY, button) {
     return (mouseX > button.x - button.w / 2 &&
         mouseX < button.x + button.w / 2 &&
