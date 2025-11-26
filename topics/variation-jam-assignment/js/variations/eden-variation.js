@@ -350,7 +350,9 @@ function edenMousePressed() {
             switch (state) {
                 case "eden-variation":
                     state = "menu"
+                    menuSetup();
                     menuState = 2;
+                    menuDraw();
                     break;
             }
         }

@@ -29,6 +29,8 @@ function menuSetup() {
     textDisplay = textData.text.menu;
 
     // Make each button object a recognizable "button"
+    returnButton = createPersonalizedButton(27, 30, 70, textDisplay.returnButton);
+    buttons.push(returnButton);
     creationButton = createPersonalizedButton(200, 100, 70, textDisplay.creationButton);
     buttons.push(creationButton);
     edenButton = createPersonalizedButton(440, 100, 70, textDisplay.edenButton);
@@ -80,6 +82,13 @@ function menuDraw() {
 
         drawFrog();
 
+        // Write the instructions
+        push();
+        textSize(16);
+        textAlign(CENTER);
+        text(textDisplay.instruction3, width / 2, 50);
+        pop();
+
         for (let button of buttons) {
             drawVariationButtons(button);
         }
@@ -100,6 +109,9 @@ function menuMousePressed() {
 
     // Switch the game state to a variation by checking which button was clicked
     if (menuState === 3) {
+        if (checkButtonOverlap(mouseX, mouseY, returnButton)) {
+            menuState -= 2;
+        }
         switch (state) {
             case "menu":
                 if (checkButtonOverlap(mouseX, mouseY, creationButton)) {

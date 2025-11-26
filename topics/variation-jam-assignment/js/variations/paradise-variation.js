@@ -367,7 +367,9 @@ function paradiseMousePressed() {
             switch (state) {
                 case "paradise-variation":
                     state = "menu"
+                    menuSetup();
                     menuState = 2;
+                    menuDraw();
                     break;
             }
         }

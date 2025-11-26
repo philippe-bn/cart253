@@ -335,7 +335,9 @@ function creationMousePressed() {
             switch (state) {
                 case "creation-variation":
                     state = "menu"
+                    menuSetup();
                     menuState = 2;
+                    menuDraw();
                     break;
             }
         }

@@ -2,13 +2,15 @@
     "description": "All of my in-game text",
     "text": {
         "menu": {
+            "title": "FROG TRIALS",
+            "instruction1": "*Croak* click to play!",
+            "instruction2": "> Use the spacebar and arrows to    catch the flies",
+            "instruction3": "Choose your trial...",
+            "returnButton": "RETURN",
             "creationButton": "Creation",
             "edenButton": "Eden",
             "hellButton": "Hell",
-            "paradiseButton": "Paradise",
-            "title": "FROG TRIALS",
-            "instruction1": "*Croak* sorry, I mean click anywhere to play.",
-            "instruction2": "*Use the spacebar and arrows to catch the flies!*"
+            "paradiseButton": "Paradise"
         },
         "creation": {
             "retryButton": "RETRY",

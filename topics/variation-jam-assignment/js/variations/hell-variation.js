@@ -335,7 +335,9 @@ function hellMousePressed() {
             switch (state) {
                 case "hell-variation":
                     state = "menu"
+                    menuSetup();
                     menuState = 2;
+                    menuDraw();
                     break;
             }
         }
