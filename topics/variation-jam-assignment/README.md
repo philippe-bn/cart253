@@ -23,14 +23,14 @@ A space where Toad the Evil Frog was sent after committing his crimes. Hell is t
 # Attributes
 - Based on Mod Jam project; "The Swamp of Eden", 2025, Philippe Beauchemin
 - "The Swamp of Eden" project credits:
-- Original project by Pippin Barr
-    - [planning](./planning.md)
-    - [pseudocode](./pseudocode.md)
-- Overlap code taken from Pippin Barr's CART253 repository: https://pippinbarr.com/cart253/assignments/challenges/functions/
-- Made with p5: https://p5js.org/
-- Keyboard pictures by Julia Bellone : https://juliabellone.github.io/Arkanoid/ 
-- Timer help by user T.J. Crowder on Stack Overflow: https://stackoverflow.com/questions/5978519/how-can-i-use-setinterval-and-clearinterval
-- Thank you Nou Noune for the help on figuring out multiple flies back at the start!! and thank you Lanna for the help on understanding the sine function parameters
+    - Original project by Pippin Barr
+        - [planning](./planning.md)
+        - [pseudocode](./pseudocode.md)
+    - Overlap code taken from Pippin Barr's CART253 repository: https://pippinbarr.com/cart253/assignments/challenges/functions/
+    - Made with p5: https://p5js.org/
+    - Keyboard pictures by Julia Bellone : https://juliabellone.github.io/Arkanoid/ 
+    - Timer help by user T.J. Crowder on Stack Overflow: https://stackoverflow.com/questions/5978519/how-can-i-use-setinterval-and-clearinterval
+    - Thank you Nou Noune for the help on figuring out multiple flies back at the start!! and thank you Lanna for the help on understanding the sine function parameters
 
 Find my variation ideas here:
 - [Ideas](./ideas.md)
