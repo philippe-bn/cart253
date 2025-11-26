@@ -1,4 +1,4 @@
-# *FROG TRIALS*
+# ***FROG TRIALS***
 
 Meet your creator. Uncover the secrets of our universe. Step into the afterlife.
 
@@ -7,17 +7,17 @@ Meet your creator. Uncover the secrets of our universe. Step into the afterlife.
 # Welcome to *FROG TRIALS*
 Choose your trial and start discovering what it truly means to be... a frog?
 
-# The Trial of Creation
+# *The Trial of Creation*
 A reflexive story on ourselves and our origins... As you control the body of our mighty Frog God, carefully balance the elements responsible for the creation or destruction(!) of our universe...
 These beings have encrypted names... some theorize their names were written in an ancient language and signified "F.L.Y", but what those letters stand for remains to be uncovered by any of the top frog researchers...
 
-# The Trial of Eden
+# *The Trial of Eden*
 A myth about how Eve was eaten by the Frog God, as per the Holy Book, the Frogle. The story tells the tribulations of our mighty creator in the land of Eden, and teaches us a lesson on survival as we remain in a constant state of struggle for sustenance... Time is of the essence; make the most of the time you get to spend in the land of limitless fly asexual reproduction...
 
-# The Trial of Paradise
+# *The Trial of Paradise*
 A premonitory dream for what will happen to those of us who will reach Paradise... We must be careful with our actions in this afterlife. Our fate is determined by the inhabitants of this metaphysical space... Here, time is irrelevant in the context of eternity...
 
-# The Trial of Hell
+# *The Trial of Hell*
 A space where Toad the Evil Frog was sent after committing his crimes. Hell is the trial in which you will discover what happens to frogs who do not succeed the Trial of Paradise... Here, time is irrelevant in the context of eternity...
 
 # Attributes
