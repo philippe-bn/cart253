@@ -7,6 +7,8 @@ Meet your creator. Uncover the secrets of our universe. Step into the afterlife.
 # Welcome to *FROG TRIALS*
 Choose your trial and start discovering what it truly means to be... a frog?
 
+![Image of the main menu](./assets/images/FROG%20TRIALS%20menu.PNG)
+
 # *The Trial of Creation*
 A reflexive story on ourselves and our origins... As you control the body of our mighty Frog God, carefully balance the elements responsible for the creation or destruction(!) of our universe...
 These beings have encrypted names... some theorize their names were written in an ancient language and signified "F.L.Y", but what those letters stand for remains to be uncovered by any of the top frog researchers...
